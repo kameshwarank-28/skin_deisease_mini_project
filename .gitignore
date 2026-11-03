@@ -39,3 +39,4 @@ frontend/dist/
 backend/app/temp_uploads/
 quarantine/
 git.cmd
+push_to_github.bat
