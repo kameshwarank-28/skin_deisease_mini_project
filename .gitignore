@@ -38,3 +38,4 @@ frontend/dist/
 *.sqlite3
 backend/app/temp_uploads/
 quarantine/
+git.cmd
