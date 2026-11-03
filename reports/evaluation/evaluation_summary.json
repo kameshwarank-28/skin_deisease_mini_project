@@ -1,0 +1,43 @@
+{
+  "evaluation_dataset_size": 320,
+  "metrics": {
+    "top1_accuracy": 0.6312,
+    "top3_accuracy": 0.9094,
+    "macro_precision": 0.5921,
+    "weighted_precision": 0.651,
+    "macro_recall": 0.6082,
+    "weighted_recall": 0.6312,
+    "macro_f1": 0.5957,
+    "weighted_f1": 0.6343,
+    "mean_uncertainty_entropy": 1.292,
+    "high_uncertainty_samples": 124,
+    "high_uncertainty_pct": "38.75%"
+  },
+  "top_confused_class_pairs": [
+    {
+      "true_class": "Melanocytic Nevi (NV) -",
+      "predicted_as": "Benign Keratosis-like Lesions (BKL)",
+      "count": 11
+    },
+    {
+      "true_class": "Melanocytic Nevi (NV) -",
+      "predicted_as": "Melanoma",
+      "count": 8
+    },
+    {
+      "true_class": "Benign Keratosis-like Lesions (BKL)",
+      "predicted_as": "Basal Cell Carcinoma (BCC)",
+      "count": 8
+    },
+    {
+      "true_class": "Basal Cell Carcinoma (BCC)",
+      "predicted_as": "Benign Keratosis-like Lesions (BKL)",
+      "count": 6
+    },
+    {
+      "true_class": "Psoriasis pictures Lichen Planus and related diseases -",
+      "predicted_as": "Tinea Ringworm Candidiasis and other Fungal Infections -",
+      "count": 6
+    }
+  ]
+}

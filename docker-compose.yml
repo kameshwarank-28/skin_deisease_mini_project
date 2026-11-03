@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: skin_disease_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./processed_dataset:/app/processed_dataset
+      - ./backend/app/data:/app/backend/app/data
+    restart: unless-stopped

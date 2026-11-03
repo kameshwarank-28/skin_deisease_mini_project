@@ -1,0 +1,44 @@
+dataset:
+  raw_dataset_path: 'Z:/IMG_CLASSES'
+  processed_dataset_path: './processed_dataset'
+  quarantine_path: './reports/dataset_analysis/quarantine'
+  train_split: 0.80
+  val_split: 0.10
+  test_split: 0.10
+  random_seed: 42
+  num_workers: 2
+
+model:
+  architecture: 'vit_base_patch16_224'
+  baseline_architecture: 'resnet50'
+  image_size: 224
+  num_classes: 'auto'
+  pretrained: true
+  dropout: 0.2
+  confidence_threshold: 0.60
+  uncertainty_entropy_threshold: 1.5
+
+training:
+  batch_size: 32
+  epochs: 20
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  optimizer: 'adamw'
+  scheduler: 'cosine'
+  warmup_epochs: 2
+  early_stopping_patience: 5
+  mixed_precision: true
+  class_weighting: 'balanced'
+
+augmentation:
+  horizontal_flip: 0.5
+  rotation_degrees: 15
+  brightness_contrast: 0.15
+  gaussian_blur: 0.1
+
+server:
+  host: '0.0.0.0'
+  port: 8000
+  reload: true
+  max_upload_size_mb: 10
+  allowed_extensions: ['jpg', 'jpeg', 'png', 'webp', 'bmp']

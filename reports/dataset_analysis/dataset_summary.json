@@ -1,0 +1,47 @@
+{
+  "dataset_directory": "Z:\\ALL\\IMG_CLASSES",
+  "total_images_scanned": 27153,
+  "valid_images": 27153,
+  "corrupted_images": 0,
+  "exact_duplicate_files": 1212,
+  "redundant_duplicate_copies": 624,
+  "cross_class_duplicates": 117,
+  "unique_images": 26529,
+  "total_classes": 10,
+  "class_imbalance_ratio": 6.34,
+  "color_modes": {
+    "RGB": 27153
+  },
+  "file_extensions": {
+    ".jpg": 27153
+  },
+  "dimension_statistics": {
+    "width": {
+      "min": 294,
+      "max": 1024,
+      "mean": 678.83,
+      "median": 600.0,
+      "std": 211.51
+    },
+    "height": {
+      "min": 222,
+      "max": 1128,
+      "mean": 569.92,
+      "median": 479.0,
+      "std": 220.94
+    },
+    "aspect_ratio": {
+      "min": 0.6236,
+      "max": 1.6327,
+      "mean": 1.2442,
+      "median": 1.3333
+    },
+    "file_size_kb": {
+      "min": 7.39,
+      "max": 927.43,
+      "mean": 200.68,
+      "median": 136.45,
+      "total_size_mb": 5321.38
+    }
+  }
+}

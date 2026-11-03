@@ -1,0 +1,11 @@
+class_name,total_files,valid_images,corrupted_images,duplicate_images,unique_images,percentage_of_total,avg_width_px,avg_height_px,avg_file_size_kb
+1. Eczema 1677,1677,1677,0,251,1573,6.18,615.5,530.2,84.7
+10. Warts Molluscum and other Viral Infections - 2103,2103,2103,0,455,1888,7.75,549.6,415.4,64.4
+2. Melanoma 15.75k,3140,3140,0,8,3136,11.56,512.0,512.0,74.0
+3. Atopic Dermatitis - 1.25k,1257,1257,0,139,1218,4.63,468.8,380.5,52.7
+4. Basal Cell Carcinoma (BCC) 3323,3323,3323,0,14,3316,12.24,958.4,935.2,455.1
+5. Melanocytic Nevi (NV) - 7970,7970,7970,0,6,7967,29.35,701.0,513.9,252.2
+6. Benign Keratosis-like Lesions (BKL) 2624,2079,2079,0,28,2065,7.66,832.1,764.2,410.0
+7. Psoriasis pictures Lichen Planus and related diseases - 2k,2055,2055,0,147,2012,7.57,598.0,505.3,83.7
+8. Seborrheic Keratoses and other Benign Tumors - 1.8k,1847,1847,0,43,1827,6.8,655.8,494.6,92.1
+9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k,1702,1702,0,121,1644,6.27,649.5,518.4,91.6

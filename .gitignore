@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Datasets
+raw_dataset/
+*.zip
+*.tar.gz
+*.7z
+
+# Processed dataset manifests
+!processed_dataset/classes.json
+!processed_dataset/*.csv
+
+# Model weights
+models/*.pth
+models/*.pt
+models/*.onnx
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+
+# DB & Temp
+*.db
+*.sqlite
+*.sqlite3
+backend/app/temp_uploads/
+quarantine/
