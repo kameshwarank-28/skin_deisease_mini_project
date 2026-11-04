@@ -27,16 +27,23 @@ def build_model(
         num_classes = get_num_classes()
     num_classes = int(num_classes)
 
+    # Standardize architecture names and aliases
+    clean_name = model_name.lower().replace("-", "_")
+    if clean_name in ["efficientnetv2_s", "efficientnet_v2_s", "efficientnetv2s"]:
+        target_name = "tf_efficientnetv2_s"
+    else:
+        target_name = model_name
+
     try:
         model = timm.create_model(
-            model_name,
+            target_name,
             pretrained=pretrained,
             num_classes=num_classes,
             drop_rate=dropout
         )
     except Exception as e:
-        print(f"Direct creation note ({e}), attempting standard head adaptation for {model_name}...")
-        model = timm.create_model(model_name, pretrained=pretrained)
+        print(f"Direct creation note ({e}), attempting standard head adaptation for {target_name}...")
+        model = timm.create_model(target_name, pretrained=pretrained)
         if hasattr(model, "reset_classifier"):
             model.reset_classifier(num_classes=num_classes, drop_rate=dropout)
         elif hasattr(model, "head"):

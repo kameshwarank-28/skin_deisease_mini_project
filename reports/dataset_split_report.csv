@@ -1,11 +1,11 @@
 class_idx,class_name,train_count,val_count,test_count,total_count,train_pct,val_pct,test_pct
-0,1. Eczema 1677,1221,153,152,1526,80.0,10.0,10.0
-1,10. Warts Molluscum and other Viral Infections - 2103,1480,185,185,1850,80.0,10.0,10.0
-2,2. Melanoma 15.75k,2509,313,314,3136,80.0,10.0,10.0
-3,3. Atopic Dermatitis - 1.25k,919,115,115,1149,80.0,10.0,10.0
-4,4. Basal Cell Carcinoma (BCC) 3323,2653,331,332,3316,80.0,10.0,10.0
-5,5. Melanocytic Nevi (NV) - 7970,6373,797,797,7967,80.0,10.0,10.0
-6,6. Benign Keratosis-like Lesions (BKL) 2624,1652,206,207,2065,80.0,10.0,10.0
-7,7. Psoriasis pictures Lichen Planus and related diseases - 2k,1558,195,195,1948,80.0,10.0,10.0
-8,8. Seborrheic Keratoses and other Benign Tumors - 1.8k,1459,183,182,1824,80.0,10.0,10.0
-9,9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k,1305,163,163,1631,80.0,10.0,10.0
+0,1. Eczema 1677,1068,229,229,1526,70.0,15.0,15.0
+1,10. Warts Molluscum and other Viral Infections - 2103,1295,277,278,1850,70.0,15.0,15.0
+2,2. Melanoma 15.75k,2195,471,470,3136,70.0,15.0,15.0
+3,3. Atopic Dermatitis - 1.25k,804,173,172,1149,70.0,15.1,15.0
+4,4. Basal Cell Carcinoma (BCC) 3323,2321,497,498,3316,70.0,15.0,15.0
+5,5. Melanocytic Nevi (NV) - 7970,5577,1195,1195,7967,70.0,15.0,15.0
+6,6. Benign Keratosis-like Lesions (BKL) 2624,1445,310,310,2065,70.0,15.0,15.0
+7,7. Psoriasis pictures Lichen Planus and related diseases - 2k,1364,292,292,1948,70.0,15.0,15.0
+8,8. Seborrheic Keratoses and other Benign Tumors - 1.8k,1277,273,274,1824,70.0,15.0,15.0
+9,9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k,1142,245,244,1631,70.0,15.0,15.0

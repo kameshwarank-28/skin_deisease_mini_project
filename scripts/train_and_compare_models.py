@@ -30,17 +30,14 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
     classification_report,
-    confusion_matrix
+    confusion_matrix,
+    brier_score_loss
 )
 import cv2
 import timm
 
-# Setup paths and environment
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-# CPU optimization
-torch.set_num_threads(min(16, os.cpu_count() or 4))
+# CPU threading optimization
+torch.set_num_threads(min(24, os.cpu_count() or 4))
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
@@ -58,7 +55,6 @@ def calculate_entropy(probs: np.ndarray) -> np.ndarray:
     return -np.sum(probs * np.log(probs + eps), axis=-1)
 
 def compute_ece(probs: np.ndarray, targets: np.ndarray, n_bins: int = 10) -> float:
-    """Expected Calibration Error."""
     confidences = np.max(probs, axis=1)
     predictions = np.argmax(probs, axis=1)
     accuracies = (predictions == targets)
@@ -80,12 +76,18 @@ def compute_ece(probs: np.ndarray, targets: np.ndarray, n_bins: int = 10) -> flo
 
     return float(ece)
 
-class FocalLoss(nn.Module):
-    def __init__(self, gamma: float = 2.0, label_smoothing: float = 0.05, weight: torch.Tensor = None):
+def compute_brier_score(probs: np.ndarray, targets: np.ndarray, num_classes: int = 10) -> float:
+    one_hot = np.zeros_like(probs)
+    for i, t in enumerate(targets):
+        one_hot[i, t] = 1.0
+    return float(np.mean(np.sum((probs - one_hot) ** 2, axis=1)))
+
+class ClassWeightedFocalLoss(nn.Module):
+    def __init__(self, gamma: float = 2.0, label_smoothing: float = 0.05, class_weights: torch.Tensor = None):
         super().__init__()
         self.gamma = gamma
         self.label_smoothing = label_smoothing
-        self.weight = weight
+        self.class_weights = class_weights
 
     def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         num_classes = inputs.size(-1)
@@ -101,9 +103,9 @@ class FocalLoss(nn.Module):
         ce_loss = -torch.sum(targets_one_hot * log_probs, dim=-1)
         loss = focal_weight * ce_loss
 
-        if self.weight is not None:
-            sample_weights = self.weight[targets]
-            loss = loss * sample_weights
+        if self.class_weights is not None:
+            w = self.class_weights.to(inputs.device)[targets]
+            loss = loss * w
 
         return loss.mean()
 
@@ -114,7 +116,7 @@ class SkinDataset(Dataset):
         self.labels = self.df["label"].tolist()
         self.transform = transform
         
-        # Pre-cache resized PIL images in RAM for ultra-fast multi-epoch training without network latency
+        # Pre-cache resized PIL images in RAM for fast CPU execution
         print(f"Pre-caching {len(self.file_paths)} {desc} images into RAM...")
         self.cached_images = []
         for path in self.file_paths:
@@ -155,6 +157,15 @@ def get_transforms(image_size: int = 224):
     ])
     return train_transform, eval_transform
 
+def is_head_param(name: str, model_name: str) -> bool:
+    if "convnext" in model_name:
+        return "head.fc" in name or "head.norm" in name
+    elif "vit" in model_name:
+        return name.startswith("head.")
+    elif "densenet" in model_name or "efficientnet" in model_name:
+        return "classifier" in name
+    return name.startswith("head") or name.startswith("fc")
+
 def train_and_evaluate_model(
     model_name: str,
     unfreeze_patterns: List[str],
@@ -162,8 +173,10 @@ def train_and_evaluate_model(
     val_loader: DataLoader,
     test_loader: DataLoader,
     device: torch.device,
+    class_weights: torch.Tensor,
     num_classes: int = 10,
-    epochs: int = 5
+    head_epochs: int = 2,
+    ft_epochs: int = 2
 ) -> Dict:
     print(f"\n" + "=" * 65)
     print(f"Training Candidate Architecture: {model_name}")
@@ -179,18 +192,20 @@ def train_and_evaluate_model(
     for p in model.parameters():
         p.requires_grad = False
 
-    # Unfreeze classification head
-    head_patterns = ["fc", "classifier", "head"]
+    # Unfreeze classification head only
     for name, param in model.named_parameters():
-        if any(hp in name for hp in head_patterns):
+        if is_head_param(name, model_name):
             param.requires_grad = True
 
-    criterion = FocalLoss(gamma=2.0, label_smoothing=0.05)
+    head_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"[{model_name}] Stage 1: Classifier head pre-training ({head_trainable_params:,} trainable params)...")
+
+    criterion = ClassWeightedFocalLoss(gamma=2.0, label_smoothing=0.05, class_weights=class_weights)
     optimizer = AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3, weight_decay=1e-2)
 
-    # Train head for 2 epochs
-    print(f"[{model_name}] Stage 1: Classifier head pre-training (2 epochs)...")
-    for epoch in range(1, 3):
+    history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+
+    for epoch in range(1, head_epochs + 1):
         model.train()
         train_loss, train_correct, train_total = 0.0, 0, 0
         for imgs, labels in train_loader:
@@ -207,24 +222,25 @@ def train_and_evaluate_model(
             train_total += labels.size(0)
 
         t_acc = train_correct / train_total if train_total > 0 else 0
-        print(f"  Head Epoch {epoch}/2 -> Loss: {train_loss/train_total:.4f} | Train Acc: {t_acc*100:.1f}%")
+        t_loss = train_loss / train_total if train_total > 0 else 0
+        print(f"  Head Epoch {epoch}/{head_epochs} -> Loss: {t_loss:.4f} | Train Acc: {t_acc*100:.1f}%")
 
     # Stage 2: Unfreeze top block + head for fine-tuning
     for name, param in model.named_parameters():
-        if any(pat in name for pat in unfreeze_patterns) or any(hp in name for hp in head_patterns):
+        if is_head_param(name, model_name) or any(pat in name for pat in unfreeze_patterns):
             param.requires_grad = True
 
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"[{model_name}] Stage 2: Fine-tuning top stages ({trainable_params:,} / {total_params:,} trainable params)...")
+    stage2_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"[{model_name}] Stage 2: Fine-tuning top stages ({stage2_trainable:,} / {total_params:,} params)...")
 
-    fine_tune_epochs = epochs - 2
     ft_optimizer = AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=2e-4, weight_decay=1e-2)
-    scheduler = CosineAnnealingLR(ft_optimizer, T_max=fine_tune_epochs, eta_min=1e-5)
+    scheduler = CosineAnnealingLR(ft_optimizer, T_max=ft_epochs, eta_min=1e-5)
 
+    best_val_f1 = 0.0
     best_val_acc = 0.0
     best_state_dict = None
 
-    for epoch in range(1, fine_tune_epochs + 1):
+    for epoch in range(1, ft_epochs + 1):
         model.train()
         train_loss, train_correct, train_total = 0.0, 0, 0
         for imgs, labels in train_loader:
@@ -243,21 +259,37 @@ def train_and_evaluate_model(
 
         scheduler.step()
         train_acc = train_correct / train_total if train_total > 0 else 0
+        train_loss_epoch = train_loss / train_total if train_total > 0 else 0
 
         # Validate
         model.eval()
-        v_correct, v_total = 0, 0
+        v_loss, v_correct, v_total = 0.0, 0, 0
+        val_preds_list, val_targets_list = [], []
         with torch.no_grad():
             for imgs, labels in val_loader:
                 imgs, labels = imgs.to(device), labels.to(device)
                 out = model(imgs)
+                vl = criterion(out, labels)
+                v_loss += vl.item() * imgs.size(0)
                 preds = out.argmax(dim=1)
                 v_correct += (preds == labels).sum().item()
                 v_total += labels.size(0)
-        val_acc = v_correct / v_total if v_total > 0 else 0
-        print(f"  FT Epoch {epoch}/{fine_tune_epochs} -> Train Acc: {train_acc*100:.1f}% | Val Acc: {val_acc*100:.1f}%")
+                val_preds_list.extend(preds.cpu().numpy())
+                val_targets_list.extend(labels.cpu().numpy())
 
-        if val_acc >= best_val_acc:
+        val_acc = v_correct / v_total if v_total > 0 else 0
+        val_loss_epoch = v_loss / v_total if v_total > 0 else 0
+        val_f1 = f1_score(val_targets_list, val_preds_list, average="macro", zero_division=0)
+
+        history["train_loss"].append(train_loss_epoch)
+        history["train_acc"].append(train_acc)
+        history["val_loss"].append(val_loss_epoch)
+        history["val_acc"].append(val_acc)
+
+        print(f"  FT Epoch {epoch}/{ft_epochs} -> Train Loss: {train_loss_epoch:.4f} | Train Acc: {train_acc*100:.1f}% | Val Acc: {val_acc*100:.1f}% | Val Macro F1: {val_f1:.4f}")
+
+        if val_f1 >= best_val_f1:
+            best_val_f1 = val_f1
             best_val_acc = val_acc
             best_state_dict = {k: v.cpu().clone() for k, v in model.state_dict().items()}
 
@@ -309,22 +341,24 @@ def train_and_evaluate_model(
     macro_f1 = float(f1_score(test_targets, test_preds, average="macro", zero_division=0))
     weighted_f1 = float(f1_score(test_targets, test_preds, average="weighted", zero_division=0))
     raw_ece = compute_ece(test_probs, test_targets)
+    raw_brier = compute_brier_score(test_probs, test_targets, num_classes=num_classes)
 
     # Per-class recall specifically for dangerous lesions (Melanoma: class 2, BCC: class 4)
     per_class_rec = recall_score(test_targets, test_preds, average=None, zero_division=0)
     melanoma_rec = float(per_class_rec[2]) if len(per_class_rec) > 2 else 0.0
     bcc_rec = float(per_class_rec[4]) if len(per_class_rec) > 4 else 0.0
 
-    print(f"[{model_name}] Test Results -> Top-1 Acc: {top1_acc*100:.2f}% | Macro F1: {macro_f1:.4f} | ECE: {raw_ece:.4f}")
+    print(f"[{model_name}] Test Results -> Top-1 Acc: {top1_acc*100:.2f}% | Top-3 Acc: {top3_acc*100:.2f}% | Macro F1: {macro_f1:.4f} | ECE: {raw_ece:.4f} | Brier: {raw_brier:.4f}")
 
     return {
         "model_name": model_name,
         "model": model,
         "total_params": total_params,
-        "trainable_params": trainable_params,
+        "trainable_params": stage2_trainable,
         "train_duration_sec": round(train_duration, 2),
         "latency_ms_per_sample": round(avg_latency_ms, 2),
         "val_acc": round(float(best_val_acc), 4),
+        "val_f1": round(float(best_val_f1), 4),
         "val_logits": val_logits,
         "val_targets": val_targets,
         "test_logits": test_logits,
@@ -339,13 +373,14 @@ def train_and_evaluate_model(
         "macro_f1": round(macro_f1, 4),
         "weighted_f1": round(weighted_f1, 4),
         "raw_ece": round(raw_ece, 4),
+        "raw_brier": round(raw_brier, 4),
         "melanoma_recall": round(melanoma_rec, 4),
         "bcc_recall": round(bcc_rec, 4),
+        "history": history,
         "state_dict": best_state_dict
     }
 
 def fit_temperature_scaling(val_logits: np.ndarray, val_targets: np.ndarray) -> float:
-    """Find scalar temperature T > 0 that minimizes NLL on validation logits."""
     v_logits = torch.from_numpy(val_logits)
     v_targets = torch.from_numpy(val_targets)
 
@@ -358,44 +393,12 @@ def fit_temperature_scaling(val_logits: np.ndarray, val_targets: np.ndarray) -> 
     res = minimize_scalar(nll_eval, bounds=(0.1, 5.0), method="bounded")
     return float(res.x)
 
-def generate_gradcam(model: nn.Module, model_name: str, pil_image: Image.Image, target_class: int, device: torch.device):
-    """Real Grad-CAM hooked into model's final convolutional layer."""
+def generate_saliency_xai(model: nn.Module, model_name: str, pil_image: Image.Image, target_class: int, device: torch.device):
+    """Generate Explainable AI Heatmap (Grad-CAM for CNNs, Saliency for Transformers)."""
     model.eval()
-
-    # Identify target layer based on architecture
-    target_layer = None
-    if "resnet" in model_name:
-        target_layer = model.layer4[-1]
-    elif "densenet" in model_name:
-        target_layer = model.features[-1]
-    elif "efficientnet" in model_name:
-        target_layer = model.conv_head
-    elif "convnext" in model_name:
-        target_layer = model.stages[-1]
-    else:
-        # Default search for last Conv2d
-        for module in reversed(list(model.modules())):
-            if isinstance(module, nn.Conv2d):
-                target_layer = module
-                break
-
-    if target_layer is None:
-        raise ValueError(f"Could not identify final conv layer for {model_name}")
-
-    activations = []
-    gradients = []
-
-    def forward_hook(module, input, output):
-        activations.append(output)
-
-    def backward_hook(module, grad_in, grad_out):
-        gradients.append(grad_out[0])
-
-    h1 = target_layer.register_forward_hook(forward_hook)
-    h2 = target_layer.register_full_backward_hook(backward_hook)
-
     _, eval_transform = get_transforms(224)
     img_t = eval_transform(pil_image).unsqueeze(0).to(device)
+    img_t.requires_grad = True
 
     model.zero_grad()
     out = model(img_t)
@@ -405,36 +408,68 @@ def generate_gradcam(model: nn.Module, model_name: str, pil_image: Image.Image, 
     score = out[0, target_class]
     score.backward()
 
-    h1.remove()
-    h2.remove()
-
-    act = activations[0].detach().cpu().numpy()[0]   # (C, H, W)
-    grad = gradients[0].detach().cpu().numpy()[0]     # (C, H, W)
-
-    # Channel weights via GAP
-    weights = np.mean(grad, axis=(1, 2))              # (C,)
-    cam = np.zeros(act.shape[1:], dtype=np.float32)
-    for i, w in enumerate(weights):
-        cam += w * act[i]
-
-    # ReLU + normalization
-    cam = np.maximum(cam, 0)
-    cam = (cam - cam.min()) / (cam.max() - cam.min() + 1e-9)
-
     orig_np = np.array(pil_image.convert("RGB"))
     h, w, _ = orig_np.shape
-    cam_resized = cv2.resize(cam, (w, h))
+
+    if "vit" in model_name:
+        # High-resolution input saliency map with smoothing
+        grad = img_t.grad.data.abs().sum(dim=1).squeeze().cpu().numpy()
+        grad = cv2.GaussianBlur(grad, (17, 17), 0)
+        norm_map = (grad - grad.min()) / (grad.max() - grad.min() + 1e-9)
+        cam_resized = cv2.resize(norm_map, (w, h))
+    else:
+        # Grad-CAM for CNN backbones
+        target_layer = None
+        if "resnet" in model_name:
+            target_layer = getattr(model, "layer4", None)
+            if target_layer is not None: target_layer = target_layer[-1]
+        elif "densenet" in model_name:
+            target_layer = getattr(model, "features", None)
+            if target_layer is not None: target_layer = target_layer[-1]
+        elif "efficientnet" in model_name:
+            target_layer = getattr(model, "conv_head", None)
+        elif "convnext" in model_name:
+            stages = getattr(model, "stages", None)
+            if stages is not None: target_layer = stages[-1]
+
+        if target_layer is None:
+            # Fallback to saliency
+            grad = img_t.grad.data.abs().sum(dim=1).squeeze().cpu().numpy()
+            grad = cv2.GaussianBlur(grad, (17, 17), 0)
+            norm_map = (grad - grad.min()) / (grad.max() - grad.min() + 1e-9)
+            cam_resized = cv2.resize(norm_map, (w, h))
+        else:
+            activations, gradients = [], []
+            def forward_hook(module, inp, output): activations.append(output)
+            def backward_hook(module, gin, gout): gradients.append(gout[0])
+            h1 = target_layer.register_forward_hook(forward_hook)
+            h2 = target_layer.register_full_backward_hook(backward_hook)
+
+            model.zero_grad()
+            out2 = model(img_t.detach().requires_grad_(True))
+            out2[0, target_class].backward()
+            h1.remove()
+            h2.remove()
+
+            act = activations[0].detach().cpu().numpy()[0]
+            grad = gradients[0].detach().cpu().numpy()[0]
+            weights = np.mean(grad, axis=(1, 2))
+            cam = np.zeros(act.shape[1:], dtype=np.float32)
+            for i, weight_val in enumerate(weights):
+                cam += weight_val * act[i]
+            cam = np.maximum(cam, 0)
+            cam = (cam - cam.min()) / (cam.max() - cam.min() + 1e-9)
+            cam_resized = cv2.resize(cam, (w, h))
 
     heatmap = cv2.applyColorMap(np.uint8(255 * cam_resized), cv2.COLORMAP_JET)
     heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
     blended = cv2.addWeighted(orig_np, 0.65, heatmap, 0.35, 0)
-
     return blended, cam_resized
 
 def main():
     print("=" * 65)
     print("DermAI Health Monitor: Multi-Architecture Deep Learning Benchmark")
-    print("Phase 4, 5, 6, 7 & 8: Training, Comparison, Selection & Calibration")
+    print("Comparing: EfficientNet-B3, ConvNeXt-Tiny, DenseNet121 & Vision Transformer")
     print("=" * 65)
 
     device = torch.device("cpu")
@@ -453,11 +488,17 @@ def main():
 
     print(f"Manifest totals -> Train: {len(train_df):,} | Val: {len(val_df):,} | Test: {len(test_df):,}")
 
+    # Compute inverse class frequency weights for Focal Loss
+    class_counts = train_df["label"].value_counts().sort_index().values
+    total_samples = len(train_df)
+    class_weights = torch.tensor([total_samples / (num_classes * c) for c in class_counts], dtype=torch.float32)
+    print(f"Computed Class Weights: {class_weights.numpy().round(3)}")
+
     # Stratified representative sampling for rigorous, balanced multi-model benchmark on CPU
-    # 160 per class for training = 1,600 samples
+    # 150 per class for training = 1,500 samples
     # 35 per class for validation = 350 samples
     # 60 per class for independent testing = 600 samples
-    train_subset = train_df.groupby("label").sample(160, random_state=42).reset_index(drop=True)
+    train_subset = train_df.groupby("label").sample(150, random_state=42).reset_index(drop=True)
     val_subset = val_df.groupby("label").sample(35, random_state=42).reset_index(drop=True)
     test_subset = test_df.groupby("label").sample(60, random_state=42).reset_index(drop=True)
 
@@ -468,27 +509,27 @@ def main():
     val_loader = DataLoader(SkinDataset(val_subset, transform=eval_tf, desc="Validation"), batch_size=32, shuffle=False, num_workers=0)
     test_loader = DataLoader(SkinDataset(test_subset, transform=eval_tf, desc="Test"), batch_size=32, shuffle=False, num_workers=0)
 
-    # 4 Architectures to evaluate and compare
+    # EXACT 4 ARCHITECTURES REQUESTED IN MASTER PROMPT
     candidate_specs = [
         {
             "name": "densenet121",
-            "unfreeze": ["denseblock4", "classifier"],
+            "unfreeze": ["denseblock4", "norm5"],
             "desc": "DenseNet-121 (Dense Feature Connectivity)"
         },
         {
-            "name": "resnet50",
-            "unfreeze": ["layer4.2", "fc"],
-            "desc": "ResNet-50 (Residual Deep Learning Baseline)"
-        },
-        {
             "name": "efficientnet_b3",
-            "unfreeze": ["blocks.6", "conv_head", "classifier"],
+            "unfreeze": ["blocks.6", "conv_head"],
             "desc": "EfficientNet-B3 (Compound Scaled Inverted Residuals)"
         },
         {
             "name": "convnext_tiny",
-            "unfreeze": ["stages.3", "head"],
+            "unfreeze": ["stages.3"],
             "desc": "ConvNeXt-Tiny (Modernized Pure ConvNet)"
+        },
+        {
+            "name": "vit_tiny_patch16_224",
+            "unfreeze": ["blocks.11", "norm"],
+            "desc": "Vision Transformer (ViT-Tiny / 16x16 Self-Attention)"
         }
     ]
 
@@ -508,8 +549,10 @@ def main():
             val_loader=val_loader,
             test_loader=test_loader,
             device=device,
+            class_weights=class_weights,
             num_classes=num_classes,
-            epochs=5
+            head_epochs=2,
+            ft_epochs=2
         )
         results.append(res)
         trained_models[spec["name"]] = res
@@ -545,231 +588,191 @@ def main():
             "Weighted F1-Score": r["weighted_f1"],
             "Melanoma Recall": f"{r['melanoma_recall']*100:.1f}%",
             "BCC Recall": f"{r['bcc_recall']*100:.1f}%",
-            "Raw ECE": r["raw_ece"]
+            "Raw ECE": r["raw_ece"],
+            "Brier Score": r["raw_brier"]
         })
 
     comp_df = pd.DataFrame(comp_data)
-    comp_df_sorted = comp_df.sort_values(by="Macro F1-Score", ascending=False).reset_index(drop=True)
-    comp_csv_path = reports_dir / "model_comparison.csv"
-    comp_df_sorted.to_csv(comp_csv_path, index=False)
-
-    print("\n" + "=" * 80)
-    print("                    MULTI-MODEL ARCHITECTURE BENCHMARK")
-    print("=" * 80)
-    print(comp_df_sorted.to_string(index=False))
-    print("=" * 80)
-
-    # Select Best Model based on Macro F1 and Balanced Sensitivity
-    best_res = max(results, key=lambda x: (x["macro_f1"], x["balanced_acc"], x["melanoma_recall"]))
-    best_arch = best_res["model_name"]
-    print(f"\n[WINNING MODEL SELECTED]: {best_arch.upper()}")
-    print(f"  * Macro F1-Score:    {best_res['macro_f1']:.4f}")
-    print(f"  * Top-1 Accuracy:    {best_res['top1_acc']*100:.2f}%")
-    print(f"  * Balanced Accuracy: {best_res['balanced_acc']*100:.2f}%")
-    print(f"  * Melanoma Recall:   {best_res['melanoma_recall']*100:.1f}%")
-    print(f"  * BCC Recall:        {best_res['bcc_recall']*100:.1f}%")
-
-    # Phase 8: Temperature Scaling Calibration on Winning Model
+    comp_csv_path = reports_dir / "model_comparison_table.csv"
+    comp_df.to_csv(comp_csv_path, index=False)
     print("\n" + "=" * 65)
-    print(f"Phase 8: Temperature Scaling & Uncertainty Calibration ({best_arch})")
+    print("MODEL COMPARISON TABLE")
     print("=" * 65)
-    optimal_T = fit_temperature_scaling(best_res["val_logits"], best_res["val_targets"])
-    print(f"Optimal Temperature Parameter T: {optimal_T:.4f}")
+    print(comp_df.to_string(index=False))
 
-    # Evaluate test set with Calibrated Temperature
-    calibrated_test_logits = best_res["test_logits"] / optimal_T
+    # Identify Winning Model
+    # Ranking criterion: Macro F1-Score, Balanced Accuracy, Melanoma Recall
+    best_res = max(results, key=lambda x: (x["macro_f1"], x["balanced_acc"], x["top1_acc"]))
+    best_name = best_res["model_name"]
+    best_model = best_res["model"]
+
+    print("\n" + "=" * 65)
+    print(f"SELECTED OPTIMAL ARCHITECTURE: {best_name.upper()}")
+    print(f"Criteria: Macro F1={best_res['macro_f1']:.4f}, Top-1 Acc={best_res['top1_acc']*100:.2f}%, Top-3 Acc={best_res['top3_acc']*100:.2f}%")
+    print("=" * 65)
+
+    # Post-Hoc Probability Calibration via Temperature Scaling
+    optimal_t = fit_temperature_scaling(best_res["val_logits"], best_res["val_targets"])
+    print(f"Optimal Temperature Scaling Parameter T = {optimal_t:.4f}")
+
+    # Calibrated probabilities on untouched test set
+    calibrated_test_logits = best_res["test_logits"] / optimal_t
     calibrated_test_probs = torch.softmax(torch.from_numpy(calibrated_test_logits), dim=-1).numpy()
     calibrated_ece = compute_ece(calibrated_test_probs, best_res["test_targets"])
-    print(f"Test ECE Before Calibration: {best_res['raw_ece']:.4f}")
-    print(f"Test ECE After Calibration:  {calibrated_ece:.4f} (Improvement: {best_res['raw_ece'] - calibrated_ece:.4f})")
+    calibrated_brier = compute_brier_score(calibrated_test_probs, best_res["test_targets"], num_classes=num_classes)
+
+    print(f"Calibration Improvement on Test Set -> ECE: {best_res['raw_ece']:.4f} -> {calibrated_ece:.4f} (Brier: {best_res['raw_brier']:.4f} -> {calibrated_brier:.4f})")
 
     # Save Best Model Checkpoint
     best_ckpt_path = models_dir / "best_model.pth"
     torch.save({
-        "model_name": best_arch,
+        "model_name": best_name,
         "num_classes": num_classes,
         "classes": classes_list,
-        "model_state_dict": best_res["state_dict"],
-        "temperature": optimal_T,
+        "clean_names": clean_names,
+        "temperature": optimal_t,
         "raw_ece": best_res["raw_ece"],
         "calibrated_ece": calibrated_ece,
-        "val_acc": best_res["val_acc"],
-        "top1_acc": best_res["top1_acc"],
-        "macro_f1": best_res["macro_f1"],
-        "balanced_acc": best_res["balanced_acc"],
-        "normalization": {
-            "mean": IMAGENET_MEAN,
-            "std": IMAGENET_STD,
-            "image_size": 224
-        }
-    }, best_ckpt_path)
-    print(f"Saved primary production checkpoint: {best_ckpt_path}")
-
-    # Also save backwards-compatible checkpoint
-    legacy_ckpt_path = models_dir / "best_vit_base_patch16_224.pth"
-    torch.save({
-        "model_name": best_arch,
-        "num_classes": num_classes,
-        "classes": classes_list,
         "model_state_dict": best_res["state_dict"],
-        "temperature": optimal_T,
-        "val_acc": best_res["val_acc"],
         "top1_acc": best_res["top1_acc"],
-        "macro_f1": best_res["macro_f1"]
-    }, legacy_ckpt_path)
-    print(f"Saved compatibility checkpoint: {legacy_ckpt_path}")
+        "top3_acc": best_res["top3_acc"],
+        "macro_f1": best_res["macro_f1"],
+        "weighted_f1": best_res["weighted_f1"],
+        "balanced_acc": best_res["balanced_acc"],
+        "latency_ms_per_sample": best_res["latency_ms_per_sample"]
+    }, best_ckpt_path)
+    print(f"Saved Best Model Checkpoint to: {best_ckpt_path}")
 
-    # Detailed Evaluation Visualizations for the Winning Model
-    y_true = best_res["test_targets"]
-    y_pred = best_res["test_preds"]
-    y_probs = calibrated_test_probs
-
-    # 1. Confusion Matrices
-    cm = confusion_matrix(y_true, y_pred, labels=range(num_classes))
-    cm_norm = cm.astype("float") / (cm.sum(axis=1)[:, np.newaxis] + 1e-9)
-
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=clean_names, yticklabels=clean_names)
-    plt.title(f"Confusion Matrix (Counts) — {best_arch.upper()}", fontsize=14, fontweight="bold", pad=15)
-    plt.xlabel("Predicted Condition", fontsize=11)
-    plt.ylabel("Ground Truth Condition", fontsize=11)
-    plt.xticks(rotation=40, ha="right", fontsize=9)
-    plt.yticks(rotation=0, fontsize=9)
+    # Generate Evaluation Artifacts & Plots
+    # 1. Model Comparison Bar Chart
+    plt.figure(figsize=(10, 6))
+    x_indices = np.arange(len(results))
+    width = 0.25
+    plt.bar(x_indices - width, [r["top1_acc"]*100 for r in results], width, label="Top-1 Accuracy (%)", color="#1e3a8a")
+    plt.bar(x_indices, [r["balanced_acc"]*100 for r in results], width, label="Balanced Accuracy (%)", color="#0d9488")
+    plt.bar(x_indices + width, [r["macro_f1"]*100 for r in results], width, label="Macro F1 (%)", color="#6366f1")
+    plt.xticks(x_indices, [r["model_name"] for r in results], rotation=15, fontsize=10)
+    plt.ylabel("Score (%)")
+    plt.title("Skin Disease Classification: Architecture Benchmark Comparison", fontsize=12, fontweight="bold")
+    plt.legend()
+    plt.grid(axis="y", linestyle="--", alpha=0.5)
     plt.tight_layout()
-    plt.savefig(reports_dir / "confusion_matrix_counts.png", dpi=300)
+    plt.savefig(reports_dir / "model_comparison_chart.png", dpi=300)
     plt.close()
 
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(cm_norm, annot=True, fmt=".2f", cmap="Blues", xticklabels=clean_names, yticklabels=clean_names)
-    plt.title(f"Normalized Confusion Matrix (Recall / Sensitivity) — {best_arch.upper()}", fontsize=14, fontweight="bold", pad=15)
-    plt.xlabel("Predicted Condition", fontsize=11)
-    plt.ylabel("Ground Truth Condition", fontsize=11)
-    plt.xticks(rotation=40, ha="right", fontsize=9)
+    # 2. Confusion Matrix for Best Model
+    cm = confusion_matrix(best_res["test_targets"], best_res["test_preds"])
+    cm_norm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+
+    plt.figure(figsize=(11, 9))
+    sns.heatmap(cm_norm, annot=True, fmt=".2f", cmap="Blues",
+                xticklabels=[f"{i}: {clean_names[i][:15]}" for i in range(num_classes)],
+                yticklabels=[f"{i}: {clean_names[i][:15]}" for i in range(num_classes)])
+    plt.xlabel("Predicted Disease Class", fontweight="bold")
+    plt.ylabel("True Disease Class", fontweight="bold")
+    plt.title(f"Normalized Confusion Matrix: {best_name.upper()} (Test Set)", fontsize=13, fontweight="bold")
+    plt.xticks(rotation=45, ha="right", fontsize=9)
     plt.yticks(rotation=0, fontsize=9)
     plt.tight_layout()
-    plt.savefig(reports_dir / "confusion_matrix_normalized.png", dpi=300)
+    plt.savefig(reports_dir / "confusion_matrix_best_model.png", dpi=300)
     plt.close()
 
-    # 2. Classification Report
-    cls_report = classification_report(
-        y_true,
-        y_pred,
+    # 3. Per-Class Precision, Recall, F1 for Best Model
+    clf_rep = classification_report(
+        best_res["test_targets"],
+        best_res["test_preds"],
         target_names=clean_names,
-        labels=range(num_classes),
         output_dict=True,
         zero_division=0
     )
-    report_df = pd.DataFrame(cls_report).transpose()
-    report_df.to_csv(reports_dir / "classification_report.csv")
+    clf_rep_df = pd.DataFrame(clf_rep).transpose()
+    clf_rep_df.to_csv(reports_dir / "classification_report_best_model.csv")
 
-    # 3. Per-class Bar Plot
-    metrics_subset = report_df.loc[clean_names, ["precision", "recall", "f1-score"]]
-    plt.figure(figsize=(14, 7))
-    metrics_subset.plot(kind="bar", figsize=(14, 7), colormap="viridis", width=0.8)
-    plt.title(f"Per-Class Performance Metrics — {best_arch.upper()}", fontsize=14, fontweight="bold", pad=15)
-    plt.xlabel("Dermatological Condition", fontsize=11)
-    plt.ylabel("Score (0.0 - 1.0)", fontsize=11)
-    plt.ylim(0, 1.05)
-    plt.xticks(rotation=40, ha="right", fontsize=9)
-    plt.grid(axis="y", linestyle="--", alpha=0.5)
-    plt.legend(loc="lower right")
+    per_class_f1 = [clf_rep[cn]["f1-score"] for cn in clean_names]
+    plt.figure(figsize=(10, 5))
+    bars = plt.barh(clean_names, per_class_f1, color="#0d9488")
+    plt.xlabel("F1-Score")
+    plt.title(f"Per-Class F1-Scores: {best_name.upper()}", fontweight="bold")
+    plt.xlim(0, 1.0)
+    for bar in bars:
+        w_val = bar.get_width()
+        plt.text(w_val + 0.01, bar.get_y() + bar.get_height()/2, f"{w_val:.2f}", va="center", fontsize=9)
     plt.tight_layout()
-    plt.savefig(reports_dir / "class_metrics_bar.png", dpi=300)
+    plt.savefig(reports_dir / "per_class_f1_best_model.png", dpi=300)
     plt.close()
 
-    # 4. Calibration Curve
-    plt.figure(figsize=(8, 8))
-    bins = np.linspace(0, 1, 11)
-    bin_centers = (bins[:-1] + bins[1:]) / 2
-
+    # 4. Calibration Reliability Diagram
+    bin_boundaries = np.linspace(0, 1, 11)
     raw_confs = np.max(best_res["test_probs"], axis=1)
-    raw_accs = (best_res["test_preds"] == y_true)
     cal_confs = np.max(calibrated_test_probs, axis=1)
-    cal_accs = (np.argmax(calibrated_test_probs, axis=1) == y_true)
+    correct = (best_res["test_preds"] == best_res["test_targets"])
 
-    raw_bin_accs, cal_bin_accs = [], []
+    raw_bin_accs, cal_bin_accs, bin_centers = [], [], []
     for i in range(10):
-        m_raw = (raw_confs > bins[i]) & (raw_confs <= bins[i+1])
-        raw_bin_accs.append(np.mean(raw_accs[m_raw]) if np.sum(m_raw) > 0 else np.nan)
-        m_cal = (cal_confs > bins[i]) & (cal_confs <= bins[i+1])
-        cal_bin_accs.append(np.mean(cal_accs[m_cal]) if np.sum(m_cal) > 0 else np.nan)
+        b_low, b_high = bin_boundaries[i], bin_boundaries[i+1]
+        bin_centers.append((b_low + b_high) / 2)
+        raw_mask = (raw_confs > b_low) & (raw_confs <= b_high)
+        cal_mask = (cal_confs > b_low) & (cal_confs <= b_high)
+        raw_bin_accs.append(np.mean(correct[raw_mask]) if np.sum(raw_mask) > 0 else np.nan)
+        cal_bin_accs.append(np.mean(correct[cal_mask]) if np.sum(cal_mask) > 0 else np.nan)
 
-    plt.plot([0, 1], [0, 1], "k--", label="Perfect Calibration")
-    plt.plot(bin_centers, raw_bin_accs, "ro-", label=f"Uncalibrated (ECE = {best_res['raw_ece']:.3f})")
-    plt.plot(bin_centers, cal_bin_accs, "bs-", label=f"Temperature Scaled (ECE = {calibrated_ece:.3f})")
-    plt.xlabel("Mean Predicted Confidence", fontsize=11)
-    plt.ylabel("Empirical Accuracy", fontsize=11)
-    plt.title(f"Reliability Diagram (Calibration) — {best_arch.upper()}", fontsize=13, fontweight="bold")
-    plt.legend(loc="upper left")
+    plt.figure(figsize=(7, 6))
+    plt.plot([0, 1], [0, 1], "k--", label="Perfect Calibration (Ideal)")
+    plt.plot(bin_centers, raw_bin_accs, "s-", color="#dc2626", label=f"Uncalibrated (ECE={best_res['raw_ece']:.3f})")
+    plt.plot(bin_centers, cal_bin_accs, "o-", color="#059669", label=f"Calibrated (T={optimal_t:.2f}, ECE={calibrated_ece:.3f})")
+    plt.xlabel("Mean Predicted Confidence")
+    plt.ylabel("Observed Empirical Accuracy")
+    plt.title("Reliability Diagram: Post-Hoc Temperature Scaling", fontweight="bold")
+    plt.legend()
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.tight_layout()
-    plt.savefig(reports_dir / "calibration_curve.png", dpi=300)
+    plt.savefig(reports_dir / "calibration_reliability_diagram.png", dpi=300)
     plt.close()
 
-    # Phase 9: Real Explainable AI Grad-CAM Validation
-    print("\n" + "=" * 65)
-    print(f"Phase 9: Generating Real Grad-CAM Visualization ({best_arch})")
-    print("=" * 65)
-    sample_img_path = test_subset["file_path"].iloc[0]
-    sample_label = int(test_subset["label"].iloc[0])
-    sample_class_name = clean_names[sample_label]
+    # 5. Explainable AI (XAI) Verification on Test Sample
+    sample_path = test_subset.iloc[0]["file_path"]
+    sample_label = test_subset.iloc[0]["label"]
+    with Image.open(sample_path) as s_img:
+        s_pil = s_img.convert("RGB")
+        blended, cam_map = generate_saliency_xai(best_model, best_name, s_pil, sample_label, device)
+        cv2.imwrite(str(reports_dir / "xai_verification_sample.jpg"), cv2.cvtColor(blended, cv2.COLOR_RGB2BGR))
+        print(f"Generated XAI heatmap on sample test image: {reports_dir / 'xai_verification_sample.jpg'}")
 
-    with Image.open(sample_img_path) as s_img:
-        s_rgb = s_img.convert("RGB")
-        best_model_inst = timm.create_model(best_arch, pretrained=False, num_classes=num_classes)
-        best_model_inst.load_state_dict(best_res["state_dict"])
-        best_model_inst.to(device)
-
-        cam_overlay, raw_cam = generate_gradcam(
-            model=best_model_inst,
-            model_name=best_arch,
-            pil_image=s_rgb,
-            target_class=sample_label,
-            device=device
-        )
-        gradcam_save_path = reports_dir / "gradcam_sample.jpg"
-        Image.fromarray(cam_overlay).save(gradcam_save_path, quality=90)
-        print(f"Grad-CAM sample generated and saved to: {gradcam_save_path}")
-        print(f"Verified sample class: {sample_class_name} | Image: {sample_img_path}")
-
-    # Save comprehensive evaluation summary
-    summary_data = {
-        "selected_architecture": best_arch,
-        "optimal_temperature": round(optimal_T, 4),
-        "metrics": {
-            "top1_accuracy": f"{best_res['top1_acc']*100:.2f}%",
-            "top3_accuracy": f"{best_res['top3_acc']*100:.2f}%",
-            "balanced_accuracy": f"{best_res['balanced_acc']*100:.2f}%",
-            "macro_f1": best_res["macro_f1"],
-            "weighted_f1": best_res["weighted_f1"],
-            "macro_precision": best_res["macro_precision"],
-            "macro_recall": best_res["macro_recall"],
-            "uncalibrated_ece": best_res["raw_ece"],
-            "calibrated_ece": round(calibrated_ece, 4),
-            "inference_latency_ms": best_res["latency_ms_per_sample"]
-        },
-        "all_models_benchmarked": [
+    # Save complete JSON evaluation summary
+    eval_summary = {
+        "best_model_architecture": best_name,
+        "temperature_scaling": round(optimal_t, 4),
+        "test_top1_accuracy": best_res["top1_acc"],
+        "test_top3_accuracy": best_res["top3_acc"],
+        "test_balanced_accuracy": best_res["balanced_acc"],
+        "test_macro_f1": best_res["macro_f1"],
+        "test_weighted_f1": best_res["weighted_f1"],
+        "test_raw_ece": best_res["raw_ece"],
+        "test_calibrated_ece": round(calibrated_ece, 4),
+        "test_raw_brier_score": best_res["raw_brier"],
+        "test_calibrated_brier_score": round(calibrated_brier, 4),
+        "melanoma_recall": best_res["melanoma_recall"],
+        "bcc_recall": best_res["bcc_recall"],
+        "inference_latency_ms": best_res["latency_ms_per_sample"],
+        "all_models_compared": [
             {
-                "architecture": r["model_name"],
-                "total_parameters": r["total_params"],
-                "train_time_sec": r["train_duration_sec"],
-                "top1_accuracy": r["top1_acc"],
-                "top3_accuracy": r["top3_acc"],
-                "balanced_accuracy": r["balanced_acc"],
+                "name": r["model_name"],
+                "params": r["total_params"],
+                "top1_acc": r["top1_acc"],
+                "top3_acc": r["top3_acc"],
                 "macro_f1": r["macro_f1"],
-                "weighted_f1": r["weighted_f1"],
-                "melanoma_recall": r["melanoma_recall"],
-                "bcc_recall": r["bcc_recall"],
-                "raw_ece": r["raw_ece"]
+                "balanced_acc": r["balanced_acc"],
+                "ece": r["raw_ece"]
             }
             for r in results
         ]
     }
     with open(reports_dir / "evaluation_summary.json", "w", encoding="utf-8") as f:
-        json.dump(summary_data, f, indent=2)
+        json.dump(eval_summary, f, indent=2)
+    print(f"Saved complete evaluation summary to: {reports_dir / 'evaluation_summary.json'}")
 
     print("\n" + "=" * 65)
-    print("ALL 10 TRAINING & EVALUATION PHASES SUCCESSFULLY COMPLETED!")
+    print("MULTI-ARCHITECTURE TRAINING & EVALUATION COMPLETED SUCCESSFULLY!")
     print("=" * 65)
 
 if __name__ == "__main__":
