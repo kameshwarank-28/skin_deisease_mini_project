@@ -2069,12 +2069,11 @@ def add_doctor_symptom_observation(
     db.refresh(symptom)
 
     # Generate patient notification
-    doc_display_name = current_user.full_name if current_user.full_name.startswith("Dr.") else f"Dr. {current_user.full_name}"
     db.add(Notification(
         user_id=symptom.user_id,
         sender_id=current_user.id,
         title="Dermatologist Clinical Observation Added",
-        message=f"{doc_display_name} reviewed your symptom report for '{symptom.symptom_name}' and added clinical observations and follow-up guidance.",
+        message=f"Dr. {current_user.full_name} reviewed your symptom report for '{symptom.symptom_name}' and added clinical observations and follow-up guidance.",
         notification_type="DoctorObservation",
         urgency="Normal",
         reference_id=symptom.id,
