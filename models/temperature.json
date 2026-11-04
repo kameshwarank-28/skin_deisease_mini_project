@@ -1,7 +1,7 @@
 {
   "temperature": 1.2,
-  "target_ece": 0.038,
-  "mean_confidence": 91.08956237473795,
+  "target_ece": 0.04,
+  "mean_confidence": 60.789100646972656,
   "num_classes": 11,
-  "canonical_normal_folder": "12. Normal_Skin"
+  "internet_trained": true
 }
