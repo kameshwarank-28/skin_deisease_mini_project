@@ -47,7 +47,7 @@ export default function Sidebar({
       items: [
         { key: 'diagnose', label: 'AI Classification', icon: ScanSearch },
         { key: 'records', label: 'Skin Records', icon: FolderHeart },
-        { key: 'symptoms', label: 'Symptom Tracker', icon: Activity },
+        { key: 'symptoms', label: 'Symptoms & Observations', icon: Activity },
         { key: 'timeline', label: 'Skin Timeline', icon: History }
       ]
     },

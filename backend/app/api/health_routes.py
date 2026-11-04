@@ -61,6 +61,7 @@ from backend.app.schemas.health import (
     SymptomCreate,
     SymptomUpdate,
     SymptomResponse,
+    DoctorSymptomObservationCreate,
     ConsultationCreate,
     ConsultationUpdate,
     ConsultationResponse,
@@ -893,6 +894,8 @@ def get_all_doctor_patient_symptoms(
     for s in symptoms:
         p_user = db.query(User).filter(User.id == s.user_id).first()
         p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        img_url = f"/api/images/{s.skin_record.image_filename}" if (s.skin_record and s.skin_record.image_filename) else None
+        body_loc = s.skin_record.body_location if s.skin_record else None
         result.append({
             "id": s.id,
             "user_id": s.user_id,
@@ -903,7 +906,15 @@ def get_all_doctor_patient_symptoms(
             "severity_score": s.severity_score,
             "duration": s.duration,
             "notes": s.notes,
-            "recorded_at": s.recorded_at.isoformat()
+            "recorded_at": s.recorded_at.isoformat(),
+            "doctor_observation": s.doctor_observation,
+            "doctor_feedback": s.doctor_feedback,
+            "reviewed_by_doctor_id": s.reviewed_by_doctor_id,
+            "reviewed_by_doctor_name": s.reviewed_by_doctor_name,
+            "reviewed_at": s.reviewed_at.isoformat() if s.reviewed_at else None,
+            "skin_record_id": s.skin_record_id,
+            "skin_record_image_url": img_url,
+            "skin_record_body_location": body_loc
         })
     return result
 
@@ -1061,9 +1072,10 @@ def doctor_get_patient_symptoms(
         raise HTTPException(status_code=403, detail="Only doctors can view patient symptoms.")
     verify_doctor_patient_access(current_user.id, patient_id, db)
 
-    return db.query(SymptomRecord).filter(
+    symptoms = db.query(SymptomRecord).filter(
         SymptomRecord.user_id == patient_id
     ).order_by(SymptomRecord.recorded_at.desc()).all()
+    return [serialize_symptom(s) for s in symptoms]
 
 @router.get("/doctors/patients/{patient_id}/consultations", response_model=List[ConsultationResponse], summary="Doctor Views Patient Consultations")
 def doctor_get_patient_consultations(
@@ -1792,6 +1804,28 @@ def serialize_skin_record(r: SkinHealthRecord) -> SkinRecordResponse:
         ]
     )
 
+def serialize_symptom(s: SymptomRecord) -> SymptomResponse:
+    img_url = f"/api/images/{s.skin_record.image_filename}" if (s.skin_record and s.skin_record.image_filename) else None
+    body_loc = s.skin_record.body_location if s.skin_record else None
+    return SymptomResponse(
+        id=s.id,
+        user_id=s.user_id,
+        skin_record_id=s.skin_record_id,
+        symptom_name=s.symptom_name,
+        severity=s.severity,
+        severity_score=s.severity_score,
+        recorded_at=s.recorded_at,
+        duration=s.duration,
+        notes=s.notes,
+        doctor_observation=s.doctor_observation,
+        doctor_feedback=s.doctor_feedback,
+        reviewed_by_doctor_id=s.reviewed_by_doctor_id,
+        reviewed_by_doctor_name=s.reviewed_by_doctor_name,
+        reviewed_at=s.reviewed_at,
+        skin_record_image_url=img_url,
+        skin_record_body_location=body_loc
+    )
+
 @router.get("/skin-records", response_model=List[SkinRecordResponse], summary="List User Skin Health Records")
 def get_skin_records(
     body_location: Optional[str] = None,
@@ -1933,9 +1967,10 @@ def get_all_symptoms(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    return db.query(SymptomRecord).filter(
+    symptoms = db.query(SymptomRecord).filter(
         SymptomRecord.user_id == current_user.id
     ).order_by(SymptomRecord.recorded_at.desc()).all()
+    return [serialize_symptom(s) for s in symptoms]
 
 @router.post("/symptoms", response_model=Dict[str, Any], summary="Record New Symptom")
 def create_symptom(
@@ -1964,13 +1999,31 @@ def create_symptom(
     advisory = check_symptom_progression_and_alert(
         db=db,
         user_id=current_user.id,
-        symptom_name=symptom.symptom_name,
-        new_severity_score=score,
-        current_time=rec_time
+        new_symptom=symptom
     )
 
+    # Notify connected doctor(s)
+    conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.patient_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).all()
+    p_name = current_user.patient_profile.patient_name if current_user.patient_profile else current_user.full_name
+    for c in conns:
+        urgency = "Urgent" if clean_severity == "Severe" or (advisory and advisory.get("alert_triggered")) else "Normal"
+        db.add(Notification(
+            user_id=c.doctor_id,
+            sender_id=current_user.id,
+            title="New Patient Symptom Report",
+            message=f"{p_name} reported new symptom: {symptom.symptom_name} (Severity: {clean_severity})." + (f" Advisory: {advisory.get('title')}" if advisory and advisory.get("alert_triggered") else ""),
+            notification_type="SymptomAlert" if urgency == "Urgent" else "SymptomReport",
+            urgency=urgency,
+            reference_id=symptom.id,
+            reference_type="symptom"
+        ))
+    db.commit()
+
     return {
-        "symptom": SymptomResponse.model_validate(symptom),
+        "symptom": serialize_symptom(symptom),
         "advisory": advisory
     }
 
@@ -1989,6 +2042,47 @@ def delete_symptom(
     db.delete(symptom)
     db.commit()
     return {"status": "deleted", "id": symptom_id}
+
+@router.post("/doctors/symptoms/{symptom_id}/observation", response_model=SymptomResponse, summary="Doctor Adds Clinical Observation to Symptom")
+def add_doctor_symptom_observation(
+    symptom_id: int,
+    payload: DoctorSymptomObservationCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="Only doctors can add clinical observations.")
+
+    symptom = db.query(SymptomRecord).filter(SymptomRecord.id == symptom_id).first()
+    if not symptom:
+        raise HTTPException(status_code=404, detail="Symptom record not found.")
+
+    verify_doctor_patient_access(current_user.id, symptom.user_id, db)
+
+    # Set doctor clinical observations without modifying the original patient-reported entry
+    symptom.doctor_observation = payload.doctor_observation.strip()
+    symptom.doctor_feedback = payload.doctor_feedback.strip() if payload.doctor_feedback else None
+    symptom.reviewed_by_doctor_id = current_user.id
+    symptom.reviewed_by_doctor_name = current_user.full_name
+    symptom.reviewed_at = datetime.datetime.now(datetime.timezone.utc)
+    db.commit()
+    db.refresh(symptom)
+
+    # Generate patient notification
+    doc_display_name = current_user.full_name if current_user.full_name.startswith("Dr.") else f"Dr. {current_user.full_name}"
+    db.add(Notification(
+        user_id=symptom.user_id,
+        sender_id=current_user.id,
+        title="Dermatologist Clinical Observation Added",
+        message=f"{doc_display_name} reviewed your symptom report for '{symptom.symptom_name}' and added clinical observations and follow-up guidance.",
+        notification_type="DoctorObservation",
+        urgency="Normal",
+        reference_id=symptom.id,
+        reference_type="symptom"
+    ))
+    db.commit()
+
+    return serialize_symptom(symptom)
 
 
 # ==========================================
@@ -2345,16 +2439,34 @@ def get_skin_timeline(
     # 3. Symptoms
     symptoms = db.query(SymptomRecord).filter(SymptomRecord.user_id == target_user_id).all()
     for s in symptoms:
+        doc_note = f" • Clinician Review: {s.doctor_observation}" if s.doctor_observation else ""
+        img_url = f"/api/images/{s.skin_record.image_filename}" if (s.skin_record and s.skin_record.image_filename) else None
+        body_loc = s.skin_record.body_location if s.skin_record else None
+        desc_parts = []
+        if s.notes:
+            desc_parts.append(f"Patient Notes: {s.notes}")
+        if s.doctor_observation:
+            desc_parts.append(f"Doctor Observation ({s.reviewed_by_doctor_name or 'Clinician'}): {s.doctor_observation}")
+        if s.doctor_feedback:
+            desc_parts.append(f"Doctor Recommendations: {s.doctor_feedback}")
         events.append(TimelineEvent(
             event_id=f"symptom_{s.id}",
             event_type="symptom",
             date=s.recorded_at,
             title=f"Symptom Logged: {s.symptom_name}",
-            subtitle=f"Severity: {s.severity} (Duration: {s.duration or 'unspecified'})",
-            description=s.notes,
+            subtitle=f"Severity: {s.severity} (Duration: {s.duration or 'unspecified'}){doc_note}",
+            description=" • ".join(desc_parts) if desc_parts else "Self-reported skin symptom entry.",
             severity=s.severity,
+            image_url=img_url,
+            body_location=body_loc,
             link_tab="symptoms",
-            metadata={"symptom_id": s.id, "score": s.severity_score}
+            metadata={
+                "symptom_id": s.id,
+                "score": s.severity_score,
+                "doctor_observation": s.doctor_observation,
+                "doctor_feedback": s.doctor_feedback,
+                "reviewed_by_doctor_name": s.reviewed_by_doctor_name
+            }
         ))
 
     # 4. Consultations

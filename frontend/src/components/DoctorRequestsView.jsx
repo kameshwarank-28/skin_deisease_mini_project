@@ -366,3 +366,4 @@ export default function DoctorRequestsView({ setActiveTab }) {
     </div>
   );
 }
+

@@ -178,6 +178,17 @@ class SymptomResponse(BaseModel):
     recorded_at: datetime.datetime
     duration: Optional[str] = None
     notes: Optional[str] = None
+    doctor_observation: Optional[str] = None
+    doctor_feedback: Optional[str] = None
+    reviewed_by_doctor_id: Optional[int] = None
+    reviewed_by_doctor_name: Optional[str] = None
+    reviewed_at: Optional[datetime.datetime] = None
+    skin_record_image_url: Optional[str] = None
+    skin_record_body_location: Optional[str] = None
+
+class DoctorSymptomObservationCreate(BaseModel):
+    doctor_observation: str = Field(..., description="Doctor's clinical observation / notes")
+    doctor_feedback: Optional[str] = Field(None, description="Doctor's recommendations / follow-up advice to patient")
 
 
 # --- Skin Record Schemas ---

@@ -20,7 +20,7 @@ class User(Base):
     patient_profile = relationship("PatientProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     doctor_profile = relationship("DoctorProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     skin_records = relationship("SkinHealthRecord", back_populates="user", cascade="all, delete-orphan")
-    symptoms = relationship("SymptomRecord", back_populates="user", cascade="all, delete-orphan")
+    symptoms = relationship("SymptomRecord", foreign_keys="[SymptomRecord.user_id]", back_populates="user", cascade="all, delete-orphan")
     consultations = relationship("DermatologistConsultation", foreign_keys="[DermatologistConsultation.user_id]", back_populates="user", cascade="all, delete-orphan")
     treatments = relationship("TreatmentRecord", foreign_keys="[TreatmentRecord.user_id]", back_populates="user", cascade="all, delete-orphan")
     appointments = relationship("FollowUpAppointment", foreign_keys="[FollowUpAppointment.user_id]", back_populates="user", cascade="all, delete-orphan")
@@ -114,9 +114,15 @@ class SymptomRecord(Base):
     recorded_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc), index=True)
     duration = Column(String(100), nullable=True)
     notes = Column(Text, nullable=True)
+    doctor_observation = Column(Text, nullable=True) # Clinician observation / physical assessment
+    doctor_feedback = Column(Text, nullable=True) # Follow-up advice / recommendations
+    reviewed_by_doctor_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    reviewed_by_doctor_name = Column(String(255), nullable=True)
+    reviewed_at = Column(DateTime, nullable=True)
 
     # Relationships
-    user = relationship("User", back_populates="symptoms")
+    user = relationship("User", foreign_keys=[user_id], back_populates="symptoms")
+    reviewed_by_doctor = relationship("User", foreign_keys=[reviewed_by_doctor_id])
     skin_record = relationship("SkinHealthRecord", back_populates="symptoms")
 
 

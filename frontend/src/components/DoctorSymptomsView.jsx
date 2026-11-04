@@ -10,9 +10,13 @@ import {
   Clock,
   ShieldCheck,
   Loader2,
-  Calendar
+  Calendar,
+  MessageSquare,
+  CheckCircle2,
+  Images,
+  ExternalLink
 } from 'lucide-react';
-import api from '../services/api';
+import api, { getImageUrl } from '../services/api';
 
 export default function DoctorSymptomsView({ setActiveTab }) {
   const [symptoms, setSymptoms] = useState([]);
@@ -20,6 +24,12 @@ export default function DoctorSymptomsView({ setActiveTab }) {
   const [patientFilter, setPatientFilter] = useState('all');
   const [severityFilter, setSeverityFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Observation Modal State
+  const [observationModalSymptom, setObservationModalSymptom] = useState(null);
+  const [observationData, setObservationData] = useState({ doctor_observation: '', doctor_feedback: '' });
+  const [submittingObs, setSubmittingObs] = useState(false);
+  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
     loadSymptoms();
@@ -37,6 +47,42 @@ export default function DoctorSymptomsView({ setActiveTab }) {
     }
   };
 
+  const openObservationModal = (symptom) => {
+    setObservationModalSymptom(symptom);
+    setObservationData({
+      doctor_observation: symptom.doctor_observation || '',
+      doctor_feedback: symptom.doctor_feedback || ''
+    });
+  };
+
+  const handleSubmitObservation = async (e) => {
+    e.preventDefault();
+    if (!observationModalSymptom) return;
+    setSubmittingObs(true);
+
+    try {
+      await api.post(`/api/doctors/symptoms/${observationModalSymptom.id}/observation`, {
+        doctor_observation: observationData.doctor_observation.trim(),
+        doctor_feedback: observationData.doctor_feedback.trim() || null
+      });
+
+      setFeedback({
+        type: 'success',
+        message: `Clinical observation recorded for ${observationModalSymptom.patient_name}'s ${observationModalSymptom.symptom_name}. Patient notified.`
+      });
+      setObservationModalSymptom(null);
+      loadSymptoms();
+    } catch (err) {
+      console.error('Failed to save observation:', err);
+      setFeedback({
+        type: 'error',
+        message: err.response?.data?.detail || 'Failed to save clinical observation.'
+      });
+    } finally {
+      setSubmittingObs(false);
+    }
+  };
+
   const uniquePatients = Array.from(new Set(symptoms.map(s => s.patient_name || `Patient #${s.user_id}`)));
 
   const filteredSymptoms = symptoms.filter(s => {
@@ -46,7 +92,8 @@ export default function DoctorSymptomsView({ setActiveTab }) {
     const q = searchQuery.toLowerCase();
     const sName = (s.symptom_name || '').toLowerCase();
     const notes = (s.notes || '').toLowerCase();
-    return matchesPatient && matchesSeverity && (pName.toLowerCase().includes(q) || sName.includes(q) || notes.includes(q));
+    const docObs = (s.doctor_observation || '').toLowerCase();
+    return matchesPatient && matchesSeverity && (pName.toLowerCase().includes(q) || sName.includes(q) || notes.includes(q) || docObs.includes(q));
   });
 
   const formatDate = (dateStr) => {
@@ -79,6 +126,33 @@ export default function DoctorSymptomsView({ setActiveTab }) {
 
   return (
     <div>
+      {/* Toast Feedback */}
+      {feedback && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px 18px',
+          borderRadius: 8,
+          marginBottom: 16,
+          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          fontSize: '0.875rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {feedback.type === 'success' ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
+            <span>{feedback.message}</span>
+          </div>
+          <button
+            onClick={() => setFeedback(null)}
+            style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontWeight: 700 }}
+          >
+            &times;
+          </button>
+        </div>
+      )}
+
       {/* Header Banner */}
       <div style={{
         backgroundColor: '#ffffff',
@@ -108,7 +182,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
           Authorized Patient Symptom History ({symptoms.length})
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
-          Evaluate patient-reported symptoms, severity progressions, and worsening alerts to inform clinical diagnostic decisions.
+          Evaluate patient-reported symptoms, severity progressions, and provide clinical observations and recommendations without modifying patient entries.
         </p>
       </div>
 
@@ -184,7 +258,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
             No symptom entries found for the selected filters.
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {filteredSymptoms.map(s => {
               const sev = (s.severity || '').toLowerCase();
               const isSevere = sev === 'severe';
@@ -194,96 +268,247 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                 <div
                   key={s.id}
                   style={{
-                    padding: '14px 18px',
+                    padding: '16px 20px',
                     borderRadius: 10,
                     border: '1px solid #e2e8f0',
                     backgroundColor: isSevere ? '#fffbfb' : '#f8fafc',
                     borderLeft: isSevere ? '4px solid #ef4444' : isModerate ? '4px solid #f59e0b' : '4px solid #10b981',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 16,
-                    flexWrap: 'wrap'
+                    flexDirection: 'column',
+                    gap: 12
                   }}
                 >
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                      <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
-                        {s.symptom_name}
-                      </span>
-                      <span style={{
-                        fontSize: '0.7rem',
-                        padding: '2px 8px',
-                        borderRadius: 10,
-                        fontWeight: 700,
-                        backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#dcfce7',
-                        color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#15803d'
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
+                        <span style={{ fontWeight: 800, fontSize: '1rem', color: '#0f172a' }}>
+                          {s.symptom_name}
+                        </span>
+                        <span style={{
+                          fontSize: '0.7rem',
+                          padding: '2px 8px',
+                          borderRadius: 10,
+                          fontWeight: 700,
+                          backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#dcfce7',
+                          color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#15803d'
+                        }}>
+                          {s.severity || 'Mild'}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: '#0d6efd', fontWeight: 700 }}>
+                          {s.patient_name || `Patient #${s.user_id}`}
+                        </span>
+                        <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: 4, backgroundColor: '#e2e8f0', color: '#475569' }}>
+                          {s.patient_code}
+                        </span>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: '0.775rem', color: '#64748b' }}>
+                        {s.duration && <span>Duration: <strong>{s.duration}</strong></span>}
+                        <span>Logged: {formatDate(s.recorded_at)}</span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => openObservationModal(s)}
+                        style={{
+                          padding: '6px 12px',
+                          backgroundColor: s.doctor_observation ? '#eff6ff' : '#0d6efd',
+                          color: s.doctor_observation ? '#1d4ed8' : '#ffffff',
+                          border: s.doctor_observation ? '1px solid #bfdbfe' : 'none',
+                          borderRadius: 6,
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4
+                        }}
+                      >
+                        <MessageSquare size={13} />
+                        <span>{s.doctor_observation ? 'Edit Observation' : '+ Add Clinical Observation'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab('doctor_consultations')}
+                        style={{
+                          padding: '6px 12px',
+                          backgroundColor: '#ffffff',
+                          border: '1px solid #cbd5e1',
+                          borderRadius: 6,
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          color: '#0f172a',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4
+                        }}
+                      >
+                        <Stethoscope size={13} />
+                        <span>Consultation</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab('doctor_treatments')}
+                        style={{
+                          padding: '6px 12px',
+                          backgroundColor: '#16a34a',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: 6,
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4
+                        }}
+                      >
+                        <Pill size={13} />
+                        <span>Prescribe</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Patient Notes & Associated Photo */}
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    {s.skin_record_image_url && (
+                      <div style={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 6,
+                        backgroundColor: '#0f172a',
+                        overflow: 'hidden',
+                        flexShrink: 0,
+                        position: 'relative'
                       }}>
-                        {s.severity || 'Mild'}
-                      </span>
-                      <span style={{ fontSize: '0.75rem', color: '#0d6efd', fontWeight: 600 }}>
-                        {s.patient_name || `Patient #${s.user_id}`}
-                      </span>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: '0.775rem', color: '#64748b', marginBottom: 6 }}>
-                      {s.duration && <span>Duration: <strong>{s.duration}</strong></span>}
-                      <span>Logged: {formatDate(s.recorded_at)}</span>
-                    </div>
-
-                    {s.notes && (
-                      <div style={{ fontSize: '0.825rem', color: '#334155' }}>
-                        "{s.notes}"
+                        <img
+                          src={getImageUrl(s.skin_record_image_url)}
+                          alt="Lesion"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        {s.skin_record_body_location && (
+                          <span style={{
+                            position: 'absolute',
+                            bottom: 2,
+                            left: 2,
+                            backgroundColor: 'rgba(15,23,42,0.85)',
+                            color: '#38bdf8',
+                            fontSize: '0.55rem',
+                            padding: '1px 3px',
+                            borderRadius: 2
+                          }}>
+                            {s.skin_record_body_location}
+                          </span>
+                        )}
                       </div>
                     )}
+
+                    <div style={{ flex: 1, fontSize: '0.825rem', color: '#334155' }}>
+                      <strong>Patient Note:</strong> {s.notes ? `"${s.notes}"` : <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>None provided</span>}
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button
-                      onClick={() => setActiveTab('doctor_consultations')}
-                      style={{
-                        padding: '6px 12px',
-                        backgroundColor: '#ffffff',
-                        border: '1px solid #cbd5e1',
-                        borderRadius: 6,
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        color: '#0f172a',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4
-                      }}
-                    >
-                      <Stethoscope size={13} />
-                      <span>Consultation</span>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('doctor_treatments')}
-                      style={{
-                        padding: '6px 12px',
-                        backgroundColor: '#0d6efd',
-                        color: '#ffffff',
-                        border: 'none',
-                        borderRadius: 6,
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4
-                      }}
-                    >
-                      <Pill size={13} />
-                      <span>Prescribe</span>
-                    </button>
-                  </div>
+                  {/* Doctor Clinical Observation Section if exists */}
+                  {(s.doctor_observation || s.doctor_feedback) && (
+                    <div style={{
+                      padding: '10px 14px',
+                      backgroundColor: '#eff6ff',
+                      border: '1px solid #bfdbfe',
+                      borderRadius: 8
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                        <Stethoscope size={14} color="#2563eb" />
+                        <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1e40af' }}>
+                          Doctor Clinical Observation ({s.reviewed_by_doctor_name ? `Dr. ${s.reviewed_by_doctor_name}` : 'Clinician'})
+                        </span>
+                        {s.reviewed_at && (
+                          <span style={{ fontSize: '0.7rem', color: '#6b7280' }}>
+                            • {formatDate(s.reviewed_at)}
+                          </span>
+                        )}
+                      </div>
+
+                      {s.doctor_observation && (
+                        <div style={{ fontSize: '0.8rem', color: '#1e3a8a', marginBottom: s.doctor_feedback ? 3 : 0 }}>
+                          <strong>Observation:</strong> {s.doctor_observation}
+                        </div>
+                      )}
+
+                      {s.doctor_feedback && (
+                        <div style={{ fontSize: '0.8rem', color: '#1e3a8a' }}>
+                          <strong>Recommendations for Patient:</strong> {s.doctor_feedback}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         )}
       </div>
+
+      {/* Observation Modal */}
+      {observationModalSymptom && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: 480 }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: '#0f172a' }}>
+              Add Clinical Observation
+            </h3>
+            <p style={{ fontSize: '0.825rem', color: '#64748b', marginBottom: 16 }}>
+              Patient: <strong>{observationModalSymptom.patient_name}</strong> • Symptom: <strong>{observationModalSymptom.symptom_name}</strong> ({observationModalSymptom.severity})
+            </p>
+
+            <form onSubmit={handleSubmitObservation}>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: '0.775rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>
+                  Clinical Observation / Physical Findings *
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="e.g. Mild localized erythema observed. No signs of secondary infection or cellulitis."
+                  value={observationData.doctor_observation}
+                  onChange={(e) => setObservationData({ ...observationData, doctor_observation: e.target.value })}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.775rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>
+                  Patient Recommendations & Guidance (Optional)
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="e.g. Apply prescribed topical barrier cream twice daily. Avoid hot showers."
+                  value={observationData.doctor_feedback}
+                  onChange={(e) => setObservationData({ ...observationData, doctor_feedback: e.target.value })}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  onClick={() => setObservationModalSymptom(null)}
+                  style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingObs}
+                  style={{ padding: '8px 16px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  {submittingObs ? 'Saving...' : 'Save Clinical Observation'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

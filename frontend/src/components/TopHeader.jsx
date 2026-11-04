@@ -14,7 +14,7 @@ const PAGE_METADATA = {
   dashboard: { title: 'Dashboard Overview', breadcrumb: 'Overview' },
   diagnose: { title: 'AI Skin Disease Classification', breadcrumb: 'AI & Skin Monitoring' },
   records: { title: 'Skin Health Records', breadcrumb: 'AI & Skin Monitoring' },
-  symptoms: { title: 'Symptom Severity Tracker', breadcrumb: 'AI & Skin Monitoring' },
+  symptoms: { title: 'Symptoms & Observations', breadcrumb: 'AI & Skin Monitoring' },
   comparison: { title: 'Longitudinal Image Comparison', breadcrumb: 'AI & Skin Monitoring' },
   timeline: { title: 'Skin Progress Timeline', breadcrumb: 'AI & Skin Monitoring' },
   my_dermatologist: { title: 'My Dermatologist', breadcrumb: 'Doctor & Medical Care' },
