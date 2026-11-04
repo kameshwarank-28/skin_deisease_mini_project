@@ -66,3 +66,30 @@ Splitting was performed with fixed random seed `seed=42`:
 - **Mitigation**: Class-Weighted Focal Loss ($\gamma = 2.0$, label smoothing $\epsilon = 0.05$) with normalized inverse-frequency weights applied during training:
   $$\alpha_c = \frac{N_{\text{total}}}{C \cdot N_c}$$
   Class weights range from $0.332$ (Melanocytic Nevi) to $2.300$ (Atopic Dermatitis).
+
+---
+
+## 7. Deep Investigation: The Eczema, Atopic Dermatitis & Fungal Triad
+
+### Existence and Representation
+- **Eczema Directory**: Confirmed present at `Z:\IMG_CLASSES\1. Eczema 1677` containing 1,677 raw images (1,573 unique files).
+- **Atopic Dermatitis Directory**: Confirmed present as a separate class at `Z:\IMG_CLASSES\3. Atopic Dermatitis - 1.25k` containing 1,257 raw images (1,218 unique files).
+- **Fungal Infections Directory**: Confirmed present at `Z:\IMG_CLASSES\9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k` containing 1,702 raw images (1,644 unique files).
+
+### Cross-Folder Label Duplication & Noise
+Empirical hash analysis revealed direct label contamination in the raw uncleaned dataset:
+- **12 exact identical image files** were discovered present in *both* `1. Eczema 1677` and `3. Atopic Dermatitis - 1.25k`.
+- **13 exact identical image files** were discovered present in *both* `1. Eczema 1677` and `9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k`.
+- **0 duplicate files** between Atopic Dermatitis and Fungal Infections.
+
+All 25 contradictory files were quarantined and purged from training to prevent contradictory gradient penalties.
+
+### Morphological Ambiguity & Visual Diversity
+- **Eczema vs. Atopic Dermatitis**: Atopic dermatitis is the chronic allergic phenotype of eczema. Both present identical macroscopic signs: ill-defined erythematous patches, lichenification, excoriation, and scaling. In standard 10-class classification, separate class heads force the model to split probability mass across both categories.
+- **Eczema vs. Fungal Infections**: Nummular eczema (discoid dermatitis) forms round, coin-shaped erythematous scaly plaques. *Tinea corporis* (ringworm) forms circular annular lesions with advancing erythematous scaling borders and central clearing. In downsampled RGB images ($224 \times 224$), CNNs detect identical circular edge features and erythematous color histograms, causing the model to output balanced probabilities (~22% fungal vs ~13% eczema + ~13% atopic dermatitis, totalling ~26% eczema-spectrum).
+- **Resolution and Lighting Profile**:
+  - Eczema: Mean resolution $615.5 \times 530.2$ px, mean brightness 104.6.
+  - Atopic Dermatitis: Mean resolution $468.8 \times 380.5$ px, mean brightness 115.3.
+  - Fungal Infections: Mean resolution $649.5 \times 518.4$ px, mean brightness 113.2.
+
+

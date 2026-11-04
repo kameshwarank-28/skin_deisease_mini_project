@@ -77,3 +77,4 @@ The updated prediction pipeline in `backend/app/services/classifier.py` and `pre
    - Actinic Keratoses and Benign Keratosis-like Lesions share subtle histological and macroscopic textures, resulting in occasional cross-class confusion.
 3. **Not a Diagnostic Substitute**:
    - As mandated by medical AI safety standards, the model provides assistive screening and triage prioritization only. It does not replace tissue biopsy or professional dermatological diagnosis.
+

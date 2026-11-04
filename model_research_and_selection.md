@@ -59,3 +59,4 @@ Models are ranked on the independent test set according to:
 3. **Malignancy Recall**: Sensitivity on dangerous lesions (Melanoma and Basal Cell Carcinoma).
 4. **Expected Calibration Error (ECE)**: Probability alignment with empirical reliability.
 5. **Inference Latency**: Real-time usability on clinical client devices.
+

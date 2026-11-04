@@ -70,3 +70,4 @@ To identify the strongest replacement model for the DermAI Health Monitor, resea
 2. **Superior Malignancy Recall**: Achieved the highest sensitivity on the most clinically critical skin cancers—**34.29% Recall / 54.55% Precision on Melanoma** and **37.14% Recall on Basal Cell Carcinoma (BCC)**.
 3. **Lowest Calibrated ECE (0.0259)**: Demonstrates near-ideal alignment between model confidence and true empirical accuracy, eliminating misleading diagnostic certainty.
 4. **Computational Efficiency**: At only **50.86 ms latency** and a compact **20.19M parameter footprint**, it provides responsive, low-latency performance in real-time browser sessions without requiring expensive cloud GPU instances.
+

@@ -30,3 +30,4 @@ Run the verification script to verify which checkpoint is currently active:
 ```powershell
 python -u verify_efficientnetv2_s.py
 ```
+
