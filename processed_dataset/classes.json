@@ -12,7 +12,11 @@
     "8. Seborrheic Keratoses and other Benign Tumors - 1.8k": 8,
     "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": 9,
     "11. Normal Skin": 10,
-    "Normal_Skin": 10
+    "12. Normal_Skin": 10,
+    "12. Normal Skin": 10,
+    "12. Normal_skin": 10,
+    "Normal_Skin": 10,
+    "Normal Skin": 10
   },
   "idx_to_class": {
     "0": "1. Eczema 1677",

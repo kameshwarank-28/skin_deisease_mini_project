@@ -59,3 +59,4 @@ def extract_user_skin_crops():
 
 if __name__ == "__main__":
     extract_user_skin_crops()
+

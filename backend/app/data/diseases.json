@@ -5,10 +5,26 @@
     "type": "Inflammatory / Chronic",
     "risk_level": "Low to Moderate",
     "description": "Eczema is a common condition that causes dry, itchy, inflamed, and irritated skin patches. It can flare periodically and is not contagious.",
-    "symptoms": ["Dry, sensitive skin", "Intense itching (pruritus)", "Red to brownish-gray patches", "Small raised bumps that may leak fluid when scratched", "Cracked, scaly skin"],
-    "common_triggers": ["Harsh soaps/detergents", "Dry weather", "Stress", "Allergens like pollen or pet dander", "Synthetic fabrics"],
+    "symptoms": [
+      "Dry, sensitive skin",
+      "Intense itching (pruritus)",
+      "Red to brownish-gray patches",
+      "Small raised bumps that may leak fluid when scratched",
+      "Cracked, scaly skin"
+    ],
+    "common_triggers": [
+      "Harsh soaps/detergents",
+      "Dry weather",
+      "Stress",
+      "Allergens like pollen or pet dander",
+      "Synthetic fabrics"
+    ],
     "when_to_see_doctor": "Seek evaluation if the rash is intensely painful, shows signs of bacterial infection (pus, yellow crusting), or interferes with sleep.",
-    "care_tips": ["Moisturize frequently with fragrance-free ointments", "Take short, lukewarm showers", "Avoid known irritants and wear soft, breathable cotton fabrics"]
+    "care_tips": [
+      "Moisturize frequently with fragrance-free ointments",
+      "Take short, lukewarm showers",
+      "Avoid known irritants and wear soft, breathable cotton fabrics"
+    ]
   },
   "10. Warts Molluscum and other Viral Infections - 2103": {
     "name": "Viral Infections (Warts & Molluscum)",
@@ -16,10 +32,23 @@
     "type": "Infectious / Viral",
     "risk_level": "Low",
     "description": "Skin conditions caused by viral infections, including common warts, plantar warts, and dome-shaped molluscum contagiosum bumps with central dimples.",
-    "symptoms": ["Small, fleshy, grainy bumps", "Rough to touch", "Flesh-colored, white, or pink firm lesions", "Central indentation (umbilication) in molluscum"],
-    "common_triggers": ["Direct skin-to-skin contact", "Shared towels/gym equipment", "Warm, moist environments (pools, locker rooms)"],
+    "symptoms": [
+      "Small, fleshy, grainy bumps",
+      "Rough to touch",
+      "Flesh-colored, white, or pink firm lesions",
+      "Central indentation (umbilication) in molluscum"
+    ],
+    "common_triggers": [
+      "Direct skin-to-skin contact",
+      "Shared towels/gym equipment",
+      "Warm, moist environments (pools, locker rooms)"
+    ],
     "when_to_see_doctor": "Consult a doctor if lesions are painful, spreading rapidly, bleeding, or located on sensitive areas.",
-    "care_tips": ["Do not scratch, pick, or shave over lesions to prevent spreading", "Keep hands clean and dry", "Avoid sharing personal hygiene items"]
+    "care_tips": [
+      "Do not scratch, pick, or shave over lesions to prevent spreading",
+      "Keep hands clean and dry",
+      "Avoid sharing personal hygiene items"
+    ]
   },
   "2. Melanoma 15.75k": {
     "name": "Melanoma",
@@ -27,10 +56,24 @@
     "type": "Malignant Neoplasm (High Risk)",
     "risk_level": "High (Urgent Medical Attention Recommended)",
     "description": "Melanoma is the most serious form of skin cancer, arising from pigment-producing melanocytes. Early detection and immediate clinical biopsy are critical.",
-    "symptoms": ["Asymmetrical mole (ABCDE rule)", "Irregular, scalloped or notched border", "Varied shades of brown, black, blue, red, or white", "Diameter larger than 6mm (pencil eraser size)", "Evolving size, shape, color, or new itching/bleeding"],
-    "common_triggers": ["Ultraviolet (UV) radiation from sun exposure or tanning beds", "Fair skin, light hair, or history of blistering sunburns", "Family history of melanoma"],
+    "symptoms": [
+      "Asymmetrical mole (ABCDE rule)",
+      "Irregular, scalloped or notched border",
+      "Varied shades of brown, black, blue, red, or white",
+      "Diameter larger than 6mm (pencil eraser size)",
+      "Evolving size, shape, color, or new itching/bleeding"
+    ],
+    "common_triggers": [
+      "Ultraviolet (UV) radiation from sun exposure or tanning beds",
+      "Fair skin, light hair, or history of blistering sunburns",
+      "Family history of melanoma"
+    ],
     "when_to_see_doctor": "IMMEDIATE medical consultation with a dermatologist or oncologist is strongly recommended for any suspicious mole.",
-    "care_tips": ["Perform regular full-body skin self-exams", "Wear broad-spectrum SPF 30+ sunscreen daily", "Avoid peak sun hours and tanning beds"]
+    "care_tips": [
+      "Perform regular full-body skin self-exams",
+      "Wear broad-spectrum SPF 30+ sunscreen daily",
+      "Avoid peak sun hours and tanning beds"
+    ]
   },
   "3. Atopic Dermatitis - 1.25k": {
     "name": "Atopic Dermatitis",
@@ -38,10 +81,23 @@
     "type": "Allergic / Immune-Mediated",
     "risk_level": "Low to Moderate",
     "description": "A chronic, relapsing inflammatory skin disease commonly associated with a genetic predisposition to allergic rhinitis, asthma, or food allergies.",
-    "symptoms": ["Severe itching, often worse at night", "Thickened, lichenified skin from repeated scratching", "Erythematous papules and plaques in skin creases (elbows, behind knees)"],
-    "common_triggers": ["Sudden temperature changes", "Sweating", "Environmental allergens (dust mites, pollen)", "Fragrances"],
+    "symptoms": [
+      "Severe itching, often worse at night",
+      "Thickened, lichenified skin from repeated scratching",
+      "Erythematous papules and plaques in skin creases (elbows, behind knees)"
+    ],
+    "common_triggers": [
+      "Sudden temperature changes",
+      "Sweating",
+      "Environmental allergens (dust mites, pollen)",
+      "Fragrances"
+    ],
     "when_to_see_doctor": "Consult a dermatologist if over-the-counter moisturizers fail to provide relief or if signs of secondary infection appear.",
-    "care_tips": ["Apply thick emollient creams immediately after bathing", "Use mild, soap-free cleansers", "Manage stress and maintain optimal indoor humidity"]
+    "care_tips": [
+      "Apply thick emollient creams immediately after bathing",
+      "Use mild, soap-free cleansers",
+      "Manage stress and maintain optimal indoor humidity"
+    ]
   },
   "4. Basal Cell Carcinoma (BCC) 3323": {
     "name": "Basal Cell Carcinoma (BCC)",
@@ -49,10 +105,22 @@
     "type": "Malignant / Locally Invasive",
     "risk_level": "Moderate to High (Requires Medical Attention)",
     "description": "The most common form of skin cancer. It grows slowly and rarely metastasizes to distant sites, but can cause extensive local tissue destruction if untreated.",
-    "symptoms": ["Pearly or waxy translucent bump with visible tiny blood vessels (telangiectasias)", "Flat, firm, pale or yellow scar-like area", "Persistent non-healing sore that bleeds, oozes, or crusts", "Elevated pink growth with a central depression"],
-    "common_triggers": ["Cumulative long-term lifetime UV exposure", "Fair skin with high susceptibility to sunburn"],
+    "symptoms": [
+      "Pearly or waxy translucent bump with visible tiny blood vessels (telangiectasias)",
+      "Flat, firm, pale or yellow scar-like area",
+      "Persistent non-healing sore that bleeds, oozes, or crusts",
+      "Elevated pink growth with a central depression"
+    ],
+    "common_triggers": [
+      "Cumulative long-term lifetime UV exposure",
+      "Fair skin with high susceptibility to sunburn"
+    ],
     "when_to_see_doctor": "Prompt evaluation by a dermatologist is recommended for biopsy and surgical or topical removal.",
-    "care_tips": ["Protect face, ears, neck, and scalp with wide-brimmed hats", "Apply sunscreen rigorously", "Schedule regular dermatological screenings"]
+    "care_tips": [
+      "Protect face, ears, neck, and scalp with wide-brimmed hats",
+      "Apply sunscreen rigorously",
+      "Schedule regular dermatological screenings"
+    ]
   },
   "5. Melanocytic Nevi (NV) - 7970": {
     "name": "Melanocytic Nevi (Common Mole)",
@@ -60,10 +128,21 @@
     "type": "Benign Neoplasm",
     "risk_level": "Low (Benign)",
     "description": "Common benign growths composed of melanocytes. Most adults have between 10 and 40 moles, which are generally harmless.",
-    "symptoms": ["Evenly pigmented round or oval spot", "Clear, well-defined border", "Uniform tan, brown, or black color", "Stable size typically under 6mm"],
-    "common_triggers": ["Genetic predisposition", "Sun exposure during childhood and adolescence"],
+    "symptoms": [
+      "Evenly pigmented round or oval spot",
+      "Clear, well-defined border",
+      "Uniform tan, brown, or black color",
+      "Stable size typically under 6mm"
+    ],
+    "common_triggers": [
+      "Genetic predisposition",
+      "Sun exposure during childhood and adolescence"
+    ],
     "when_to_see_doctor": "Monitor with the ABCDE criteria; consult a physician if any mole changes in size, shape, color, or starts itching or bleeding.",
-    "care_tips": ["Take regular photos of existing moles to track changes", "Use sun protection to prevent UV damage"]
+    "care_tips": [
+      "Take regular photos of existing moles to track changes",
+      "Use sun protection to prevent UV damage"
+    ]
   },
   "6. Benign Keratosis-like Lesions (BKL) 2624": {
     "name": "Benign Keratosis",
@@ -71,10 +150,21 @@
     "type": "Benign Epidermal Lesion",
     "risk_level": "Low (Benign)",
     "description": "Non-cancerous skin lesions encompassing sun spots (solar lentigines) and lichen planus-like keratosis, frequently appearing in sun-exposed areas of older adults.",
-    "symptoms": ["Flat or slightly raised macules or thin plaques", "Tan, brown, reddish or grayish coloration", "Sharply demarcated borders"],
-    "common_triggers": ["Chronic cumulative ultraviolet light exposure", "Natural aging process"],
+    "symptoms": [
+      "Flat or slightly raised macules or thin plaques",
+      "Tan, brown, reddish or grayish coloration",
+      "Sharply demarcated borders"
+    ],
+    "common_triggers": [
+      "Chronic cumulative ultraviolet light exposure",
+      "Natural aging process"
+    ],
     "when_to_see_doctor": "Consult a healthcare provider if a lesion looks atypical, grows rapidly, or resembles melanoma.",
-    "care_tips": ["Daily broad-spectrum sunscreen", "Gentle skin hygiene", "Routine clinical skin checks"]
+    "care_tips": [
+      "Daily broad-spectrum sunscreen",
+      "Gentle skin hygiene",
+      "Routine clinical skin checks"
+    ]
   },
   "7. Psoriasis pictures Lichen Planus and related diseases - 2k": {
     "name": "Psoriasis & Lichen Planus",
@@ -82,10 +172,24 @@
     "type": "Autoimmune / Inflammatory",
     "risk_level": "Moderate",
     "description": "Immune-mediated dermatological conditions where rapid skin cell turnover produces thick, silvery-scaled plaques or violaceous polygonal itchy papules.",
-    "symptoms": ["Raised red patches covered with thick, silvery scales (Psoriasis)", "Itchy, flat-topped purple bumps (Lichen Planus)", "Dry, cracked skin that may bleed", "Pitted or discolored nails"],
-    "common_triggers": ["Infections (e.g. strep throat)", "Stress", "Cold, dry weather", "Skin injury (Koebner phenomenon)"],
+    "symptoms": [
+      "Raised red patches covered with thick, silvery scales (Psoriasis)",
+      "Itchy, flat-topped purple bumps (Lichen Planus)",
+      "Dry, cracked skin that may bleed",
+      "Pitted or discolored nails"
+    ],
+    "common_triggers": [
+      "Infections (e.g. strep throat)",
+      "Stress",
+      "Cold, dry weather",
+      "Skin injury (Koebner phenomenon)"
+    ],
     "when_to_see_doctor": "See a dermatologist for systemic, biologic, or targeted topical therapies, especially if joint pain (psoriatic arthritis) is present.",
-    "care_tips": ["Keep skin moisturized", "Controlled sunlight exposure under doctor advice", "Avoid smoking and excessive alcohol"]
+    "care_tips": [
+      "Keep skin moisturized",
+      "Controlled sunlight exposure under doctor advice",
+      "Avoid smoking and excessive alcohol"
+    ]
   },
   "8. Seborrheic Keratoses and other Benign Tumors - 1.8k": {
     "name": "Seborrheic Keratosis",
@@ -93,10 +197,19 @@
     "type": "Benign Epidermal Tumor",
     "risk_level": "Low (Benign)",
     "description": "One of the most common non-cancerous skin growths in older adults. They often appear 'pasted on' or waxy.",
-    "symptoms": ["Round or oval growths with a waxy, scaly, or 'stuck-on' appearance", "Tan, brown, or black color", "Slightly raised with a velvety to verrucous surface"],
-    "common_triggers": ["Aging and genetic factors (family predisposition)"],
+    "symptoms": [
+      "Round or oval growths with a waxy, scaly, or 'stuck-on' appearance",
+      "Tan, brown, or black color",
+      "Slightly raised with a velvety to verrucous surface"
+    ],
+    "common_triggers": [
+      "Aging and genetic factors (family predisposition)"
+    ],
     "when_to_see_doctor": "Check with a doctor if the growth becomes inflamed from clothing friction, bleeds, or is difficult to distinguish from melanoma.",
-    "care_tips": ["Avoid scratching or picking at growths", "Cryotherapy or curettage can be performed by a clinician if irritated"]
+    "care_tips": [
+      "Avoid scratching or picking at growths",
+      "Cryotherapy or curettage can be performed by a clinician if irritated"
+    ]
   },
   "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": {
     "name": "Fungal Infections (Tinea & Candidiasis)",
@@ -104,10 +217,24 @@
     "type": "Infectious / Fungal",
     "risk_level": "Low",
     "description": "Fungal infections of the outer skin layers (such as ringworm, athlete's foot, jock itch, or candidal intertrigo).",
-    "symptoms": ["Circular rash with raised, red, scaly edges and clearer center (ringworm)", "Intense itching, burning, or stinging", "Cracking, peeling skin in moist folds or between toes", "Red, macerated patches with satellite pustules"],
-    "common_triggers": ["Warm, humid conditions", "Wearing damp or tight clothing", "Public showers/pools", "Compromised skin barrier"],
+    "symptoms": [
+      "Circular rash with raised, red, scaly edges and clearer center (ringworm)",
+      "Intense itching, burning, or stinging",
+      "Cracking, peeling skin in moist folds or between toes",
+      "Red, macerated patches with satellite pustules"
+    ],
+    "common_triggers": [
+      "Warm, humid conditions",
+      "Wearing damp or tight clothing",
+      "Public showers/pools",
+      "Compromised skin barrier"
+    ],
     "when_to_see_doctor": "Seek medical attention if the infection does not improve after 2 weeks of antifungal treatment or spreads to the scalp or nails.",
-    "care_tips": ["Keep infected areas thoroughly clean and dry", "Use prescribed or OTC antifungal creams as directed", "Wear loose, breathable footwear and clothing"]
+    "care_tips": [
+      "Keep infected areas thoroughly clean and dry",
+      "Use prescribed or OTC antifungal creams as directed",
+      "Wear loose, breathable footwear and clothing"
+    ]
   },
   "11. Normal Skin": {
     "name": "Normal / Healthy Skin",
@@ -115,10 +242,22 @@
     "type": "Non-Pathological / Intact",
     "risk_level": "None (Healthy)",
     "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
-    "symptoms": ["Smooth, intact cutaneous surface", "Even pigmentation without suspicious focal macules", "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"],
-    "common_triggers": ["Routine hydration", "Sun protection with broad-spectrum SPF 30+", "Gentle non-stripping skincare hygiene"],
+    "symptoms": [
+      "Smooth, intact cutaneous surface",
+      "Even pigmentation without suspicious focal macules",
+      "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"
+    ],
+    "common_triggers": [
+      "Routine hydration",
+      "Sun protection with broad-spectrum SPF 30+",
+      "Gentle non-stripping skincare hygiene"
+    ],
     "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
-    "care_tips": ["Maintain daily skin barrier moisturization", "Apply broad-spectrum sunscreen when exposed to sunlight", "Avoid harsh chemical abrasives or excessive scrubbing"]
+    "care_tips": [
+      "Maintain daily skin barrier moisturization",
+      "Apply broad-spectrum sunscreen when exposed to sunlight",
+      "Avoid harsh chemical abrasives or excessive scrubbing"
+    ]
   },
   "Normal_Skin": {
     "name": "Normal / Healthy Skin",
@@ -126,9 +265,67 @@
     "type": "Non-Pathological / Intact",
     "risk_level": "None (Healthy)",
     "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
-    "symptoms": ["Smooth, intact cutaneous surface", "Even pigmentation without suspicious focal macules", "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"],
-    "common_triggers": ["Routine hydration", "Sun protection with broad-spectrum SPF 30+", "Gentle non-stripping skincare hygiene"],
+    "symptoms": [
+      "Smooth, intact cutaneous surface",
+      "Even pigmentation without suspicious focal macules",
+      "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"
+    ],
+    "common_triggers": [
+      "Routine hydration",
+      "Sun protection with broad-spectrum SPF 30+",
+      "Gentle non-stripping skincare hygiene"
+    ],
     "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
-    "care_tips": ["Maintain daily skin barrier moisturization", "Apply broad-spectrum sunscreen when exposed to sunlight", "Avoid harsh chemical abrasives or excessive scrubbing"]
+    "care_tips": [
+      "Maintain daily skin barrier moisturization",
+      "Apply broad-spectrum sunscreen when exposed to sunlight",
+      "Avoid harsh chemical abrasives or excessive scrubbing"
+    ]
+  },
+  "12. Normal_Skin": {
+    "name": "Normal / Healthy Skin",
+    "scientific_name": "Physiological Healthy Integument",
+    "type": "Non-Pathological / Intact",
+    "risk_level": "None (Healthy)",
+    "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
+    "symptoms": [
+      "Smooth, intact cutaneous surface",
+      "Even pigmentation without suspicious focal macules",
+      "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"
+    ],
+    "common_triggers": [
+      "Routine hydration",
+      "Sun protection with broad-spectrum SPF 30+",
+      "Gentle non-stripping skincare hygiene"
+    ],
+    "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
+    "care_tips": [
+      "Maintain daily skin barrier moisturization",
+      "Apply broad-spectrum sunscreen when exposed to sunlight",
+      "Avoid harsh chemical abrasives or excessive scrubbing"
+    ]
+  },
+  "12. Normal Skin": {
+    "name": "Normal / Healthy Skin",
+    "scientific_name": "Physiological Healthy Integument",
+    "type": "Non-Pathological / Intact",
+    "risk_level": "None (Healthy)",
+    "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
+    "symptoms": [
+      "Smooth, intact cutaneous surface",
+      "Even pigmentation without suspicious focal macules",
+      "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"
+    ],
+    "common_triggers": [
+      "Routine hydration",
+      "Sun protection with broad-spectrum SPF 30+",
+      "Gentle non-stripping skincare hygiene"
+    ],
+    "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
+    "care_tips": [
+      "Maintain daily skin barrier moisturization",
+      "Apply broad-spectrum sunscreen when exposed to sunlight",
+      "Avoid harsh chemical abrasives or excessive scrubbing"
+    ]
   }
 }

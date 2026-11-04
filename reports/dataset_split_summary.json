@@ -1,9 +1,9 @@
 {
   "num_classes": 11,
-  "total_images": 27704,
-  "train_images": 19388,
-  "val_images": 4150,
-  "test_images": 4166,
+  "total_images": 27900,
+  "train_images": 19525,
+  "val_images": 4180,
+  "test_images": 4195,
   "zero_leakage": true,
   "classes": [
     {
@@ -14,7 +14,7 @@
       "train_count": 1068,
       "val_count": 228,
       "test_count": 230,
-      "percentage": "5.51%"
+      "percentage": "5.47%"
     },
     {
       "class_index": 1,
@@ -24,7 +24,7 @@
       "train_count": 1295,
       "val_count": 277,
       "test_count": 278,
-      "percentage": "6.68%"
+      "percentage": "6.63%"
     },
     {
       "class_index": 2,
@@ -34,7 +34,7 @@
       "train_count": 2195,
       "val_count": 470,
       "test_count": 471,
-      "percentage": "11.32%"
+      "percentage": "11.24%"
     },
     {
       "class_index": 3,
@@ -44,7 +44,7 @@
       "train_count": 804,
       "val_count": 172,
       "test_count": 173,
-      "percentage": "4.15%"
+      "percentage": "4.12%"
     },
     {
       "class_index": 4,
@@ -54,7 +54,7 @@
       "train_count": 2321,
       "val_count": 497,
       "test_count": 498,
-      "percentage": "11.97%"
+      "percentage": "11.89%"
     },
     {
       "class_index": 5,
@@ -64,7 +64,7 @@
       "train_count": 5576,
       "val_count": 1195,
       "test_count": 1196,
-      "percentage": "28.76%"
+      "percentage": "28.56%"
     },
     {
       "class_index": 6,
@@ -74,7 +74,7 @@
       "train_count": 1445,
       "val_count": 309,
       "test_count": 311,
-      "percentage": "7.45%"
+      "percentage": "7.40%"
     },
     {
       "class_index": 7,
@@ -84,7 +84,7 @@
       "train_count": 1363,
       "val_count": 292,
       "test_count": 293,
-      "percentage": "7.03%"
+      "percentage": "6.98%"
     },
     {
       "class_index": 8,
@@ -94,7 +94,7 @@
       "train_count": 1276,
       "val_count": 273,
       "test_count": 275,
-      "percentage": "6.58%"
+      "percentage": "6.54%"
     },
     {
       "class_index": 9,
@@ -104,17 +104,17 @@
       "train_count": 1141,
       "val_count": 244,
       "test_count": 246,
-      "percentage": "5.89%"
+      "percentage": "5.85%"
     },
     {
       "class_index": 10,
       "folder_name": "11. Normal Skin",
       "clean_name": "Normal / Healthy Skin",
-      "total_clean_count": 1292,
-      "train_count": 904,
-      "val_count": 193,
-      "test_count": 195,
-      "percentage": "4.66%"
+      "total_clean_count": 1488,
+      "train_count": 1041,
+      "val_count": 223,
+      "test_count": 224,
+      "percentage": "5.33%"
     }
   ]
 }

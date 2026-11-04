@@ -1,12 +1,12 @@
 class_index,folder_name,clean_name,total_clean_count,train_count,val_count,test_count,percentage
-0,1. Eczema 1677,Eczema,1526,1068,228,230,5.51%
-1,10. Warts Molluscum and other Viral Infections - 2103,Warts Molluscum and Viral Infections,1850,1295,277,278,6.68%
-2,2. Melanoma 15.75k,Melanoma,3136,2195,470,471,11.32%
-3,3. Atopic Dermatitis - 1.25k,Atopic Dermatitis,1149,804,172,173,4.15%
-4,4. Basal Cell Carcinoma (BCC) 3323,Basal Cell Carcinoma (BCC),3316,2321,497,498,11.97%
-5,5. Melanocytic Nevi (NV) - 7970,Melanocytic Nevi (NV),7967,5576,1195,1196,28.76%
-6,6. Benign Keratosis-like Lesions (BKL) 2624,Benign Keratosis-like Lesions (BKL),2065,1445,309,311,7.45%
-7,7. Psoriasis pictures Lichen Planus and related diseases - 2k,Psoriasis and Lichen Planus,1948,1363,292,293,7.03%
-8,8. Seborrheic Keratoses and other Benign Tumors - 1.8k,Seborrheic Keratoses and Benign Tumors,1824,1276,273,275,6.58%
-9,9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k,Tinea Ringworm and Fungal Infections,1631,1141,244,246,5.89%
-10,11. Normal Skin,Normal / Healthy Skin,1292,904,193,195,4.66%
+0,1. Eczema 1677,Eczema,1526,1068,228,230,5.47%
+1,10. Warts Molluscum and other Viral Infections - 2103,Warts Molluscum and Viral Infections,1850,1295,277,278,6.63%
+2,2. Melanoma 15.75k,Melanoma,3136,2195,470,471,11.24%
+3,3. Atopic Dermatitis - 1.25k,Atopic Dermatitis,1149,804,172,173,4.12%
+4,4. Basal Cell Carcinoma (BCC) 3323,Basal Cell Carcinoma (BCC),3316,2321,497,498,11.89%
+5,5. Melanocytic Nevi (NV) - 7970,Melanocytic Nevi (NV),7967,5576,1195,1196,28.56%
+6,6. Benign Keratosis-like Lesions (BKL) 2624,Benign Keratosis-like Lesions (BKL),2065,1445,309,311,7.40%
+7,7. Psoriasis pictures Lichen Planus and related diseases - 2k,Psoriasis and Lichen Planus,1948,1363,292,293,6.98%
+8,8. Seborrheic Keratoses and other Benign Tumors - 1.8k,Seborrheic Keratoses and Benign Tumors,1824,1276,273,275,6.54%
+9,9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k,Tinea Ringworm and Fungal Infections,1631,1141,244,246,5.85%
+10,11. Normal Skin,Normal / Healthy Skin,1488,1041,223,224,5.33%

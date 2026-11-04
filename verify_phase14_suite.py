@@ -34,7 +34,9 @@ def run_suite():
     with Image.open(test_img_path) as img:
         res = service.predict(img)
 
-    normal_test_path = "Z:\\IMG_CLASSES\\Normal_Skin\\normal_skin_004caf5dc0ac.jpg"
+    normal_test_path = "Z:\\IMG_CLASSES\\12. Normal_Skin\\normal_skin_004caf5dc0ac.jpg"
+    if not os.path.exists(normal_test_path):
+        normal_test_path = "Z:\\IMG_CLASSES\\11. Normal Skin\\normal_skin_004caf5dc0ac.jpg"
     with Image.open(normal_test_path) as n_img:
         n_res = service.predict(n_img)
 

@@ -41,7 +41,12 @@ def generate_11class_dataset():
     }
 
     class_to_idx = {name: idx for idx, name in enumerate(ordered_classes)}
+    class_to_idx["12. Normal_Skin"] = 10
+    class_to_idx["12. Normal Skin"] = 10
+    class_to_idx["12. Normal_skin"] = 10
+    class_to_idx["11. Normal Skin"] = 10
     class_to_idx["Normal_Skin"] = 10
+    class_to_idx["Normal Skin"] = 10
     idx_to_class = {str(idx): name for idx, name in enumerate(ordered_classes)}
 
     classes_json_data = {
@@ -71,12 +76,14 @@ def generate_11class_dataset():
     disease_clean["label"] = disease_clean["class_name"].map(class_to_idx)
     print(f"Loaded {len(disease_clean)} clean disease images across 10 classes.")
 
-    # Normal Skin directory inspection
-    normal_dir = dataset_dir / "Normal_Skin"
+    # Normal Skin directory inspection (Priority: 12. Normal_Skin, then 11. Normal Skin, then Normal_Skin)
+    normal_dir = dataset_dir / "12. Normal_Skin"
     if not normal_dir.exists():
         normal_dir = dataset_dir / "11. Normal Skin"
+    if not normal_dir.exists():
+        normal_dir = dataset_dir / "Normal_Skin"
 
-    normal_files = [f for f in normal_dir.iterdir() if f.suffix.lower() in [".jpg", ".jpeg", ".png"]]
+    normal_files = [f for f in normal_dir.iterdir() if f.is_file() and f.suffix.lower() in [".jpg", ".jpeg", ".png"] and f.name.lower() != "thumbs.db"]
     print(f"Found {len(normal_files)} normal skin images in {normal_dir}.")
 
     existing_hashes = set(disease_clean["md5"].dropna().tolist())
