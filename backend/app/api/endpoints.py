@@ -18,8 +18,8 @@ from backend.app.models.history import PredictionRecord
 
 router = APIRouter()
 
-ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp"}
-MAX_FILE_SIZE_MB = 10
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "heic", "heif"}
+MAX_FILE_SIZE_MB = 15
 
 def validate_image_file(file: UploadFile) -> Image.Image:
     ext = file.filename.split(".")[-1].lower() if "." in file.filename else ""
@@ -32,6 +32,15 @@ def validate_image_file(file: UploadFile) -> Image.Image:
         contents = file.file.read()
         if len(contents) > MAX_FILE_SIZE_MB * 1024 * 1024:
             raise HTTPException(status_code=400, detail=f"File exceeds maximum size of {MAX_FILE_SIZE_MB}MB.")
+        
+        if ext in ["heic", "heif"]:
+            try:
+                import pillow_heif
+                heif_file = pillow_heif.read_heif(contents)
+                return Image.frombytes(heif_file.mode, heif_file.size, heif_file.data, "raw").convert("RGB")
+            except Exception:
+                pass
+
         image = Image.open(io.BytesIO(contents)).convert("RGB")
         return image
     except Exception as e:
@@ -42,7 +51,12 @@ def decode_base64_image(base64_str: str) -> Image.Image:
         if "," in base64_str:
             base64_str = base64_str.split(",", 1)[1]
         image_data = base64.b64decode(base64_str)
-        return Image.open(io.BytesIO(image_data)).convert("RGB")
+        try:
+            return Image.open(io.BytesIO(image_data)).convert("RGB")
+        except Exception:
+            import pillow_heif
+            heif_file = pillow_heif.read_heif(image_data)
+            return Image.frombytes(heif_file.mode, heif_file.size, heif_file.data, "raw").convert("RGB")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid base64 image data: {str(e)}")
 

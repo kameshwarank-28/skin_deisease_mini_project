@@ -28,6 +28,6 @@ def test_img(path, desc):
         return res
 
 if __name__ == "__main__":
-    test_img('Z:/IMG_CLASSES/Normal_Skin/normal_skin_00195a93db11.jpg', 'VALID NORMAL SKIN SAMPLE 1')
-    test_img('Z:/IMG_CLASSES/Normal_Skin/normal_skin_004caf5dc0ac.jpg', 'VALID NORMAL SKIN SAMPLE 2')
-    test_img('Z:/IMG_CLASSES/Normal_Skin/normal_skin_00dc004f9503.jpg', 'VALID NORMAL SKIN SAMPLE 3')
+    for i in [1, 2, 3]:
+        p = f"user_normal_samples/user_normal_{i}.jpg"
+        test_img(p, f"USER NORMAL SKIN IMAGE {i}")

@@ -38,6 +38,7 @@ frontend/dist/
 *.sqlite
 *.sqlite3
 backend/app/temp_uploads/
+user_normal_samples/
 quarantine/
 git.cmd
 push_to_github.bat

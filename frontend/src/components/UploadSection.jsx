@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertTriangle, RefreshCw, X, FileText } from 'lucide-react';
 
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB configurable limit
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif'];
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20MB limit
 
 export default function UploadSection({
   onFileSelected,
@@ -84,7 +84,7 @@ export default function UploadSection({
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+        accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/jpeg,image/png,image/webp,image/heic,image/heif"
         style={{ display: 'none' }}
       />
 
