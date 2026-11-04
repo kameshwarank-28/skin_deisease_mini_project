@@ -29,3 +29,4 @@ with urllib.request.urlopen(req) as resp:
     print('Confidence:', data.get('confidence_pct'))
     print('Prediction ID:', data.get('prediction_id'))
     print('Top 3:', [{'name': x['clean_name'], 'prob': x['percentage']} for x in data.get('top_5', [])[:3]])
+

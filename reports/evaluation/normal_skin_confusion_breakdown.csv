@@ -1,0 +1,12 @@
+predicted_class_index,predicted_class_name,sample_count,percentage
+0,Eczema,2,2.86%
+1,Warts Molluscum and Viral Infections,2,2.86%
+2,Melanoma,0,0.00%
+3,Atopic Dermatitis,5,7.14%
+4,Basal Cell Carcinoma (BCC),1,1.43%
+5,Melanocytic Nevi (NV),0,0.00%
+6,Benign Keratosis-like Lesions (BKL),0,0.00%
+7,Psoriasis and Lichen Planus,0,0.00%
+8,Seborrheic Keratoses and Benign Tumors,0,0.00%
+9,Tinea Ringworm and Fungal Infections,0,0.00%
+10,Normal / Healthy Skin,60,85.71%

@@ -134,7 +134,10 @@ def main():
         print(f"Error: Checkpoint not found at {ckpt_path}")
         sys.exit(1)
 
-    checkpoint = torch.load(ckpt_path, map_location=device)
+    try:
+        checkpoint = torch.load(ckpt_path, map_location=device, weights_only=False)
+    except TypeError:
+        checkpoint = torch.load(ckpt_path, map_location=device)
     model_name = checkpoint.get("model_name", "efficientnetv2_s")
     timm_key = checkpoint.get("timm_model_name", checkpoint.get("timm_key", model_name))
     if timm_key in ["efficientnetv2_s", "efficientnet_v2_s"]:
@@ -211,8 +214,15 @@ def main():
         print(f"  #{rank} {p_val*100:>6.2f}%  ->  {cname}")
 
     print("\nClinical Safety Notice:")
-    print("  AI screening predictions are statistical estimates and do NOT constitute")
-    print("  a confirmed medical diagnosis. Consult a board-certified dermatologist.")
+    if "normal" in top_clean_name.lower():
+        if is_uncertain:
+            print("  Unable to determine whether this image represents normal skin or a supported skin condition.")
+            print("  Please upload a clearer image or consult a dermatologist.")
+        else:
+            print("  No visible signs of the supported skin conditions were detected in this image. The skin appears normal.")
+    else:
+        print("  AI screening predictions are statistical estimates and do NOT constitute")
+        print("  a confirmed medical diagnosis. Consult a board-certified dermatologist.")
     print("=" * 65)
 
     # Generate and save heatmap

@@ -108,5 +108,27 @@
     "common_triggers": ["Warm, humid conditions", "Wearing damp or tight clothing", "Public showers/pools", "Compromised skin barrier"],
     "when_to_see_doctor": "Seek medical attention if the infection does not improve after 2 weeks of antifungal treatment or spreads to the scalp or nails.",
     "care_tips": ["Keep infected areas thoroughly clean and dry", "Use prescribed or OTC antifungal creams as directed", "Wear loose, breathable footwear and clothing"]
+  },
+  "11. Normal Skin": {
+    "name": "Normal / Healthy Skin",
+    "scientific_name": "Physiological Healthy Integument",
+    "type": "Non-Pathological / Intact",
+    "risk_level": "None (Healthy)",
+    "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
+    "symptoms": ["Smooth, intact cutaneous surface", "Even pigmentation without suspicious focal macules", "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"],
+    "common_triggers": ["Routine hydration", "Sun protection with broad-spectrum SPF 30+", "Gentle non-stripping skincare hygiene"],
+    "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
+    "care_tips": ["Maintain daily skin barrier moisturization", "Apply broad-spectrum sunscreen when exposed to sunlight", "Avoid harsh chemical abrasives or excessive scrubbing"]
+  },
+  "Normal_Skin": {
+    "name": "Normal / Healthy Skin",
+    "scientific_name": "Physiological Healthy Integument",
+    "type": "Non-Pathological / Intact",
+    "risk_level": "None (Healthy)",
+    "description": "No visible signs of the supported skin conditions were detected in this image. The skin appears normal with intact cutaneous barrier function.",
+    "symptoms": ["Smooth, intact cutaneous surface", "Even pigmentation without suspicious focal macules", "Absence of suspicious erythematous patches, plaques, scaling, or ulcerations"],
+    "common_triggers": ["Routine hydration", "Sun protection with broad-spectrum SPF 30+", "Gentle non-stripping skincare hygiene"],
+    "when_to_see_doctor": "Continue routine preventive skin self-examinations. Consult a certified dermatologist if you notice any new, changing, itching, or bleeding spots.",
+    "care_tips": ["Maintain daily skin barrier moisturization", "Apply broad-spectrum sunscreen when exposed to sunlight", "Avoid harsh chemical abrasives or excessive scrubbing"]
   }
 }

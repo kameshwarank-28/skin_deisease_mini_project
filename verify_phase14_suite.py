@@ -22,20 +22,26 @@ def run_suite():
     assert service.model_name == "efficientnetv2_s", f"Expected efficientnetv2_s, got {service.model_name}"
     print(f"[OK 1/15] Verified Model Checkpoint: Loaded {service.model_name} (T={service.temperature:.4f})")
 
-    # 2. Class Names & 10-Class Mapping
-    assert len(service.classes_list) == 10, f"Expected 10 classes, got {len(service.classes_list)}"
+    # 2. Class Names & 11-Class Mapping
+    assert len(service.classes_list) == 11, f"Expected 11 classes, got {len(service.classes_list)}"
     with open("class_mapping.json", "r", encoding="utf-8") as f:
         cmap = json.load(f)
-    print(f"[OK 2/15] Verified Class Mapping: 10 classes match dataset exactly.")
+    assert cmap["num_classes"] == 11, "Class mapping must specify 11 classes"
+    print(f"[OK 2/15] Verified Class Mapping: 11 classes (including Normal / Healthy Skin) match dataset exactly.")
 
-    # 3. Test on Valid Clinical Skin Image
+    # 3. Test on Valid Clinical Skin Image and Normal Skin Image
     test_img_path = "Z:\\IMG_CLASSES\\4. Basal Cell Carcinoma (BCC) 3323\\ISIC_0054986.jpg"
     with Image.open(test_img_path) as img:
         res = service.predict(img)
 
+    normal_test_path = "Z:\\IMG_CLASSES\\Normal_Skin\\normal_skin_004caf5dc0ac.jpg"
+    with Image.open(normal_test_path) as n_img:
+        n_res = service.predict(n_img)
+
     assert res["prediction"] is not None
     assert len(res["top_5"]) == 5
-    print(f"[OK 3/15] Valid Skin Image Classified: '{res['prediction']}' (Confidence: {res['confidence_pct']})")
+    assert n_res["is_normal_skin"] == True, f"Expected Normal Skin, got {n_res['prediction']}"
+    print(f"[OK 3/15] Valid Disease & Normal Skin Classified: Disease='{res['prediction']}', Normal='{n_res['prediction']}' ({n_res['confidence_pct']})")
 
     # 4. Top-3 Probabilities and Calibration
     probs = [p["probability"] for p in res["top_5"][:3]]

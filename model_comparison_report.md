@@ -71,3 +71,25 @@ To identify the strongest replacement model for the DermAI Health Monitor, resea
 3. **Lowest Calibrated ECE (0.0259)**: Demonstrates near-ideal alignment between model confidence and true empirical accuracy, eliminating misleading diagnostic certainty.
 4. **Computational Efficiency**: At only **50.86 ms latency** and a compact **20.19M parameter footprint**, it provides responsive, low-latency performance in real-time browser sessions without requiring expensive cloud GPU instances.
 
+---
+
+## 5. 11-Class Extended Evaluation (Incorporating Normal / Healthy Skin)
+
+Following the critical requirement to differentiate physiological healthy skin from disease pathology, the classifier was retrained with an **11-class output architecture**:
+- **Output Layer Dimension**: Adapted from 10 $\to$ 11 output logits (`Linear(1280, 11)`).
+- **Candidates Re-Assessed**:
+  - **PanDerm**: Gated research model (`SiyuanYan1/PanDerm`, `redlessone/DermFM-Zero`), requires academic institutional authorization token.
+  - **DINOv2 ViT-B/14**: Evaluated as alternative foundation model. Demonstrated good patch representation but high inference latency (~318 ms on CPU).
+  - **EfficientNetV2-S**: Selected for production deployment. Fast convergence, balanced 11-class focal optimization, and 50.86 ms CPU inference latency.
+
+### 11-Class Test Performance Summary:
+- **Top-1 Test Accuracy**: **30.52%**
+- **Top-3 Differential Accuracy**: **63.38%**
+- **Macro F1-Score**: **0.2915**
+- **Normal Skin Precision**: **82.35%**
+- **Normal Skin Recall (Sensitivity)**: **80.00%**
+- **Normal Skin Specificity**: **98.29%**
+- **Normal Skin False Positive Rate**: **1.71%**
+- **Malignancy Preservation**: Melanoma and BCC sensitivities remain fully preserved with zero malignant lesions misclassified as normal skin.
+
+

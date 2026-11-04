@@ -19,37 +19,38 @@ This document provides a complete audit of the clinical dermatological image dat
 ---
 
 ## 3. Class Names & Image Distribution
-The dataset contains exactly 10 diagnostic categories:
+The updated dataset contains exactly 11 diagnostic and physiological skin categories:
 
 | Index | Exact Directory Name | Clean Diagnostic Label | Raw Count | Pruned Count | Class Share (%) |
 |:---:|:---|:---|:---:|:---:|:---:|
-| 0 | `1. Eczema 1677` | Eczema | 1,678 | 1,526 | 5.78% |
-| 1 | `10. Warts Molluscum and other Viral Infections - 2103` | Warts Molluscum & Viral Infections | 2,103 | 1,850 | 7.00% |
-| 2 | `2. Melanoma 15.75k` | Melanoma | 3,140 | 3,136 | 11.87% |
-| 3 | `3. Atopic Dermatitis - 1.25k` | Atopic Dermatitis | 1,257 | 1,149 | 4.35% |
-| 4 | `4. Basal Cell Carcinoma (BCC) 3323` | Basal Cell Carcinoma (BCC) | 3,323 | 3,316 | 12.56% |
-| 5 | `5. Melanocytic Nevi (NV) - 7970` | Melanocytic Nevi (NV) | 7,970 | 7,967 | 30.16% |
-| 6 | `6. Benign Keratosis-like Lesions (BKL) 2624` | Benign Keratosis-like Lesions (BKL) | 2,079 | 2,065 | 7.82% |
-| 7 | `7. Psoriasis pictures Lichen Planus and related diseases - 2k` | Psoriasis & Lichen Planus | 2,055 | 1,948 | 7.38% |
-| 8 | `8. Seborrheic Keratoses and other Benign Tumors - 1.8k` | Seborrheic Keratoses & Tumors | 1,847 | 1,824 | 6.91% |
-| 9 | `9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k` | Fungal Infections (Tinea & Candidiasis) | 1,702 | 1,631 | 6.18% |
-| **Total** | **All 10 Diagnostic Classes** | — | **27,154** | **26,412** | **100.00%** |
+| 0 | `1. Eczema 1677` | Eczema | 1,678 | 1,526 | 5.51% |
+| 1 | `10. Warts Molluscum and other Viral Infections - 2103` | Warts Molluscum & Viral Infections | 2,103 | 1,850 | 6.68% |
+| 2 | `2. Melanoma 15.75k` | Melanoma | 3,140 | 3,136 | 11.32% |
+| 3 | `3. Atopic Dermatitis - 1.25k` | Atopic Dermatitis | 1,257 | 1,149 | 4.15% |
+| 4 | `4. Basal Cell Carcinoma (BCC) 3323` | Basal Cell Carcinoma (BCC) | 3,323 | 3,316 | 11.97% |
+| 5 | `5. Melanocytic Nevi (NV) - 7970` | Melanocytic Nevi (NV) | 7,970 | 7,967 | 28.76% |
+| 6 | `6. Benign Keratosis-like Lesions (BKL) 2624` | Benign Keratosis-like Lesions (BKL) | 2,079 | 2,065 | 7.45% |
+| 7 | `7. Psoriasis pictures Lichen Planus and related diseases - 2k` | Psoriasis & Lichen Planus | 2,055 | 1,948 | 7.03% |
+| 8 | `8. Seborrheic Keratoses and other Benign Tumors - 1.8k` | Seborrheic Keratoses & Tumors | 1,847 | 1,824 | 6.58% |
+| 9 | `9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k` | Fungal Infections (Tinea & Candidiasis) | 1,702 | 1,631 | 5.89% |
+| 10 | `11. Normal Skin` (`Normal_Skin`) | Normal / Healthy Skin | 1,386 | 1,292 | 4.66% |
+| **Total** | **All 11 Supported Categories** | — | **28,540** | **27,704** | **100.00%** |
 
 ---
 
 ## 4. Data Cleaning, Corrupt Detection & Deduplication
 1. **Corrupted Images**: **0 files**. Every single image was decoded via PIL / OpenCV without header errors or truncated byte streams.
 2. **Cross-Class Duplicate Conflicts**: **117 images** were detected with identical MD5 hashes under differing, contradictory diagnostic labels (e.g. an identical image labeled both under Eczema and Atopic Dermatitis). All 117 conflicting entries were quarantined and excluded from training to prevent label ambiguity and contradictory gradient updates.
-3. **Within-Class Redundant Duplicates**: **624 exact identical duplicate files** within the same class were detected. Redundant duplicates were removed, retaining a single canonical instance.
-4. **Cleaned Usable Dataset**: **26,412 verified high-quality skin disease images**.
+3. **Within-Class Redundant Duplicates**: Redundant duplicate files within the same class were removed, retaining a single canonical instance.
+4. **Cleaned Usable Dataset**: **27,704 verified high-quality skin images across 11 classes**.
 
 ---
 
 ## 5. Stratified 70/15/15 Data Leakage Prevention
 Splitting was performed with fixed random seed `seed=42`:
-- **Training Subset (70%)**: 18,488 images
-- **Validation Subset (15%)**: 3,962 images
-- **Independent Test Subset (15%)**: 3,962 images
+- **Training Subset (70%)**: 19,388 images
+- **Validation Subset (15%)**: 4,150 images
+- **Independent Test Subset (15%)**: 4,166 images
 
 ### Leakage Verification:
 - Shared Hashes between Train and Val: **0**

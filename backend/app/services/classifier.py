@@ -85,7 +85,10 @@ class SkinClassifierService:
 
             if target_ckpt is not None:
                 print(f"[Classifier] Loading weights from {target_ckpt}")
-                checkpoint = torch.load(target_ckpt, map_location=self.device)
+                try:
+                    checkpoint = torch.load(target_ckpt, map_location=self.device, weights_only=False)
+                except TypeError:
+                    checkpoint = torch.load(target_ckpt, map_location=self.device)
                 model_name = checkpoint.get("model_name", "resnet50")
                 self.model_name = model_name
                 self.temperature = float(checkpoint.get("temperature", 0.50))
@@ -114,8 +117,10 @@ class SkinClassifierService:
         blur_score = 100.0
         is_blurry = False
         mean_brightness = 128.0
+        std_brightness = 40.0
         is_too_dark = False
         is_overexposed = False
+        is_featureless = False
 
         if TORCH_AVAILABLE:
             try:
@@ -123,8 +128,10 @@ class SkinClassifierService:
                 blur_score = float(cv2.Laplacian(np_gray, cv2.CV_64F).var())
                 is_blurry = blur_score < 30.0
                 mean_brightness = float(np.mean(np_gray))
+                std_brightness = float(np.std(np_gray))
                 is_too_dark = mean_brightness < 35.0
                 is_overexposed = mean_brightness > 225.0
+                is_featureless = std_brightness < 12.0
             except Exception:
                 pass
 
@@ -137,8 +144,10 @@ class SkinClassifierService:
             warnings.append(f"Severely underexposed/dark image (mean brightness: {mean_brightness:.1f}).")
         if is_overexposed:
             warnings.append(f"Severely overexposed image (mean brightness: {mean_brightness:.1f}).")
+        if is_featureless:
+            warnings.append(f"Image lacks detectable skin texture or surface detail (variation: {std_brightness:.1f}).")
 
-        is_rejected = is_too_dark or is_overexposed or (is_low_res and is_blurry)
+        is_rejected = is_too_dark or is_overexposed or is_featureless or (is_low_res and is_blurry)
 
         return {
             "valid": not is_rejected,
@@ -146,10 +155,12 @@ class SkinClassifierService:
             "height": h,
             "blur_score": blur_score,
             "mean_brightness": mean_brightness,
+            "std_brightness": std_brightness,
             "is_blurry": is_blurry,
             "is_low_res": is_low_res,
             "is_too_dark": is_too_dark,
             "is_overexposed": is_overexposed,
+            "is_featureless": is_featureless,
             "is_rejected": is_rejected,
             "warnings": warnings
         }
@@ -297,14 +308,41 @@ class SkinClassifierService:
             })
 
         top_pred = top_5[0]
+        is_normal = ("normal" in top_pred["clean_name"].lower() or "normal" in top_pred["class_name"].lower())
         entropy = float(calculate_entropy(probs))
-        is_uncertain = bool(entropy > 1.6 or top_pred["probability"] < 0.20 or quality_info.get("is_rejected", False))
+        
+        # Uncertainty triggers in 11-class space: max entropy is ln(11) ~= 2.40.
+        # Top probability < 22% or entropy > 2.15 indicates ambiguous/split probability mass
+        is_uncertain = bool(
+            entropy > 2.15 or 
+            top_pred["probability"] < 0.22 or 
+            quality_info.get("is_rejected", False)
+        )
 
-        # Generate attention heatmap for the top predicted disease
+        # Generate attention heatmap for the top predicted disease/category
         heatmap_overlay = self.generate_attention_heatmap(pil_image, target_class=top_pred["class_idx"])
 
         # Match disease database details
         disease_info = self.diseases_db.get(top_pred["class_name"])
+        if not disease_info:
+            for k, v in self.diseases_db.items():
+                if top_pred["clean_name"].lower() in k.lower() or k.lower() in top_pred["class_name"].lower():
+                    disease_info = v
+                    break
+
+        # Clinical Action Advice adhering strictly to medical safety protocol
+        if quality_info.get("is_rejected", False):
+            recommendation = "Image quality check failed. The image cannot be reliably analyzed as normal skin or a skin lesion. Please upload a well-lit, sharply focused skin photograph."
+        elif is_normal:
+            if is_uncertain:
+                recommendation = "Unable to determine whether this image represents normal skin or a supported skin condition. Please upload a clearer image or consult a dermatologist."
+            else:
+                recommendation = "No visible signs of the supported skin conditions were detected in this image. The skin appears normal."
+        else:
+            if is_uncertain:
+                recommendation = "High uncertainty detected. Strongly recommended to consult a certified dermatologist for clinical diagnosis."
+            else:
+                recommendation = "Standard screening prediction. For confirmation and diagnosis, consult a medical healthcare professional."
 
         elapsed_ms = (time.time() - start_time) * 1000.0
 
@@ -315,11 +353,8 @@ class SkinClassifierService:
             "confidence_pct": top_pred["percentage"],
             "uncertainty_entropy": round(entropy, 4),
             "is_uncertain": is_uncertain,
-            "recommendation": (
-                "High uncertainty detected. Strongly recommended to consult a certified dermatologist for clinical diagnosis."
-                if is_uncertain else
-                "Standard screening prediction. For confirmation and diagnosis, consult a medical healthcare professional."
-            ),
+            "is_normal_skin": bool(is_normal),
+            "recommendation": recommendation,
             "top_5": top_5,
             "image_quality": quality_info,
             "disease_info": disease_info,

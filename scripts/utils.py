@@ -12,7 +12,10 @@ CLEAN_NAME_MAP = {
     "6. Benign Keratosis-like Lesions (BKL) 2624": "Benign Keratosis (BKL)",
     "7. Psoriasis pictures Lichen Planus and related diseases - 2k": "Psoriasis & Lichen Planus",
     "8. Seborrheic Keratoses and other Benign Tumors - 1.8k": "Seborrheic Keratoses & Benign Tumors",
-    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": "Fungal Infections (Tinea & Candidiasis)"
+    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": "Fungal Infections (Tinea & Candidiasis)",
+    "11. Normal Skin": "Normal / Healthy Skin",
+    "Normal_Skin": "Normal / Healthy Skin",
+    "Normal Skin": "Normal / Healthy Skin"
 }
 
 def clean_class_name(raw_name: str) -> str:

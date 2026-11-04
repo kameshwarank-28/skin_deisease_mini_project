@@ -1,5 +1,5 @@
 {
-  "num_classes": 10,
+  "num_classes": 11,
   "class_to_idx": {
     "1. Eczema 1677": 0,
     "10. Warts Molluscum and other Viral Infections - 2103": 1,
@@ -10,7 +10,9 @@
     "6. Benign Keratosis-like Lesions (BKL) 2624": 6,
     "7. Psoriasis pictures Lichen Planus and related diseases - 2k": 7,
     "8. Seborrheic Keratoses and other Benign Tumors - 1.8k": 8,
-    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": 9
+    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k": 9,
+    "11. Normal Skin": 10,
+    "Normal_Skin": 10
   },
   "idx_to_class": {
     "0": "1. Eczema 1677",
@@ -22,7 +24,8 @@
     "6": "6. Benign Keratosis-like Lesions (BKL) 2624",
     "7": "7. Psoriasis pictures Lichen Planus and related diseases - 2k",
     "8": "8. Seborrheic Keratoses and other Benign Tumors - 1.8k",
-    "9": "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k"
+    "9": "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k",
+    "10": "11. Normal Skin"
   },
   "classes": [
     "1. Eczema 1677",
@@ -34,6 +37,20 @@
     "6. Benign Keratosis-like Lesions (BKL) 2624",
     "7. Psoriasis pictures Lichen Planus and related diseases - 2k",
     "8. Seborrheic Keratoses and other Benign Tumors - 1.8k",
-    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k"
-  ]
+    "9. Tinea Ringworm Candidiasis and other Fungal Infections - 1.7k",
+    "11. Normal Skin"
+  ],
+  "clean_names": {
+    "0": "Eczema",
+    "1": "Warts Molluscum and Viral Infections",
+    "2": "Melanoma",
+    "3": "Atopic Dermatitis",
+    "4": "Basal Cell Carcinoma (BCC)",
+    "5": "Melanocytic Nevi (NV)",
+    "6": "Benign Keratosis-like Lesions (BKL)",
+    "7": "Psoriasis and Lichen Planus",
+    "8": "Seborrheic Keratoses and Benign Tumors",
+    "9": "Tinea Ringworm and Fungal Infections",
+    "10": "Normal / Healthy Skin"
+  }
 }

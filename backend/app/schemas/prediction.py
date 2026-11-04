@@ -31,6 +31,7 @@ class PredictionResponse(BaseModel):
     confidence_pct: str
     uncertainty_entropy: float
     is_uncertain: bool
+    is_normal_skin: Optional[bool] = False
     recommendation: str
     top_5: List[PredictionProbability]
     image_quality: ImageQualityInfo

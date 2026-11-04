@@ -10,7 +10,8 @@ dataset:
   train_manifest: "processed_dataset/train_manifest.csv"
   val_manifest: "processed_dataset/val_manifest.csv"
   test_manifest: "processed_dataset/test_manifest.csv"
-  num_classes: 10
+  num_classes: 11
+  normal_skin_category: "11. Normal Skin"
   split_ratios:
     train: 0.70
     val: 0.15

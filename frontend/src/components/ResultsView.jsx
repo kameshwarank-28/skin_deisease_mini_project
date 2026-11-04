@@ -55,6 +55,8 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
     }
   };
 
+  const isNormalSkin = Boolean(result?.is_normal_skin || (prediction && prediction.toLowerCase().includes('normal')));
+
   return (
     <div className="project-card">
       <div className="project-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -66,27 +68,44 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
 
       {/* Main Prediction Result Box */}
       <div style={{
-        backgroundColor: '#e7f1ff',
-        border: '1px solid #b6d4fe',
-        borderRadius: 5,
-        padding: '14px 18px',
+        backgroundColor: isNormalSkin ? (is_uncertain ? '#fff8e1' : '#e6f4ea') : '#e7f1ff',
+        border: `1px solid ${isNormalSkin ? (is_uncertain ? '#ffe082' : '#a8dab5') : '#b6d4fe'}`,
+        borderRadius: 6,
+        padding: '16px 18px',
         marginBottom: 18
       }}>
-        <div style={{ fontSize: '0.85rem', color: '#084298', fontWeight: 600, textTransform: 'uppercase' }}>
-          Predicted Disease:
+        <div style={{ fontSize: '0.82rem', color: isNormalSkin ? '#1b5e20' : '#084298', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          {isNormalSkin ? 'Predicted Category:' : 'Predicted Disease:'}
         </div>
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#052c65', margin: '4px 0 2px' }}>
+        <h3 style={{ fontSize: '1.45rem', fontWeight: 700, color: isNormalSkin ? '#137333' : '#052c65', margin: '4px 0 2px' }}>
           {prediction}
         </h3>
         {disease_info?.scientific_name && (
-          <div style={{ fontSize: '0.85rem', color: '#0d6efd', fontStyle: 'italic' }}>
-            Scientific Name: {disease_info.scientific_name}
+          <div style={{ fontSize: '0.85rem', color: isNormalSkin ? '#2e7d32' : '#0d6efd', fontStyle: 'italic' }}>
+            Biological Specification: {disease_info.scientific_name}
           </div>
         )}
-        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+
+        {/* Normal Skin Diagnostic Statement */}
+        {isNormalSkin && (
+          <div style={{
+            marginTop: 10,
+            padding: '10px 14px',
+            borderRadius: 6,
+            backgroundColor: is_uncertain ? '#fffde7' : '#f1f8f5',
+            borderLeft: is_uncertain ? '4px solid #fbc02d' : '4px solid #2e7d32',
+            color: is_uncertain ? '#795548' : '#1b5e20',
+            fontSize: '0.88rem',
+            lineHeight: 1.45
+          }}>
+            {recommendation}
+          </div>
+        )}
+
+        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: '0.9rem', color: '#212529' }}>
-              Confidence: <strong style={{ color: '#0d6efd' }}>{confidence_pct}</strong>
+              Confidence: <strong style={{ color: isNormalSkin ? '#137333' : '#0d6efd' }}>{confidence_pct}</strong>
             </span>
             <span className={`badge-label ${is_uncertain ? 'badge-warning-custom' : 'badge-success-custom'}`}>
               {is_uncertain ? 'Uncertain Prediction' : 'High Confidence'}

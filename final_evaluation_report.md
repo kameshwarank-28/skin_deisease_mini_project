@@ -9,47 +9,51 @@ The prior uncalibrated fallback model—which produced uniform, non-discriminati
 
 ## 2. Before vs After Replacement Comparison
 
-| Metric / Dimension | Old Model (Pre-Replacement) | New Production Model (EfficientNetV2-S) | Absolute Improvement |
+| Metric / Dimension | Old Model (Pre-Replacement) | Previous 10-Class Baseline | New 11-Class Production Model (With Normal Skin) |
 |---|:---:|:---:|:---:|
-| **Model Architecture** | ResNet-50 (Uninitialized Linear Head) | EfficientNetV2-S (`tf_efficientnetv2_s`) | Modern Compound MBConv |
-| **Trained Checkpoint** | None on disk (Default fallback) | `models/best_model.pth` | Real fine-tuned weights |
-| **Top-1 Test Accuracy** | 10.00% (Uniform / Random) | **29.00%** | **+19.00% (2.9x improvement)** |
-| **Top-3 Differential Accuracy** | 30.00% | **61.29%** | **+31.29% (2.04x improvement)** |
-| **Balanced Accuracy** | 10.00% | **29.00%** | **+19.00%** |
-| **Macro F1-Score** | 0.0182 | **0.2771** | **+0.2589 (15.2x improvement)** |
-| **Melanoma Precision** | 10.00% | **54.55%** | **+44.55%** |
-| **Melanoma Recall** | 10.00% | **34.29%** | **+24.29%** |
-| **BCC Recall** | 10.00% | **37.14%** | **+27.14%** |
-| **Expected Calibration Error (ECE)** | 0.9000 (Severe Overconfidence) | **0.0259** (Calibrated) | **18.27x Calibration Error Reduction** |
-| **Brier Score** | 1.1188 | **0.8164** | **-0.3024** |
-| **Inference Latency** | 62.00 ms | **50.86 ms** | **11.14 ms faster** |
-| **Explainable AI (XAI)** | Fallback / Incomplete | **Grad-CAM on `conv_head`** | Verified Active Heatmaps |
+| **Architecture** | ResNet-50 (Uncalibrated) | EfficientNetV2-S (10-Class) | **EfficientNetV2-S (11-Class)** |
+| **Trained Checkpoint** | None on disk | `models/best_model.pth` | `models/best_model.pth` |
+| **Supported Categories** | 10 Diseases | 10 Diseases | **10 Diseases + Normal / Healthy Skin** |
+| **Top-1 Test Accuracy** | 10.00% (Uniform) | 29.00% | **40.26%** |
+| **Top-3 Differential Accuracy** | 30.00% | 61.29% | **68.05%** |
+| **Macro F1-Score** | 0.0182 | 0.2771 | **0.3888** |
+| **Melanoma Precision** | 10.00% | 54.55% | **50.00%** |
+| **Melanoma Recall** | 10.00% | 34.29% | **61.43%** |
+| **BCC Precision** | 10.00% | 45.61% | **55.00%** |
+| **BCC Recall** | 10.00% | 37.14% | **47.14%** |
+| **Normal Skin Precision** | 0.00% (Unsupported) | 0.00% (Unsupported) | **68.18%** |
+| **Normal Skin Recall** | 0.00% (Unsupported) | 0.00% (Unsupported) | **85.71%** |
+| **Normal Skin F1-Score** | 0.0000 | 0.0000 | **0.7595** |
+| **Expected Calibration Error (ECE)** | 0.9000 (Severe) | 0.0259 | **0.0392** |
+| **Inference Latency** | 62.00 ms | 50.86 ms | **50.86 ms** |
+| **Explainable AI (XAI)** | Fallback | Grad-CAM (`conv_head`) | **Grad-CAM (`conv_head`)** |
 
 ---
 
 ## 3. Dataset Characteristics & Integrity
 - **Verified Dataset Path**: `Z:\IMG_CLASSES`
-- **Total Clean Images**: 26,412 (10 classes)
+- **Total Clean Images**: 27,704 across 11 classes (including 1,292 verified Normal Skin captures).
 - **Data Splitting**:
-  - Training: 18,488 images (70%)
-  - Validation: 3,962 images (15%)
-  - Independent Test: 3,962 images (15%)
-- **Data Leakage**: 0 shared hashes across all splits.
+  - Training: 19,388 images (70%)
+  - Validation: 4,150 images (15%)
+  - Independent Test: 4,166 images (15%)
+- **Data Leakage**: Strictly 0 shared hashes across all splits.
 
-### Per-Class Test Performance (700 Balanced Samples):
+### Per-Class Test Performance (770 Balanced Independent Test Samples):
 | Class Name | Precision | Recall | F1-Score | Support |
 |---|:---:|:---:|:---:|:---:|
-| **Melanoma** | **54.55%** | **34.29%** | **0.4211** | 70 |
-| **Basal Cell Carcinoma (BCC)** | **45.61%** | **37.14%** | **0.4094** | 70 |
-| **Benign Keratosis-like Lesions (BKL)** | **31.73%** | **47.14%** | **0.3793** | 70 |
-| **Seborrheic Keratoses & Tumors** | **24.10%** | **57.14%** | **0.3390** | 70 |
-| **Atopic Dermatitis** | **27.00%** | **38.57%** | **0.3176** | 70 |
-| **Melanocytic Nevi (NV)** | **37.21%** | **22.86%** | **0.2832** | 70 |
-| **Fungal Infections (Tinea & Candidiasis)** | **18.18%** | **20.00%** | **0.1905** | 70 |
-| **Eczema** | **23.08%** | **12.86%** | **0.1651** | 70 |
-| **Psoriasis & Lichen Planus** | **20.00%** | **11.43%** | **0.1455** | 70 |
-| **Viral Infections (Warts & Molluscum)** | **20.00%** | **8.57%** | **0.1200** | 70 |
-| **Macro Average** | **30.15%** | **29.00%** | **0.2771** | **700** |
+| **Normal / Healthy Skin** | **68.18%** | **85.71%** | **0.7595** | 70 |
+| **Melanoma** | **50.00%** | **61.43%** | **0.5513** | 70 |
+| **Benign Keratosis-like Lesions (BKL)** | **50.00%** | **61.43%** | **0.5513** | 70 |
+| **Basal Cell Carcinoma (BCC)** | **55.00%** | **47.14%** | **0.5077** | 70 |
+| **Seborrheic Keratoses & Tumors** | **38.37%** | **47.14%** | **0.4231** | 70 |
+| **Atopic Dermatitis** | **26.14%** | **32.86%** | **0.2911** | 70 |
+| **Eczema** | **24.72%** | **31.43%** | **0.2767** | 70 |
+| **Psoriasis & Lichen Planus** | **31.37%** | **22.86%** | **0.2645** | 70 |
+| **Melanocytic Nevi (NV)** | **48.00%** | **17.14%** | **0.2526** | 70 |
+| **Fungal Infections (Tinea & Candidiasis)** | **24.53%** | **18.57%** | **0.2114** | 70 |
+| **Viral Infections (Warts & Molluscum)** | **20.69%** | **17.14%** | **0.1875** | 70 |
+| **Overall Balanced / Macro Avg** | **39.73%** | **40.26%** | **0.3888** | **770** |
 
 ---
 

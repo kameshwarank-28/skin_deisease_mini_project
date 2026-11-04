@@ -1,55 +1,30 @@
 {
-  "model_name": "efficientnetv2_s",
-  "timm_model_name": "tf_efficientnetv2_s",
-  "model_family": "EfficientNetV2",
-  "pretrained_weights": "ImageNet-21k / ImageNet-1k fine-tuned",
-  "total_parameters": 20190298,
-  "trainable_parameters": 20190298,
-  "num_classes": 10,
-  "classes_mapping_file": "class_mapping.json",
-  "checkpoint_path": "models/best_model.pth",
-  "backup_checkpoint_path": "models/backup_pre_replacement/best_model.pth",
-  "optimal_temperature_T": 4.9999,
-  "calibration_method": "Post-Hoc Temperature Scaling",
-  "training_date": "2026-11-04",
-  "input_resolution": [256, 256],
-  "color_mode": "RGB",
-  "normalization": {
-    "mean": [0.485, 0.456, 0.406],
-    "std": [0.229, 0.224, 0.225]
-  },
-  "independent_test_evaluation": {
-    "test_samples": 700,
-    "top1_accuracy": 0.2900,
-    "top3_accuracy": 0.6129,
-    "balanced_accuracy": 0.2900,
-    "macro_precision": 0.3015,
-    "macro_recall": 0.2900,
-    "macro_f1": 0.2771,
-    "weighted_f1": 0.2771,
-    "melanoma_precision": 0.5455,
-    "melanoma_recall": 0.3429,
-    "melanoma_f1": 0.4211,
-    "bcc_precision": 0.4561,
-    "bcc_recall": 0.3714,
-    "bcc_f1": 0.4094,
-    "raw_ece": 0.4733,
-    "calibrated_ece": 0.0259,
-    "raw_brier_score": 1.1188,
-    "calibrated_brier_score": 0.8164,
-    "inference_latency_ms": 50.86
-  },
-  "explainability": {
-    "method": "Grad-CAM",
-    "target_layer": "conv_head",
-    "colormap": "JET",
-    "alpha": 0.65
-  },
-  "runtime_environment": {
-    "framework": "PyTorch",
-    "engine": "FastAPI + Uvicorn",
-    "device": "cpu",
-    "threads": 24
+  "model_architecture": "EfficientNetV2-S (tf_efficientnetv2_s)",
+  "num_classes": 11,
+  "classes": [
+    "Eczema",
+    "Warts Molluscum and Viral Infections",
+    "Melanoma",
+    "Atopic Dermatitis",
+    "Basal Cell Carcinoma (BCC)",
+    "Melanocytic Nevi (NV)",
+    "Benign Keratosis-like Lesions (BKL)",
+    "Psoriasis and Lichen Planus",
+    "Seborrheic Keratoses and Benign Tumors",
+    "Tinea Ringworm and Fungal Infections",
+    "Normal / Healthy Skin"
+  ],
+  "date_trained": "2026-11-04 13:46:44",
+  "top1_accuracy": 0.4026,
+  "top3_accuracy": 0.6805,
+  "macro_f1": 0.3888,
+  "calibrated_temperature": 3.5,
+  "calibrated_ece": 0.0392,
+  "normal_skin_metrics": {
+    "precision": 0.6818,
+    "recall": 0.8571,
+    "f1_score": 0.7595,
+    "specificity": 0.96,
+    "false_positive_rate": 0.04
   }
 }
-
