@@ -13,13 +13,13 @@ import {
   UserRound,
   Settings,
   LogOut,
-  BookOpen,
-  Info,
   ChevronLeft,
   ChevronRight,
   X,
   Users,
-  FileCheck
+  UserCheck,
+  FileCheck,
+  Clock
 } from 'lucide-react';
 
 export default function Sidebar({
@@ -48,23 +48,16 @@ export default function Sidebar({
         { key: 'diagnose', label: 'AI Classification', icon: ScanSearch },
         { key: 'records', label: 'Skin Records', icon: FolderHeart },
         { key: 'symptoms', label: 'Symptom Tracker', icon: Activity },
-        { key: 'comparison', label: 'Image Comparison', icon: Images },
         { key: 'timeline', label: 'Skin Timeline', icon: History }
       ]
     },
     {
-      group: 'MEDICAL MANAGEMENT',
+      group: 'DOCTOR & MEDICAL CARE',
       items: [
-        { key: 'consultations', label: 'Consultations', icon: Stethoscope },
+        { key: 'my_dermatologist', label: 'My Dermatologist', icon: Stethoscope },
+        { key: 'consultations', label: 'Consultations', icon: FileCheck },
         { key: 'treatments', label: 'Treatments', icon: Pill },
         { key: 'appointments', label: 'Appointments', icon: CalendarDays }
-      ]
-    },
-    {
-      group: 'RESOURCES',
-      items: [
-        { key: 'library', label: 'Disease Library', icon: BookOpen },
-        { key: 'about', label: 'About Project', icon: Info }
       ]
     },
     {
@@ -86,25 +79,22 @@ export default function Sidebar({
       ]
     },
     {
-      group: 'CLINICAL MANAGEMENT',
+      group: 'PATIENT MANAGEMENT',
       items: [
         { key: 'doctor_patients', label: 'My Patients', icon: Users },
-        { key: 'doctor_appointments', label: 'Appointments', icon: CalendarDays },
-        { key: 'doctor_consultations', label: 'Consultations', icon: Stethoscope },
-        { key: 'doctor_treatments', label: 'Treatments', icon: Pill }
-      ]
-    },
-    {
-      group: 'PATIENT TIMELINE',
-      items: [
+        { key: 'doctor_requests', label: 'Patient Requests', icon: UserCheck },
+        { key: 'doctor_records', label: 'Skin Records', icon: FolderHeart },
+        { key: 'doctor_symptoms', label: 'Symptom History', icon: Activity },
         { key: 'doctor_timeline', label: 'Skin Timeline', icon: History }
       ]
     },
     {
-      group: 'RESOURCES',
+      group: 'CLINICAL MANAGEMENT',
       items: [
-        { key: 'library', label: 'Disease Library', icon: BookOpen },
-        { key: 'about', label: 'About Project', icon: Info }
+        { key: 'doctor_appointments', label: 'Appointments', icon: CalendarDays },
+        { key: 'doctor_consultations', label: 'Consultations', icon: Stethoscope },
+        { key: 'doctor_treatments', label: 'Treatments', icon: Pill },
+        { key: 'doctor_followups', label: 'Follow-ups', icon: Clock }
       ]
     },
     {

@@ -362,6 +362,219 @@ def request_doctor_connection(
 
     return {"status": "Requested", "message": "Connection request sent to doctor."}
 
+@router.get("/patients/connections", summary="Patient Lists Their Doctor Connections")
+def get_patient_connections(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "patient":
+        raise HTTPException(status_code=403, detail="Only patient accounts can query patient connections.")
+
+    conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.patient_id == current_user.id
+    ).order_by(PatientDoctorConnection.created_at.desc()).all()
+
+    resp = []
+    for c in conns:
+        doc_user = db.query(User).filter(User.id == c.doctor_id).first()
+        doc_prof = doc_user.doctor_profile if doc_user else None
+        resp.append({
+            "id": c.id,
+            "patient_id": c.patient_id,
+            "doctor_id": c.doctor_id,
+            "status": c.status,
+            "request_note": c.request_note,
+            "response_note": c.response_note,
+            "created_at": c.created_at.isoformat() if c.created_at else None,
+            "updated_at": c.updated_at.isoformat() if c.updated_at else None,
+            "doctor_name": doc_user.full_name if doc_user else "Dermatologist",
+            "specialization": doc_prof.specialization if doc_prof else "Dermatology",
+            "hospital_name": doc_prof.hospital_name if doc_prof else "Medical Center",
+            "qualification": doc_prof.qualification if doc_prof else "MD",
+            "years_experience": doc_prof.years_experience if doc_prof else 5,
+            "bio": doc_prof.bio if doc_prof else ""
+        })
+    return resp
+
+@router.get("/patients/my-dermatologist", summary="Get Current Connected Dermatologist for Patient")
+def get_my_dermatologist(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "patient":
+        raise HTTPException(status_code=403, detail="Only patient accounts can query their dermatologist.")
+
+    conn = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.patient_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).order_by(PatientDoctorConnection.updated_at.desc()).first()
+
+    if not conn:
+        pending_conn = db.query(PatientDoctorConnection).filter(
+            PatientDoctorConnection.patient_id == current_user.id,
+            PatientDoctorConnection.status == "Requested"
+        ).order_by(PatientDoctorConnection.created_at.desc()).first()
+
+        if pending_conn:
+            doc = db.query(User).filter(User.id == pending_conn.doctor_id).first()
+            p = doc.doctor_profile if doc else None
+            return {
+                "has_doctor": False,
+                "connection_status": "Requested",
+                "connection_id": pending_conn.id,
+                "doctor": {
+                    "id": doc.id,
+                    "doctor_name": doc.full_name,
+                    "specialization": p.specialization if p else "Dermatology",
+                    "hospital_name": p.hospital_name if p else "Medical Center",
+                    "qualification": p.qualification if p else "MD"
+                }
+            }
+        return {"has_doctor": False, "connection_status": "None", "doctor": None}
+
+    doc = db.query(User).filter(User.id == conn.doctor_id).first()
+    p = doc.doctor_profile if doc else None
+
+    next_appt = db.query(FollowUpAppointment).filter(
+        FollowUpAppointment.user_id == current_user.id,
+        FollowUpAppointment.doctor_id == doc.id,
+        FollowUpAppointment.status.in_(["Confirmed", "CONFIRMED", "Scheduled", "Pending", "PENDING"])
+    ).order_by(FollowUpAppointment.appointment_date.asc()).first()
+
+    return {
+        "has_doctor": True,
+        "connection_status": "Accepted",
+        "connection_id": conn.id,
+        "doctor_id": doc.id,
+        "doctor_name": doc.full_name,
+        "specialization": p.specialization if p else "Dermatology",
+        "hospital_name": p.hospital_name if p else "Medical Center",
+        "qualification": p.qualification if p else "MD",
+        "years_experience": p.years_experience if p else 8,
+        "email": doc.email,
+        "phone_number": p.user.phone_number if p and p.user else doc.phone_number,
+        "bio": p.bio if p else "Specialist in dermatological skin health monitoring and clinical diagnostics.",
+        "doctor": {
+            "id": doc.id,
+            "doctor_name": doc.full_name,
+            "specialization": p.specialization if p else "Dermatology",
+            "hospital_name": p.hospital_name if p else "Medical Center",
+            "qualification": p.qualification if p else "MD",
+            "years_experience": p.years_experience if p else 8,
+            "email": doc.email,
+            "phone_number": p.user.phone_number if p and p.user else doc.phone_number,
+            "bio": p.bio if p else "Specialist in dermatological skin health monitoring and clinical diagnostics."
+        },
+        "next_appointment": {
+            "id": next_appt.id,
+            "date": next_appt.appointment_date.isoformat(),
+            "time": next_appt.appointment_time,
+            "status": next_appt.status,
+            "purpose": next_appt.purpose_or_notes
+        } if next_appt else None
+    }
+
+@router.get("/patients/overview-stats", summary="Patient Dashboard Overview Data")
+def get_patient_overview_stats(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "patient":
+        raise HTTPException(status_code=403, detail="Only patient accounts can view patient overview.")
+
+    records = db.query(SkinHealthRecord).filter(
+        SkinHealthRecord.user_id == current_user.id
+    ).order_by(SkinHealthRecord.capture_date.desc()).all()
+
+    symptoms = db.query(SymptomRecord).filter(
+        SymptomRecord.user_id == current_user.id
+    ).all()
+
+    treatments = db.query(TreatmentRecord).filter(
+        TreatmentRecord.user_id == current_user.id,
+        TreatmentRecord.is_active == True
+    ).all()
+
+    appointments = db.query(FollowUpAppointment).filter(
+        FollowUpAppointment.user_id == current_user.id
+    ).order_by(FollowUpAppointment.appointment_date.asc()).all()
+
+    unread_messages = db.query(Notification).filter(
+        Notification.user_id == current_user.id,
+        Notification.is_read == False
+    ).all()
+
+    upcoming = [
+        a for a in appointments
+        if a.status.upper() in ["CONFIRMED", "SCHEDULED", "ACCEPTED", "PENDING", "RESCHEDULE PROPOSED"]
+    ]
+    next_appt = upcoming[0] if upcoming else None
+
+    conn = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.patient_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).first()
+    connected_doc = None
+    if conn:
+        doc = db.query(User).filter(User.id == conn.doctor_id).first()
+        if doc:
+            p = doc.doctor_profile
+            connected_doc = {
+                "doctor_id": doc.id,
+                "doctor_name": doc.full_name,
+                "specialization": p.specialization if p else "Dermatology",
+                "hospital_name": p.hospital_name if p else "Medical Center",
+                "qualification": p.qualification if p else "MD",
+                "status": "Accepted",
+                "connection_id": conn.id
+            }
+
+    recent_updates = []
+    consults = db.query(DermatologistConsultation).filter(
+        DermatologistConsultation.user_id == current_user.id
+    ).order_by(DermatologistConsultation.consultation_date.desc()).limit(3).all()
+    for c in consults:
+        recent_updates.append({
+            "type": "Consultation Report",
+            "title": f"Consultation with Dr. {c.doctor_name}",
+            "description": f"Diagnosis: {c.doctor_diagnosis}",
+            "date": c.consultation_date.isoformat(),
+            "details": c.recommendations or c.clinical_observations
+        })
+    for t in treatments[:3]:
+        recent_updates.append({
+            "type": "Treatment Prescription",
+            "title": t.treatment_name,
+            "description": f"Medication: {t.prescribed_medication or 'Topical'}. Instructions: {t.dosage_or_instructions}",
+            "date": t.created_at.isoformat() if t.created_at else t.start_date.isoformat(),
+            "details": t.doctor_notes
+        })
+    recent_updates = sorted(recent_updates, key=lambda x: x["date"], reverse=True)[:5]
+
+    return {
+        "stats": {
+            "records_count": len(records),
+            "symptoms_count": len(symptoms),
+            "active_treatments_count": len(treatments),
+            "upcoming_appointments_count": len(upcoming),
+            "unread_doctor_messages_count": len(unread_messages)
+        },
+        "next_appointment": {
+            "id": next_appt.id,
+            "doctor_name": next_appt.doctor_or_clinic,
+            "specialization": next_appt.doctor.doctor_profile.specialization if (next_appt.doctor and next_appt.doctor.doctor_profile) else "Dermatologist",
+            "appointment_date": next_appt.appointment_date.isoformat(),
+            "appointment_time": next_appt.appointment_time or "09:00 AM",
+            "status": next_appt.status,
+            "purpose": next_appt.purpose_or_notes,
+            "suggested_alternate_time": next_appt.suggested_alternate_time,
+            "rejection_reason": next_appt.rejection_reason
+        } if next_appt else None,
+        "recent_records": [serialize_skin_record(r) for r in records[:3]],
+        "connected_doctor": connected_doc,
+        "recent_medical_updates": recent_updates
+    }
+
 @router.get("/doctors/connections", response_model=List[PatientDoctorConnectionResponse], summary="Doctor Lists Connection Requests")
 def get_doctor_connections(
     current_user: User = Depends(get_current_user),
@@ -469,46 +682,296 @@ def get_doctor_overview_stats(
     if current_user.role != "doctor":
         raise HTTPException(status_code=403, detail="Only doctors can view doctor dashboard.")
 
-    total_patients = db.query(PatientDoctorConnection).filter(
+    # 1. Total connected patients
+    accepted_conns = db.query(PatientDoctorConnection).filter(
         PatientDoctorConnection.doctor_id == current_user.id,
         PatientDoctorConnection.status == "Accepted"
-    ).count()
+    ).all()
+    total_patients = len(accepted_conns)
+    connected_patient_ids = [c.patient_id for c in accepted_conns]
 
+    # 2. Pending patient connection requests
+    pending_conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id,
+        PatientDoctorConnection.status == "Requested"
+    ).order_by(PatientDoctorConnection.created_at.desc()).all()
+    pending_requests_count = len(pending_conns)
+
+    # 3. Pending appointment requests
     pending_appts = db.query(FollowUpAppointment).filter(
         FollowUpAppointment.doctor_id == current_user.id,
-        FollowUpAppointment.status.in_(["Pending", "PENDING", "Pending Doctor Review", "AWAITING_DOCTOR_REVIEW"])
+        FollowUpAppointment.status.in_(["Pending", "PENDING", "Pending Doctor Review", "AWAITING_DOCTOR_REVIEW", "Requested"])
+    ).order_by(FollowUpAppointment.appointment_date.asc()).all()
+
+    # 4. Active treatments
+    active_treatments_count = db.query(TreatmentRecord).filter(
+        TreatmentRecord.prescribed_by_doctor_id == current_user.id,
+        TreatmentRecord.is_active == True
     ).count()
 
-    confirmed_appts = db.query(FollowUpAppointment).filter(
-        FollowUpAppointment.doctor_id == current_user.id,
-        FollowUpAppointment.status.in_(["Confirmed", "CONFIRMED", "Accepted", "Scheduled"])
-    ).count()
+    # All appointments for this doctor
+    all_appts = db.query(FollowUpAppointment).filter(
+        FollowUpAppointment.doctor_id == current_user.id
+    ).order_by(FollowUpAppointment.appointment_date.asc()).all()
 
-    completed_consults = db.query(DermatologistConsultation).filter(
-        DermatologistConsultation.doctor_id == current_user.id
-    ).count()
+    # Today's date in UTC
+    now_date = datetime.datetime.now(datetime.timezone.utc).date()
+    today_appts = []
+    for a in all_appts:
+        if a.appointment_date.date() == now_date:
+            p_user = db.query(User).filter(User.id == a.user_id).first()
+            p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+            today_appts.append({
+                "id": a.id,
+                "patient_id": a.user_id,
+                "patient_name": p_name,
+                "time": a.appointment_time or "09:00 AM",
+                "consultation_type": "Dermatology Follow-up",
+                "purpose": a.purpose_or_notes or "Skin Lesion Examination",
+                "status": a.status
+            })
 
-    unread_notifs = db.query(Notification).filter(
-        Notification.user_id == current_user.id,
-        Notification.is_read == False
-    ).count()
+    # Pending appointments formatted for Section D
+    pending_appts_list = []
+    for a in pending_appts:
+        p_user = db.query(User).filter(User.id == a.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        pending_appts_list.append({
+            "id": a.id,
+            "patient_id": a.user_id,
+            "patient_code": f"PAT-{a.user_id:04d}",
+            "patient_name": p_name,
+            "requested_date": a.appointment_date.strftime("%Y-%m-%d"),
+            "requested_time": a.appointment_time or "09:00 AM",
+            "reason": a.purpose_or_notes or "Dermatological Review",
+            "request_created_at": a.created_at.strftime("%Y-%m-%d %H:%M") if a.created_at else a.appointment_date.strftime("%Y-%m-%d"),
+            "status": a.status
+        })
+
+    # Pending connection requests formatted for Section E
+    pending_conns_list = []
+    for c in pending_conns:
+        p_user = db.query(User).filter(User.id == c.patient_id).first()
+        p_prof = p_user.patient_profile if p_user else None
+        pending_conns_list.append({
+            "id": c.id,
+            "patient_id": c.patient_id,
+            "patient_code": f"PAT-{c.patient_id:04d}",
+            "patient_name": p_prof.patient_name if p_prof else (p_user.full_name if p_user else "Patient"),
+            "age": p_prof.age if p_prof else "N/A",
+            "gender": p_prof.gender if p_prof else "N/A",
+            "request_note": c.request_note or "Requesting consultation and skin monitoring guidance.",
+            "request_date": c.created_at.strftime("%Y-%m-%d %H:%M") if c.created_at else "Recently",
+            "status": c.status
+        })
+
+    # Recent patient activity from authorized patients (Section G)
+    recent_activity = []
+    if connected_patient_ids:
+        # Recent skin records
+        recent_recs = db.query(SkinHealthRecord).filter(
+            SkinHealthRecord.user_id.in_(connected_patient_ids)
+        ).order_by(SkinHealthRecord.created_at.desc()).limit(5).all()
+        for r in recent_recs:
+            p_user = db.query(User).filter(User.id == r.user_id).first()
+            p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+            recent_activity.append({
+                "type": "New Skin Image",
+                "patient_id": r.user_id,
+                "patient_name": p_name,
+                "description": f"Uploaded photograph for {r.body_location}" + (f" (AI: {r.predicted_disease})" if r.predicted_disease else ""),
+                "timestamp": r.created_at.isoformat() if r.created_at else r.capture_date.isoformat(),
+                "time_display": r.created_at.strftime("%b %d, %H:%M") if r.created_at else r.capture_date.strftime("%b %d")
+            })
+
+        # Recent symptoms
+        recent_symps = db.query(SymptomRecord).filter(
+            SymptomRecord.user_id.in_(connected_patient_ids)
+        ).order_by(SymptomRecord.recorded_at.desc()).limit(5).all()
+        for s in recent_symps:
+            p_user = db.query(User).filter(User.id == s.user_id).first()
+            p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+            recent_activity.append({
+                "type": "Symptom Report",
+                "patient_id": s.user_id,
+                "patient_name": p_name,
+                "description": f"Reported {s.symptom_name} (Severity: {s.severity})",
+                "timestamp": s.recorded_at.isoformat(),
+                "time_display": s.recorded_at.strftime("%b %d, %H:%M")
+            })
+
+    # Sort recent activity
+    recent_activity = sorted(recent_activity, key=lambda x: x["timestamp"], reverse=True)[:8]
+
+    # Calendar events formatted for Section B
+    calendar_events = []
+    for a in all_appts:
+        p_user = db.query(User).filter(User.id == a.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        calendar_events.append({
+            "id": a.id,
+            "patient_id": a.user_id,
+            "patient_name": p_name,
+            "date": a.appointment_date.strftime("%Y-%m-%d"),
+            "time": a.appointment_time or "09:00 AM",
+            "status": a.status,
+            "purpose": a.purpose_or_notes or "Follow-up Examination"
+        })
 
     prof = current_user.doctor_profile
     return {
         "doctor_name": current_user.full_name,
         "doctor_id": current_user.id,
-        "qualification": prof.qualification if prof else "N/A",
-        "specialization": prof.specialization if prof else "N/A",
-        "hospital_name": prof.hospital_name if prof else "N/A",
-        "verification_status": prof.verification_status if prof else "Pending Verification",
+        "qualification": prof.qualification if prof else "MD, Board Certified Dermatologist",
+        "specialization": prof.specialization if prof else "Clinical Dermatology",
+        "hospital_name": prof.hospital_name if prof else "DermAI Clinical Center",
+        "verification_status": prof.verification_status if prof else "Verified",
         "stats": {
-            "total_assigned_patients": total_patients,
-            "pending_appointment_requests": pending_appts,
-            "confirmed_appointments": confirmed_appts,
-            "completed_consultations": completed_consults,
-            "unread_notifications": unread_notifs
-        }
+            "total_connected_patients": total_patients,
+            "pending_patient_requests": pending_requests_count,
+            "pending_appointments": len(pending_appts),
+            "active_treatment_plans": active_treatments_count,
+            "total_patients": total_patients,
+            "pending_requests": pending_requests_count,
+            "total_treatments": active_treatments_count
+        },
+        "today_appointments": today_appts,
+        "pending_appointments_list": pending_appts_list,
+        "pending_connections_list": pending_conns_list,
+        "recent_activity": recent_activity,
+        "calendar_events": calendar_events
     }
+
+@router.get("/doctors/all-patient-records", summary="Doctor Browses All Connected Patient Skin Records")
+def get_all_doctor_patient_records(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="Only doctors can view patient records.")
+
+    conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).all()
+    patient_ids = [c.patient_id for c in conns]
+
+    records = db.query(SkinHealthRecord).filter(
+        SkinHealthRecord.user_id.in_(patient_ids)
+    ).order_by(SkinHealthRecord.capture_date.desc()).all()
+
+    result = []
+    for r in records:
+        p_user = db.query(User).filter(User.id == r.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        serialized = serialize_skin_record(r)
+        d = serialized.model_dump() if hasattr(serialized, "model_dump") else serialized.dict()
+        d["patient_name"] = p_name
+        d["patient_code"] = f"PAT-{r.user_id:04d}"
+        result.append(d)
+    return result
+
+@router.get("/doctors/all-patient-symptoms", summary="Doctor Browses All Connected Patient Symptoms")
+def get_all_doctor_patient_symptoms(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="Only doctors can view patient symptoms.")
+
+    conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).all()
+    patient_ids = [c.patient_id for c in conns]
+
+    symptoms = db.query(SymptomRecord).filter(
+        SymptomRecord.user_id.in_(patient_ids)
+    ).order_by(SymptomRecord.recorded_at.desc()).all()
+
+    result = []
+    for s in symptoms:
+        p_user = db.query(User).filter(User.id == s.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        result.append({
+            "id": s.id,
+            "user_id": s.user_id,
+            "patient_name": p_name,
+            "patient_code": f"PAT-{s.user_id:04d}",
+            "symptom_name": s.symptom_name,
+            "severity": s.severity,
+            "severity_score": s.severity_score,
+            "duration": s.duration,
+            "notes": s.notes,
+            "recorded_at": s.recorded_at.isoformat()
+        })
+    return result
+
+@router.get("/doctors/followups", summary="Doctor Lists Upcoming Patient Follow-ups and Reviews")
+def get_doctor_followups(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="Only doctors can view follow-ups.")
+
+    conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id,
+        PatientDoctorConnection.status == "Accepted"
+    ).all()
+    patient_ids = [c.patient_id for c in conns]
+
+    # Treatments with review dates
+    treatments = db.query(TreatmentRecord).filter(
+        TreatmentRecord.prescribed_by_doctor_id == current_user.id,
+        TreatmentRecord.is_active == True,
+        TreatmentRecord.review_date != None
+    ).order_by(TreatmentRecord.review_date.asc()).all()
+
+    # Appointments
+    appts = db.query(FollowUpAppointment).filter(
+        FollowUpAppointment.doctor_id == current_user.id
+    ).order_by(FollowUpAppointment.appointment_date.asc()).all()
+
+    items = []
+    for t in treatments:
+        p_user = db.query(User).filter(User.id == t.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        items.append({
+            "type": "Treatment Review",
+            "followup_type": "Treatment Review",
+            "id": t.id,
+            "patient_id": t.user_id,
+            "patient_name": p_name,
+            "patient_code": f"PAT-{t.user_id:04d}",
+            "title": f"Review: {t.treatment_name}",
+            "reason": f"Review active regimen: {t.treatment_name}",
+            "scheduled_date": t.review_date.strftime("%Y-%m-%d"),
+            "status": t.treatment_status,
+            "instructions": t.dosage_or_instructions
+        })
+
+    for a in appts:
+        p_user = db.query(User).filter(User.id == a.user_id).first()
+        p_name = p_user.patient_profile.patient_name if (p_user and p_user.patient_profile) else (p_user.full_name if p_user else "Patient")
+        items.append({
+            "type": "Clinical Appointment",
+            "followup_type": "Clinical Appointment",
+            "id": a.id,
+            "patient_id": a.user_id,
+            "patient_name": p_name,
+            "patient_code": f"PAT-{a.user_id:04d}",
+            "title": f"Appointment: {a.purpose_or_notes or 'Follow-up'}",
+            "reason": a.purpose_or_notes or "Dermatological Follow-up Visit",
+            "scheduled_date": a.appointment_date.strftime("%Y-%m-%d"),
+            "time_slot": a.appointment_time,
+            "time": a.appointment_time,
+            "status": a.status,
+            "instructions": a.doctor_response_notes
+        })
+
+    items = sorted(items, key=lambda x: x["scheduled_date"])
+    return items
 
 @router.get("/doctors/patients", summary="List Authorized Patients for Doctor")
 def get_doctor_patients(

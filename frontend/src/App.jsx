@@ -19,13 +19,18 @@ import ImageComparisonView from './components/ImageComparisonView';
 import SkinTimelineView from './components/SkinTimelineView';
 import NotificationCenter from './components/NotificationCenter';
 import UserProfileSettings from './components/UserProfileSettings';
+import MyDermatologistView from './components/MyDermatologistView';
 
 // Doctor Components
 import DoctorOverview from './components/DoctorOverview';
 import DoctorPatientsView from './components/DoctorPatientsView';
+import DoctorRequestsView from './components/DoctorRequestsView';
+import DoctorRecordsView from './components/DoctorRecordsView';
+import DoctorSymptomsView from './components/DoctorSymptomsView';
 import DoctorAppointmentsView from './components/DoctorAppointmentsView';
 import DoctorConsultationsView from './components/DoctorConsultationsView';
 import DoctorTreatmentsView from './components/DoctorTreatmentsView';
+import DoctorFollowupsView from './components/DoctorFollowupsView';
 import DoctorTimelineView from './components/DoctorTimelineView';
 
 // Original Vision Transformer Components
@@ -382,6 +387,18 @@ export default function App() {
                 <DoctorPatientsView setActiveTab={handleTabChange} />
               )}
 
+              {activeTab === 'doctor_requests' && (
+                <DoctorRequestsView setActiveTab={handleTabChange} />
+              )}
+
+              {activeTab === 'doctor_records' && (
+                <DoctorRecordsView setActiveTab={handleTabChange} />
+              )}
+
+              {activeTab === 'doctor_symptoms' && (
+                <DoctorSymptomsView setActiveTab={handleTabChange} />
+              )}
+
               {activeTab === 'doctor_appointments' && (
                 <DoctorAppointmentsView />
               )}
@@ -392,6 +409,10 @@ export default function App() {
 
               {activeTab === 'doctor_treatments' && (
                 <DoctorTreatmentsView />
+              )}
+
+              {activeTab === 'doctor_followups' && (
+                <DoctorFollowupsView setActiveTab={handleTabChange} />
               )}
 
               {activeTab === 'doctor_timeline' && (
@@ -561,6 +582,11 @@ export default function App() {
 
               {/* Tab 6: Skin Progress Timeline */}
               {activeTab === 'timeline' && <SkinTimelineView setActiveTab={handleTabChange} />}
+
+              {/* Tab 6.5: My Dermatologist */}
+              {activeTab === 'my_dermatologist' && (
+                <MyDermatologistView setActiveTab={handleTabChange} />
+              )}
 
               {/* Tab 7: Consultations */}
               {activeTab === 'consultations' && (

@@ -6,7 +6,8 @@ import {
   Settings,
   LogOut,
   ChevronDown,
-  Sparkles
+  Sparkles,
+  CalendarDays
 } from 'lucide-react';
 
 const PAGE_METADATA = {
@@ -16,20 +17,24 @@ const PAGE_METADATA = {
   symptoms: { title: 'Symptom Severity Tracker', breadcrumb: 'AI & Skin Monitoring' },
   comparison: { title: 'Longitudinal Image Comparison', breadcrumb: 'AI & Skin Monitoring' },
   timeline: { title: 'Skin Progress Timeline', breadcrumb: 'AI & Skin Monitoring' },
-  consultations: { title: 'Dermatologist Consultations', breadcrumb: 'Medical Management' },
-  treatments: { title: 'Prescribed Treatment Regimens', breadcrumb: 'Medical Management' },
-  appointments: { title: 'Follow-up Appointment Management', breadcrumb: 'Medical Management' },
+  my_dermatologist: { title: 'My Dermatologist', breadcrumb: 'Doctor & Medical Care' },
+  consultations: { title: 'Dermatologist Consultations', breadcrumb: 'Doctor & Medical Care' },
+  treatments: { title: 'Prescribed Treatment Regimens', breadcrumb: 'Doctor & Medical Care' },
+  appointments: { title: 'Follow-up Appointment Management', breadcrumb: 'Doctor & Medical Care' },
   doctor_overview: { title: 'Clinical Practice Overview', breadcrumb: 'Overview' },
-  doctor_patients: { title: 'Connected Patient Management', breadcrumb: 'Clinical Management' },
+  doctor_patients: { title: 'Connected Patient Management', breadcrumb: 'Patient Management' },
+  doctor_requests: { title: 'Patient Connection Requests', breadcrumb: 'Patient Management' },
+  doctor_records: { title: 'Patient Skin Health Records', breadcrumb: 'Patient Management' },
+  doctor_symptoms: { title: 'Patient Symptom History', breadcrumb: 'Patient Management' },
+  doctor_timeline: { title: 'Patient Skin Progression Timeline', breadcrumb: 'Patient Management' },
   doctor_appointments: { title: 'Clinical Appointments & Schedule', breadcrumb: 'Clinical Management' },
   doctor_consultations: { title: 'Dermatology Consultations', breadcrumb: 'Clinical Management' },
   doctor_treatments: { title: 'Prescription & Treatment Plans', breadcrumb: 'Clinical Management' },
-  doctor_timeline: { title: 'Patient Skin Progression Timeline', breadcrumb: 'Patient Timeline' },
+  doctor_followups: { title: 'Follow-up Tracking & Reviews', breadcrumb: 'Clinical Management' },
   notifications: { title: 'Notifications & Safety Advisories', breadcrumb: 'Account' },
   profile: { title: 'User Profile & Clinical Credentials', breadcrumb: 'Account' },
   settings: { title: 'Account Settings', breadcrumb: 'Account' },
   library: { title: 'Dermatological Encyclopedia', breadcrumb: 'Resources' },
-  about: { title: 'About Vision Transformer Model', breadcrumb: 'Resources' },
   history: { title: 'Classification History Log', breadcrumb: 'Resources' }
 };
 
@@ -170,6 +175,39 @@ export default function TopHeader({
           >
             <Sparkles size={15} />
             <span>+ New AI Scan</span>
+          </button>
+        )}
+
+        {/* Quick Schedule Appointment Action Button for Doctor */}
+        {activeTab !== 'doctor_appointments' && currentUser?.role === 'doctor' && (
+          <button
+            onClick={() => setActiveTab('doctor_appointments')}
+            className="header-quick-scan-btn"
+            style={{
+              backgroundColor: '#ecfdf5',
+              color: '#059669',
+              border: '1px solid #a7f3d0',
+              borderRadius: 6,
+              padding: '6px 14px',
+              fontSize: '0.825rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#059669';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ecfdf5';
+              e.currentTarget.style.color = '#059669';
+            }}
+          >
+            <CalendarDays size={15} />
+            <span>+ Schedule Appointment</span>
           </button>
         )}
 
