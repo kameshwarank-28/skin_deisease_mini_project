@@ -1,0 +1,86 @@
+# DermAI Health Monitor: Deep Learning Training Configuration
+
+project_name: "DermAI-Health-Monitor"
+version: "2.0.0"
+date: "2026-11-04"
+
+dataset:
+  raw_directory: "Z:\\IMG_CLASSES"
+  classes_file: "class_mapping.json"
+  train_manifest: "processed_dataset/train_manifest.csv"
+  val_manifest: "processed_dataset/val_manifest.csv"
+  test_manifest: "processed_dataset/test_manifest.csv"
+  num_classes: 10
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  random_seed: 42
+  zero_leakage_verified: true
+
+preprocessing:
+  input_resolution: 224
+  high_res_gpu_resolution: 384
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  color_mode: "RGB"
+  interpolation: "bicubic"
+
+augmentation:
+  random_horizontal_flip: 0.50
+  random_vertical_flip: 0.20
+  random_rotation_degrees: 15
+  color_jitter:
+    brightness: 0.12
+    contrast: 0.12
+    saturation: 0.08
+  random_resized_crop_scale: [0.85, 1.0]
+
+loss:
+  type: "ClassWeightedFocalLoss"
+  gamma: 2.0
+  label_smoothing: 0.05
+  use_inverse_frequency_weights: true
+
+models_evaluated:
+  - name: "dinov2_vitb14"
+    timm_name: "vit_base_patch14_dinov2.lvd142m"
+    type: "Vision Transformer Foundation Model"
+    parameters: 86587402
+    unfreeze_stages: ["blocks.11", "norm"]
+  - name: "convnext_tiny"
+    timm_name: "convnext_tiny"
+    type: "Modernized Convolutional Baseline"
+    parameters: 27827818
+    unfreeze_stages: ["stages.3", "norm"]
+  - name: "efficientnetv2_s"
+    timm_name: "tf_efficientnetv2_s"
+    type: "Control Baseline"
+    parameters: 20190298
+    unfreeze_stages: ["conv_head", "blocks.5"]
+  - name: "dermfm_zero"
+    hf_repo: "redlessone/DermFM-Zero"
+    status: "Gated HuggingFace Repository (Authentication Required)"
+
+optimization:
+  stage1_epochs: 2
+  stage1_lr: 0.001
+  stage2_epochs: 3
+  stage2_backbone_lr: 0.00001
+  stage2_head_lr: 0.0002
+  optimizer: "AdamW"
+  weight_decay: 0.01
+  scheduler: "CosineAnnealingLR"
+  gradient_clipping_max_norm: 1.0
+  batch_size: 32
+
+calibration:
+  method: "TemperatureScaling"
+  target_metric: "NegativeLogLikelihood"
+  optimization_bounds: [0.1, 5.0]
+
+explainability:
+  cnn_method: "Grad-CAM"
+  transformer_method: "GradientSaliency"
+  colormap: "JET"
+  alpha_blending: 0.65

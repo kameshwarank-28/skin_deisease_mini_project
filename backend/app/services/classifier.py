@@ -113,12 +113,18 @@ class SkinClassifierService:
         is_low_res = (w < 150 or h < 150)
         blur_score = 100.0
         is_blurry = False
+        mean_brightness = 128.0
+        is_too_dark = False
+        is_overexposed = False
 
         if TORCH_AVAILABLE:
             try:
-                np_img = np.array(pil_image.convert("L"))
-                blur_score = float(cv2.Laplacian(np_img, cv2.CV_64F).var())
+                np_gray = np.array(pil_image.convert("L"))
+                blur_score = float(cv2.Laplacian(np_gray, cv2.CV_64F).var())
                 is_blurry = blur_score < 30.0
+                mean_brightness = float(np.mean(np_gray))
+                is_too_dark = mean_brightness < 35.0
+                is_overexposed = mean_brightness > 225.0
             except Exception:
                 pass
 
@@ -127,14 +133,24 @@ class SkinClassifierService:
             warnings.append(f"Image resolution ({w}x{h} px) is lower than recommended (minimum 150x150 px).")
         if is_blurry:
             warnings.append(f"Image appears blurry (sharpness score: {blur_score:.1f}).")
+        if is_too_dark:
+            warnings.append(f"Severely underexposed/dark image (mean brightness: {mean_brightness:.1f}).")
+        if is_overexposed:
+            warnings.append(f"Severely overexposed image (mean brightness: {mean_brightness:.1f}).")
+
+        is_rejected = is_too_dark or is_overexposed or (is_low_res and is_blurry)
 
         return {
-            "valid": True,
+            "valid": not is_rejected,
             "width": w,
             "height": h,
             "blur_score": blur_score,
+            "mean_brightness": mean_brightness,
             "is_blurry": is_blurry,
             "is_low_res": is_low_res,
+            "is_too_dark": is_too_dark,
+            "is_overexposed": is_overexposed,
+            "is_rejected": is_rejected,
             "warnings": warnings
         }
 
@@ -282,7 +298,7 @@ class SkinClassifierService:
 
         top_pred = top_5[0]
         entropy = float(calculate_entropy(probs))
-        is_uncertain = bool(entropy > 1.5 or top_pred["probability"] < 0.60)
+        is_uncertain = bool(entropy > 1.6 or top_pred["probability"] < 0.20 or quality_info.get("is_rejected", False))
 
         # Generate attention heatmap for the top predicted disease
         heatmap_overlay = self.generate_attention_heatmap(pil_image, target_class=top_pred["class_idx"])

@@ -1,0 +1,15 @@
+{
+  "checkpoint": "models\\best_model.pth",
+  "model_name": "efficientnetv2_s",
+  "temperature": 4.99992914994052,
+  "top1_accuracy": 0.32,
+  "top3_accuracy": 0.6,
+  "balanced_accuracy": 0.32,
+  "macro_f1": 0.2928,
+  "weighted_f1": 0.2928,
+  "raw_ece": 0.4447,
+  "calibrated_ece": 0.068,
+  "raw_brier": 1.081,
+  "calibrated_brier": 0.8114,
+  "inference_latency_ms": 23.82
+}
