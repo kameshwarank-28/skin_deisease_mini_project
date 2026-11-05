@@ -293,10 +293,19 @@ export default function TopHeader({
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 700,
-                fontSize: '0.85rem'
+                fontSize: '0.85rem',
+                overflow: 'hidden'
               }}
             >
-              {userInitial}
+              {currentUser?.profile_picture ? (
+                <img
+                  src={currentUser.profile_picture}
+                  alt={userName}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                userInitial
+              )}
             </div>
 
             {/* User Name */}

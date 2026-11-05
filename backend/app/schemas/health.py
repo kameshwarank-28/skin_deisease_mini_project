@@ -147,6 +147,7 @@ class UserProfileResponse(BaseModel):
     role: str
     phone_number: Optional[str] = None
     timezone: str
+    profile_picture: Optional[str] = None
     created_at: datetime.datetime
     patient_profile: Optional[PatientProfileResponse] = None
     doctor_profile: Optional[DoctorProfileResponse] = None

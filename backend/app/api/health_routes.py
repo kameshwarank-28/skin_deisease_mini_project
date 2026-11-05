@@ -183,7 +183,8 @@ def login_user(payload: UserLoginRequest, db: Session = Depends(get_db)):
             "full_name": user.full_name,
             "role": user.role,
             "phone_number": user.phone_number,
-            "timezone": user.timezone
+            "timezone": user.timezone,
+            "profile_picture": user.profile_picture
         },
         "has_patient_profile": has_profile,
         "doctor_verification_status": doc_status
@@ -2988,3 +2989,51 @@ def get_skin_timeline(
 
     events.sort(key=lambda x: ensure_utc(x.date), reverse=True)
     return events
+
+
+from pydantic import BaseModel
+
+class ProfilePicturePayload(BaseModel):
+    image_base64: Optional[str] = None
+
+@router.post("/user/profile-picture", summary="Upload or Update Profile Picture")
+async def update_profile_picture(
+    payload: Optional[ProfilePicturePayload] = None,
+    file: Optional[UploadFile] = File(None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    import base64
+    img_data = None
+    if file and file.filename:
+        content = await file.read()
+        mime = file.content_type or "image/jpeg"
+        b64 = base64.b64encode(content).decode("utf-8")
+        img_data = f"data:{mime};base64,{b64}"
+    elif payload and payload.image_base64:
+        img_data = payload.image_base64.strip()
+
+    if not img_data:
+        raise HTTPException(status_code=400, detail="No image file or base64 data provided.")
+
+    current_user.profile_picture = img_data
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "message": "Profile picture updated successfully.",
+        "profile_picture": current_user.profile_picture
+    }
+
+@router.delete("/user/profile-picture", summary="Remove Profile Picture")
+def delete_profile_picture(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    current_user.profile_picture = None
+    db.commit()
+    db.refresh(current_user)
+    return {
+        "message": "Profile picture removed successfully.",
+        "profile_picture": None
+    }

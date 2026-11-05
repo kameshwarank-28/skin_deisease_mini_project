@@ -132,6 +132,7 @@ def run_migrations():
         add_col_if_missing("users", "username", "VARCHAR(100)")
         add_col_if_missing("users", "phone_number", "VARCHAR(50)")
         add_col_if_missing("users", "role", "VARCHAR(20) DEFAULT 'patient'")
+        add_col_if_missing("users", "profile_picture", "TEXT")
 
         # follow_up_appointments
         add_col_if_missing("follow_up_appointments", "doctor_id", "INTEGER")

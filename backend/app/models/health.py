@@ -14,6 +14,7 @@ class User(Base):
     role = Column(String(20), default="patient", nullable=False, index=True) # "patient" | "doctor" | "admin"
     phone_number = Column(String(50), nullable=True)
     timezone = Column(String(64), default="UTC")
+    profile_picture = Column(Text, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
     # Relationships

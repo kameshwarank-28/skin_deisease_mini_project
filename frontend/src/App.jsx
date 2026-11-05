@@ -100,6 +100,17 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [activeTab]);
 
+  // Listen for profile-updated event
+  useEffect(() => {
+    const handleProfileUpdated = (e) => {
+      if (e.detail) {
+        setCurrentUser(e.detail);
+      }
+    };
+    window.addEventListener('dermai-profile-updated', handleProfileUpdated);
+    return () => window.removeEventListener('dermai-profile-updated', handleProfileUpdated);
+  }, []);
+
   // Listen for auth-expired event
   useEffect(() => {
     const handleExpired = () => {

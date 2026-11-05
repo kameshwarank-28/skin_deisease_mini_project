@@ -448,10 +448,19 @@ export default function Sidebar({
                 justifyContent: 'center',
                 fontWeight: 700,
                 fontSize: '0.9rem',
-                border: '2px solid rgba(164, 211, 226, 0.4)'
+                border: '2px solid rgba(164, 211, 226, 0.4)',
+                overflow: 'hidden'
               }}
             >
-              {userInitial}
+              {currentUser?.profile_picture ? (
+                <img
+                  src={currentUser.profile_picture}
+                  alt={userName}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                userInitial
+              )}
             </div>
 
             {!collapsed && (
