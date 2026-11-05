@@ -183,7 +183,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
 
       {/* Profile Section */}
       {activeSection === 'profile' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 460px) 1fr', gap: 20 }}>
+        <div style={{ maxWidth: 680 }}>
           {/* Active Account & Patient Profile Card */}
           <div className="project-card">
             <div className="project-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -290,35 +290,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
             </div>
           </div>
 
-          {/* Privacy & Security Architecture Card */}
-          <div className="project-card">
-            <div className="project-card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Lock size={16} color="#1177DE" />
-              <span>Healthcare Privacy & Multi-User Data Isolation</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: '0.85rem', color: '#475569' }}>
-              <div style={{ borderLeft: '4px solid #10b981', paddingLeft: 12 }}>
-                <strong style={{ color: '#1177DE' }}>Multi-Tenant Patient Data Isolation:</strong>
-                <p style={{ margin: '2px 0 0' }}>
-                  All skin lesion photographs, symptoms, consultations, treatments, appointments, and notification logs are strictly mapped to your unique user ID. One user can never query or view another user's medical records or photographs.
-                </p>
-              </div>
 
-              <div style={{ borderLeft: '4px solid #1177DE', paddingLeft: 12 }}>
-                <strong style={{ color: '#1177DE' }}>Local Storage & Deduplication:</strong>
-                <p style={{ margin: '2px 0 0' }}>
-                  Medical photographs are stored on secure local disks partitioned by user ID with SHA-256 hash deduplication. Images are never accessible via static unauthenticated URLs and are never uploaded to public AI services.
-                </p>
-              </div>
-
-              <div style={{ borderLeft: '4px solid #f59e0b', paddingLeft: 12 }}>
-                <strong style={{ color: '#1177DE' }}>Clinical Educational Screening Disclaimer:</strong>
-                <p style={{ margin: '2px 0 0' }}>
-                  The DermAI platform is a clinical decision-support and longitudinal tracking tool. It does not replace physical examination, clinical biopsy, or medical consultation by a certified dermatologist.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 
