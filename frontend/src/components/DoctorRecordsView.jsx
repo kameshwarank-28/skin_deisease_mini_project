@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import api, { getImageUrl } from '../services/api';
 
-export default function DoctorRecordsView({ setActiveTab }) {
+export default function DoctorRecordsView({ setActiveTab, onSelectPatientForAction }) {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPatientFilter, setSelectedPatientFilter] = useState('all');
@@ -74,7 +74,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading patient skin records...</div>
       </div>
@@ -87,7 +87,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -97,18 +97,18 @@ export default function DoctorRecordsView({ setActiveTab }) {
           alignItems: 'center',
           gap: 6,
           padding: '4px 10px',
-          backgroundColor: '#f0fdfa',
-          border: '1px solid #ccfbf1',
+          backgroundColor: '#EAF3FC',
+          border: '1px solid #7CB0EA',
           borderRadius: 20,
           fontSize: '0.75rem',
-          color: '#0d9488',
+          color: '#1177DE',
           fontWeight: 600,
           marginBottom: 8
         }}>
           <ShieldCheck size={14} />
           <span>Longitudinal Lesion Monitoring Repository</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           Authorized Patient Skin Records ({records.length})
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -120,7 +120,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '16px 20px',
         marginBottom: 20,
         display: 'flex',
@@ -137,7 +137,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
             <select
               value={selectedPatientFilter}
               onChange={(e) => setSelectedPatientFilter(e.target.value)}
-              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.8rem' }}
             >
               <option value="all">All Connected Patients ({uniquePatients.length})</option>
               {uniquePatients.map(p => (
@@ -152,7 +152,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
             <select
               value={selectedLocationFilter}
               onChange={(e) => setSelectedLocationFilter(e.target.value)}
-              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.8rem' }}
             >
               <option value="all">All Body Locations</option>
               {uniqueLocations.map(loc => (
@@ -170,7 +170,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
             placeholder="Search records or diagnoses..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.825rem' }}
+            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.825rem' }}
           />
         </div>
       </div>
@@ -180,12 +180,12 @@ export default function DoctorRecordsView({ setActiveTab }) {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '48px 20px',
           textAlign: 'center',
           color: '#94a3b8'
         }}>
-          <FolderHeart size={36} color="#cbd5e1" style={{ marginBottom: 10 }} />
+          <FolderHeart size={36} color="#7CB0EA" style={{ marginBottom: 10 }} />
           <div style={{ fontSize: '1rem', fontWeight: 600, color: '#475569' }}>No Skin Records Found</div>
           <p style={{ fontSize: '0.825rem', maxWidth: 400, margin: '6px auto 0' }}>
             No records matched the current filter criteria, or connected patients have not uploaded lesion photographs yet.
@@ -203,7 +203,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
               style={{
                 backgroundColor: '#ffffff',
                 borderRadius: 12,
-                border: '1px solid #e2e8f0',
+                border: '1px solid #7CB0EA',
                 overflow: 'hidden',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                 display: 'flex',
@@ -213,7 +213,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
             >
               <div>
                 {/* Lesion Photo Preview */}
-                <div style={{ height: 160, backgroundColor: '#0f172a', overflow: 'hidden', position: 'relative' }}>
+                <div style={{ height: 160, backgroundColor: '#10254C', overflow: 'hidden', position: 'relative' }}>
                   {rec.image_filename ? (
                     <img
                       src={getImageUrl(rec.image_filename)}
@@ -245,7 +245,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
                     bottom: 8,
                     right: 8,
                     backgroundColor: 'rgba(15, 23, 42, 0.85)',
-                    color: '#38bdf8',
+                    color: '#448EE2',
                     fontSize: '0.7rem',
                     fontWeight: 600,
                     padding: '2px 8px',
@@ -262,13 +262,13 @@ export default function DoctorRecordsView({ setActiveTab }) {
                       Captured: {formatDate(rec.capture_date)}
                     </span>
                     {rec.confidence_score && (
-                      <span style={{ fontSize: '0.725rem', fontWeight: 700, color: '#0d9488' }}>
+                      <span style={{ fontSize: '0.725rem', fontWeight: 700, color: '#1177DE' }}>
                         {Math.round(rec.confidence_score * 100)}% AI Conf.
                       </span>
                     )}
                   </div>
 
-                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', margin: '0 0 6px', lineHeight: 1.3 }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1177DE', margin: '0 0 6px', lineHeight: 1.3 }}>
                     {rec.predicted_disease || 'Lesion Entry'}
                   </h3>
 
@@ -281,13 +281,13 @@ export default function DoctorRecordsView({ setActiveTab }) {
               </div>
 
               {/* Action Footer */}
-              <div style={{ padding: '10px 16px', backgroundColor: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', gap: 8 }}>
+              <div style={{ padding: '10px 16px', backgroundColor: '#EAF3FC', borderTop: '1px solid #7CB0EA', display: 'flex', gap: 8 }}>
                 <button
                   onClick={() => setSelectedRecordModal(rec)}
                   style={{
                     flex: 1,
                     padding: '6px 12px',
-                    backgroundColor: '#0d6efd',
+                    backgroundColor: '#1177DE',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: 6,
@@ -305,12 +305,19 @@ export default function DoctorRecordsView({ setActiveTab }) {
                 </button>
 
                 <button
-                  onClick={() => setActiveTab('doctor_consultations')}
+                  onClick={() => {
+                    const patId = rec.patient_id || rec.user_id;
+                    if (onSelectPatientForAction && patId) {
+                      onSelectPatientForAction(patId, 'consultation');
+                    } else {
+                      setActiveTab('doctor_consultations');
+                    }
+                  }}
                   style={{
                     padding: '6px 10px',
                     backgroundColor: '#ffffff',
-                    color: '#0f172a',
-                    border: '1px solid #cbd5e1',
+                    color: '#1177DE',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     fontSize: '0.775rem',
                     fontWeight: 600,
@@ -332,7 +339,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
           <div className="modal-content" style={{ maxWidth: 640 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                   Clinical Lesion Inspection
                 </h3>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -347,7 +354,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
               </button>
             </div>
 
-            <div style={{ height: 300, backgroundColor: '#0f172a', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
+            <div style={{ height: 300, backgroundColor: '#10254C', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
               <img
                 src={getImageUrl(selectedRecordModal.image_filename)}
                 alt={selectedRecordModal.body_location}
@@ -355,18 +362,18 @@ export default function DoctorRecordsView({ setActiveTab }) {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, backgroundColor: '#f8fafc', padding: '14px', borderRadius: 8, border: '1px solid #e2e8f0', marginBottom: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, backgroundColor: '#EAF3FC', padding: '14px', borderRadius: 8, border: '1px solid #7CB0EA', marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Body Location</div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>{selectedRecordModal.body_location}</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1177DE' }}>{selectedRecordModal.body_location}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.725rem', color: '#64748b' }}>AI Prediction</div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0d6efd' }}>{selectedRecordModal.predicted_disease || 'None'}</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1177DE' }}>{selectedRecordModal.predicted_disease || 'None'}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Confidence Score</div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0d9488' }}>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1177DE' }}>
                   {selectedRecordModal.confidence_score ? `${Math.round(selectedRecordModal.confidence_score * 100)}%` : 'N/A'}
                 </div>
               </div>
@@ -375,7 +382,7 @@ export default function DoctorRecordsView({ setActiveTab }) {
             {selectedRecordModal.user_notes && (
               <div style={{ marginBottom: 16 }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>Patient Clinical Notes</div>
-                <div style={{ fontSize: '0.85rem', color: '#475569', backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: 6, border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '0.85rem', color: '#475569', backgroundColor: '#EAF3FC', padding: '10px 12px', borderRadius: 6, border: '1px solid #7CB0EA' }}>
                   "{selectedRecordModal.user_notes}"
                 </div>
               </div>
@@ -384,26 +391,36 @@ export default function DoctorRecordsView({ setActiveTab }) {
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
               <button
                 onClick={() => setSelectedRecordModal(null)}
-                style={{ padding: '8px 16px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Close
               </button>
               <button
                 onClick={() => {
+                  const patId = selectedRecordModal.patient_id || selectedRecordModal.user_id;
                   setSelectedRecordModal(null);
-                  setActiveTab('doctor_consultations');
+                  if (onSelectPatientForAction && patId) {
+                    onSelectPatientForAction(patId, 'consultation');
+                  } else {
+                    setActiveTab('doctor_consultations');
+                  }
                 }}
-                style={{ padding: '8px 16px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                style={{ padding: '8px 16px', backgroundColor: '#1177DE', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
               >
                 <Stethoscope size={14} />
                 <span>Create Consultation</span>
               </button>
               <button
                 onClick={() => {
+                  const patId = selectedRecordModal.patient_id || selectedRecordModal.user_id;
                   setSelectedRecordModal(null);
-                  setActiveTab('doctor_treatments');
+                  if (onSelectPatientForAction && patId) {
+                    onSelectPatientForAction(patId, 'treatment');
+                  } else {
+                    setActiveTab('doctor_treatments');
+                  }
                 }}
-                style={{ padding: '8px 16px', backgroundColor: '#16a34a', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                style={{ padding: '8px 16px', backgroundColor: '#1177DE', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
               >
                 <Pill size={14} />
                 <span>Prescribe Treatment</span>

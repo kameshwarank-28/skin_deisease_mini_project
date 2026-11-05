@@ -149,8 +149,8 @@ export default function Sidebar({
         className={`app-sidebar ${collapsed ? 'collapsed' : 'expanded'} ${mobileOpen ? 'mobile-open' : ''}`}
         style={{
           width: collapsed ? 72 : 250,
-          backgroundColor: '#0b1329',
-          color: '#e2e8f0',
+          backgroundColor: '#10254C',
+          color: '#EAF3FC',
           position: 'fixed',
           top: 0,
           bottom: 0,
@@ -159,8 +159,8 @@ export default function Sidebar({
           display: 'flex',
           flexDirection: 'column',
           transition: 'width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '4px 0 16px rgba(0, 0, 0, 0.15)',
+          borderRight: '1px solid rgba(164, 211, 226, 0.2)',
+          boxShadow: '4px 0 16px rgba(47, 79, 79, 0.25)',
           overflow: 'hidden'
         }}
       >
@@ -172,8 +172,8 @@ export default function Sidebar({
             display: 'flex',
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'space-between',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            backgroundColor: 'rgba(255, 255, 255, 0.02)'
+            borderBottom: '1px solid rgba(164, 211, 226, 0.2)',
+            backgroundColor: 'rgba(0, 0, 0, 0.08)'
           }}
         >
           <div
@@ -195,14 +195,14 @@ export default function Sidebar({
                 height: 38,
                 minWidth: 38,
                 borderRadius: 9,
-                background: 'linear-gradient(135deg, #0d6efd 0%, #00d2ff 100%)',
+                background: 'linear-gradient(135deg, #1177DE 0%, #448EE2 100%)',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
                 fontSize: '1.25rem',
-                boxShadow: '0 2px 8px rgba(13, 110, 253, 0.45)'
+                boxShadow: '0 2px 8px rgba(0, 124, 134, 0.45)'
               }}
             >
               +
@@ -212,9 +212,9 @@ export default function Sidebar({
             {!collapsed && (
               <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.15 }}>
-                  Derm<span style={{ color: '#38bdf8' }}>AI</span>
+                  Derm<span style={{ color: '#448EE2' }}>AI</span>
                 </div>
-                <div style={{ fontSize: '0.675rem', fontWeight: 600, color: '#94a3b8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '0.675rem', fontWeight: 600, color: '#7CB0EA', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                   Health Monitor
                 </div>
               </div>
@@ -256,7 +256,7 @@ export default function Sidebar({
                   style={{
                     fontSize: '0.675rem',
                     fontWeight: 700,
-                    color: '#64748b',
+                    color: '#7CB0EA',
                     letterSpacing: '0.8px',
                     padding: '8px 10px 4px',
                     textTransform: 'uppercase',
@@ -269,7 +269,7 @@ export default function Sidebar({
                 <div
                   style={{
                     height: 1,
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    backgroundColor: 'rgba(164, 211, 226, 0.2)',
                     margin: '8px 6px'
                   }}
                 />
@@ -295,25 +295,25 @@ export default function Sidebar({
                         borderRadius: 7,
                         border: 'none',
                         cursor: 'pointer',
-                        backgroundColor: isActive ? '#0d6efd' : 'transparent',
-                        color: isActive ? '#ffffff' : '#94a3b8',
+                        backgroundColor: isActive ? '#1177DE' : 'transparent',
+                        color: isActive ? '#ffffff' : '#7CB0EA',
                         fontWeight: isActive ? 600 : 500,
                         fontSize: '0.875rem',
                         textAlign: 'left',
                         transition: 'all 0.15s ease',
                         position: 'relative',
-                        boxShadow: isActive ? '0 2px 10px rgba(13, 110, 253, 0.35)' : 'none'
+                        boxShadow: isActive ? '0 2px 10px rgba(0, 178, 169, 0.35)' : 'none'
                       }}
                       onMouseEnter={(e) => {
                         if (!isActive) {
-                          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
-                          e.currentTarget.style.color = '#f1f5f9';
+                          e.currentTarget.style.backgroundColor = 'rgba(0, 178, 169, 0.15)';
+                          e.currentTarget.style.color = '#EAF3FC';
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (!isActive) {
                           e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.color = '#94a3b8';
+                          e.currentTarget.style.color = '#7CB0EA';
                         }
                       }}
                     >
@@ -321,7 +321,7 @@ export default function Sidebar({
                         <Icon
                           size={19}
                           style={{
-                            color: isActive ? '#ffffff' : '#38bdf8',
+                            color: isActive ? '#ffffff' : '#448EE2',
                             flexShrink: 0
                           }}
                         />
@@ -441,14 +441,14 @@ export default function Sidebar({
                 height: 34,
                 minWidth: 34,
                 borderRadius: '50%',
-                backgroundColor: '#0d6efd',
+                backgroundColor: '#1177DE',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 700,
                 fontSize: '0.9rem',
-                border: '2px solid rgba(255, 255, 255, 0.2)'
+                border: '2px solid rgba(164, 211, 226, 0.4)'
               }}
             >
               {userInitial}
@@ -456,10 +456,10 @@ export default function Sidebar({
 
             {!collapsed && (
               <div style={{ overflow: 'hidden' }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#EAF3FC', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {userName}
                 </div>
-                <div style={{ fontSize: '0.725rem', color: '#94a3b8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '0.725rem', color: '#7CB0EA', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {userEmail}
                 </div>
               </div>

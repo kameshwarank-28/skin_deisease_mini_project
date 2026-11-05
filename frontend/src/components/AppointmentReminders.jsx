@@ -44,6 +44,13 @@ export default function AppointmentReminders({ setActiveTab }) {
   const [formError, setFormError] = useState(null);
   const [feedback, setFeedback] = useState(null);
 
+  // Reschedule Modal State
+  const [rescheduleModal, setRescheduleModal] = useState(null);
+  const [rescheduleDate, setRescheduleDate] = useState('');
+  const [rescheduleTime, setRescheduleTime] = useState('10:00 AM');
+  const [rescheduleReason, setRescheduleReason] = useState('');
+  const [rescheduling, setRescheduling] = useState(false);
+
   // Delete Confirm
   const [deleteId, setDeleteId] = useState(null);
 
@@ -113,6 +120,54 @@ export default function AppointmentReminders({ setActiveTab }) {
         type: 'error',
         text: err.response?.data?.detail || 'Failed to update appointment response.'
       });
+    }
+  };
+
+  const handleOpenReschedule = (appt) => {
+    setRescheduleModal(appt);
+    let defDate = '';
+    if (appt.appointment_date) {
+      try {
+        defDate = new Date(appt.appointment_date).toISOString().slice(0, 10);
+      } catch (e) {
+        defDate = '';
+      }
+    }
+    if (!defDate) {
+      defDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    }
+    setRescheduleDate(defDate);
+    setRescheduleTime(appt.appointment_time || '10:00 AM');
+    setRescheduleReason('');
+  };
+
+  const handleConfirmReschedule = async (e) => {
+    e.preventDefault();
+    if (!rescheduleModal || !rescheduleDate) return;
+    setRescheduling(true);
+    try {
+      const payload = {
+        appointment_date: rescheduleDate,
+        appointment_time: rescheduleTime,
+        new_date: rescheduleDate,
+        new_time: rescheduleTime,
+        suggested_date: rescheduleDate,
+        suggested_time: rescheduleTime,
+        reason: rescheduleReason.trim() || 'Patient requested reschedule',
+        notes: rescheduleReason.trim() || 'Patient requested reschedule',
+        message: rescheduleReason.trim() || 'Patient requested reschedule'
+      };
+      await api.post(`/api/appointments/${rescheduleModal.id}/reschedule`, payload);
+      setRescheduleModal(null);
+      setFeedback({
+        type: 'success',
+        text: 'Appointment rescheduled successfully! Your doctor has received notification of your new requested slot.'
+      });
+      fetchAppointments();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to reschedule appointment.');
+    } finally {
+      setRescheduling(false);
     }
   };
 
@@ -255,7 +310,7 @@ export default function AppointmentReminders({ setActiveTab }) {
       {/* Top Banner */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Follow-up Appointments & Dermatologist Directory
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -285,9 +340,9 @@ export default function AppointmentReminders({ setActiveTab }) {
           padding: '12px 16px',
           borderRadius: 8,
           marginBottom: 20,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           {feedback.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
@@ -329,8 +384,8 @@ export default function AppointmentReminders({ setActiveTab }) {
                       width: 48,
                       height: 48,
                       borderRadius: 10,
-                      backgroundColor: '#e7f1ff',
-                      color: '#0d6efd',
+                      backgroundColor: '#EAF3FC',
+                      color: '#1177DE',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -342,13 +397,13 @@ export default function AppointmentReminders({ setActiveTab }) {
                     </div>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                        <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#1177DE', margin: 0 }}>
                           {a.doctor_name || a.doctor_or_clinic}
                         </h3>
                         {getStatusBadge(a)}
                       </div>
 
-                      <div style={{ fontSize: '0.85rem', color: '#0d6efd', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ fontSize: '0.85rem', color: '#1177DE', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Calendar size={14} />
                         <span>{new Date(a.appointment_date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
                         <span>•</span>
@@ -364,7 +419,16 @@ export default function AppointmentReminders({ setActiveTab }) {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: 6 }}>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <button
+                      onClick={() => handleOpenReschedule(a)}
+                      className="btn-outline"
+                      style={{ fontSize: '0.75rem', padding: '4px 10px', color: '#1177DE', borderColor: '#bae6fd', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                      title="Reschedule this appointment with your doctor"
+                    >
+                      <RotateCcw size={12} />
+                      <span>Reschedule</span>
+                    </button>
                     <button
                       onClick={() => handleOpenEdit(a)}
                       className="btn-outline"
@@ -382,13 +446,46 @@ export default function AppointmentReminders({ setActiveTab }) {
                   </div>
                 </div>
 
-                {/* If Awaiting Patient Confirmation or Rescheduled by Doctor */}
-                {((a.status && ['AWAITING_PATIENT_CONFIRMATION', 'RESCHEDULED', 'Rescheduled by Doctor'].includes(a.status)) || (a.suggested_date && a.status !== 'CONFIRMED' && a.status !== 'Confirmed')) && (
+                {/* 1. If Rescheduled by Patient (Awaiting Doctor Review) */}
+                {a.status === 'RESCHEDULED' && (
                   <div style={{
                     marginTop: 12,
                     padding: '12px 14px',
-                    backgroundColor: '#eff6ff',
-                    border: '1px solid #bfdbfe',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
+                    borderRadius: 8,
+                    fontSize: '0.85rem',
+                    color: '#0F1E36'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Clock size={15} color="#1177DE" />
+                      <strong style={{ color: '#14532d' }}>Reschedule Request Sent to Doctor:</strong>
+                    </div>
+                    <div style={{ marginTop: 4, fontWeight: 700, color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Calendar size={14} color="#1177DE" />
+                      <span>
+                        {new Date(a.appointment_date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                        {a.appointment_time && ` at ${a.appointment_time}`}
+                      </span>
+                    </div>
+                    {a.purpose_or_notes && (
+                      <div style={{ marginTop: 4, fontStyle: 'italic', color: '#0F1E36', fontSize: '0.8rem' }}>
+                        Note: "{a.purpose_or_notes}"
+                      </div>
+                    )}
+                    <div style={{ marginTop: 6, fontSize: '0.775rem', color: '#1177DE' }}>
+                      Awaiting confirmation from your doctor. They will review this new appointment slot.
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. If Doctor Proposed Alternate Time (Awaiting Patient Confirmation) */}
+                {a.status !== 'RESCHEDULED' && ((a.status && ['AWAITING_PATIENT_CONFIRMATION', 'Rescheduled by Doctor'].includes(a.status)) || (a.suggested_date && a.status !== 'CONFIRMED' && a.status !== 'Confirmed')) && (
+                  <div style={{
+                    marginTop: 12,
+                    padding: '12px 14px',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     fontSize: '0.85rem',
                     color: '#1e40af'
@@ -399,8 +496,8 @@ export default function AppointmentReminders({ setActiveTab }) {
                           <RotateCcw size={14} />
                           <strong style={{ color: '#1e3a8a' }}>Doctor Proposed New Appointment Time:</strong>
                         </div>
-                        <div style={{ marginTop: 4, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <Calendar size={14} color="#0d6efd" />
+                        <div style={{ marginTop: 4, fontWeight: 700, color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <Calendar size={14} color="#1177DE" />
                           <span>
                             {a.suggested_date || a.suggested_alternate_date || 'Alternative Date'}
                             {(a.suggested_time || a.suggested_alternate_time) && ` at ${a.suggested_time || a.suggested_alternate_time}`}
@@ -418,7 +515,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                           onClick={() => handlePatientResponse(a.id, 'accept')}
                           style={{
                             padding: '6px 14px',
-                            backgroundColor: '#16a34a',
+                            backgroundColor: '#1177DE',
                             color: '#ffffff',
                             border: 'none',
                             borderRadius: 6,
@@ -486,7 +583,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                   <div style={{
                     marginTop: 10,
                     padding: '8px 12px',
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: '#EAF3FC',
                     borderRadius: 6,
                     fontSize: '0.8rem',
                     color: '#334155'
@@ -515,8 +612,8 @@ export default function AppointmentReminders({ setActiveTab }) {
                     width: 48,
                     height: 48,
                     borderRadius: '50%',
-                    backgroundColor: '#0b1329',
-                    color: '#38bdf8',
+                    backgroundColor: '#10254C',
+                    color: '#448EE2',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -524,13 +621,13 @@ export default function AppointmentReminders({ setActiveTab }) {
                     fontSize: '1.2rem',
                     border: '2px solid rgba(56, 189, 248, 0.4)'
                   }}>
-                    <Stethoscope size={22} color="#38bdf8" />
+                    <Stethoscope size={22} color="#448EE2" />
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: '#1177DE' }}>
                       {doc.full_name}
                     </div>
-                    <div style={{ fontSize: '0.775rem', color: '#0d6efd', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.775rem', color: '#1177DE', fontWeight: 600 }}>
                       {doc.qualification} • {doc.specialization}
                     </div>
                   </div>
@@ -538,7 +635,7 @@ export default function AppointmentReminders({ setActiveTab }) {
 
                 <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: 12, flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Building size={14} color="#0d6efd" />
+                    <Building size={14} color="#1177DE" />
                     <span><strong>Hospital / Clinic:</strong> {doc.hospital_name}</span>
                   </div>
                   {doc.years_experience && (
@@ -553,7 +650,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: 8, borderTop: '1px solid #f1f5f9', paddingTop: 12 }}>
+                <div style={{ display: 'flex', gap: 8, borderTop: '1px solid #EAF3FC', paddingTop: 12 }}>
                   {doc.connection_status === 'Accepted' ? (
                     <button
                       onClick={() => handleOpenCreateWithDoctor(doc)}
@@ -598,7 +695,7 @@ export default function AppointmentReminders({ setActiveTab }) {
       {deleteId && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 380, textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 10px', color: '#0f172a' }}>Delete Appointment?</h3>
+            <h3 style={{ margin: '0 0 10px', color: '#1177DE' }}>Delete Appointment?</h3>
             <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: 18 }}>
               This will remove the appointment and cancel reminder notifications.
             </p>
@@ -619,7 +716,7 @@ export default function AppointmentReminders({ setActiveTab }) {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 480 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, color: '#0d6efd', fontSize: '1.2rem', fontWeight: 700 }}>
+              <h3 style={{ margin: 0, color: '#1177DE', fontSize: '1.2rem', fontWeight: 700 }}>
                 {editingId ? 'Edit Follow-up Appointment' : 'Book Clinical Appointment'}
               </h3>
               <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6c757d', padding: 4, display: 'flex', alignItems: 'center' }}>
@@ -661,7 +758,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                     width: '100%',
                     padding: '8px 10px',
                     fontSize: '0.85rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     marginBottom: 6,
                     backgroundColor: '#ffffff'
@@ -687,7 +784,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                     width: '100%',
                     padding: '8px 10px',
                     fontSize: '0.85rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     boxSizing: 'border-box'
                   }}
@@ -708,7 +805,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                     width: '100%',
                     padding: '8px 10px',
                     fontSize: '0.85rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     boxSizing: 'border-box'
                   }}
@@ -730,7 +827,7 @@ export default function AppointmentReminders({ setActiveTab }) {
                     width: '100%',
                     padding: '8px 10px',
                     fontSize: '0.85rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     boxSizing: 'border-box'
                   }}
@@ -751,6 +848,121 @@ export default function AppointmentReminders({ setActiveTab }) {
                   className="btn-submit"
                 >
                   {submitting ? 'Saving...' : (selectedDoctorId ? 'Send Appointment Request' : 'Schedule Visit')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: RESCHEDULE APPOINTMENT */}
+      {rescheduleModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: 440 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <RotateCcw size={20} color="#1177DE" />
+                <h3 style={{ margin: 0, color: '#1177DE', fontSize: '1.15rem', fontWeight: 700 }}>
+                  Reschedule Appointment
+                </h3>
+              </div>
+              <button
+                onClick={() => setRescheduleModal(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6c757d', padding: 4 }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0 0 16px' }}>
+              Choose a new date and time for your consultation with <strong>{rescheduleModal.doctor_name || rescheduleModal.doctor_or_clinic}</strong>. Your doctor will be notified automatically.
+            </p>
+
+            <form onSubmit={handleConfirmReschedule}>
+              <div className="form-group" style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>
+                  New Appointment Date *
+                </label>
+                <input
+                  type="date"
+                  value={rescheduleDate}
+                  min={new Date().toISOString().slice(0, 10)}
+                  onChange={(e) => setRescheduleDate(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 10px',
+                    fontSize: '0.85rem',
+                    border: '1px solid #7CB0EA',
+                    borderRadius: 6,
+                    boxSizing: 'border-box'
+                  }}
+                  required
+                />
+              </div>
+
+              <div className="form-group" style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>
+                  Preferred Time Slot *
+                </label>
+                <select
+                  value={rescheduleTime}
+                  onChange={(e) => setRescheduleTime(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 10px',
+                    fontSize: '0.85rem',
+                    border: '1px solid #7CB0EA',
+                    borderRadius: 6,
+                    boxSizing: 'border-box',
+                    backgroundColor: '#ffffff'
+                  }}
+                  required
+                >
+                  <option value="09:00 AM">09:00 AM - Morning Slot</option>
+                  <option value="10:00 AM">10:00 AM - Morning Slot</option>
+                  <option value="11:30 AM">11:30 AM - Morning Slot</option>
+                  <option value="02:00 PM">02:00 PM - Afternoon Slot</option>
+                  <option value="03:30 PM">03:30 PM - Afternoon Slot</option>
+                  <option value="04:30 PM">04:30 PM - Evening Slot</option>
+                  <option value="05:30 PM">05:30 PM - Evening Slot</option>
+                </select>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>
+                  Reason for Reschedule (Optional note for doctor)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="e.g., Prior conflict, prefer morning slot, symptom follow-up change..."
+                  value={rescheduleReason}
+                  onChange={(e) => setRescheduleReason(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 10px',
+                    fontSize: '0.85rem',
+                    border: '1px solid #7CB0EA',
+                    borderRadius: 6,
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  onClick={() => setRescheduleModal(null)}
+                  className="btn-outline"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={rescheduling}
+                  className="btn-submit"
+                  style={{ backgroundColor: '#10254C', borderColor: '#1177DE' }}
+                >
+                  {rescheduling ? 'Rescheduling...' : 'Confirm Reschedule'}
                 </button>
               </div>
             </form>

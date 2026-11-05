@@ -76,6 +76,9 @@ export default function App() {
   // Preselected record for comparison
   const [preselectedCompareRecord, setPreselectedCompareRecord] = useState(null);
 
+  // Selected patient for doctor actions (prescribe treatment, new consultation)
+  const [selectedPatientForDoctorAction, setSelectedPatientForDoctorAction] = useState(null);
+
   // Tab change handler that updates URL hash smoothly without reloading the page
   const handleTabChange = (newTab) => {
     setActiveTab(newTab);
@@ -240,6 +243,21 @@ export default function App() {
 
   const handleCameraCapture = async (base64Img) => {
     setPreviewUrl(base64Img);
+    try {
+      const arr = base64Img.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      const camFile = new File([u8arr], `webcam_skin_${Date.now()}.jpg`, { type: mime });
+      setSelectedFile(camFile);
+    } catch (e) {
+      console.warn('Could not wrap base64 in File:', e);
+    }
+
     setInputMode('upload');
     setLoading(true);
     setErrorMessage(null);
@@ -286,13 +304,13 @@ export default function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#0b1329',
+        backgroundColor: '#10254C',
         color: '#ffffff',
         fontFamily: 'Inter, system-ui, sans-serif'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-            <ShieldCheck size={40} color="#38bdf8" />
+            <ShieldCheck size={40} color="#448EE2" />
           </div>
           <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>DermAI Health Monitor</div>
           <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: 4 }}>Validating secure session...</div>
@@ -333,7 +351,7 @@ export default function App() {
 
   // 4. Fully Authenticated Platform: Render Sidebar & Role-Based Dashboard
   return (
-    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#f8fafc' }}>
+    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#C8DEF7' }}>
       {/* 1. COLLAPSIBLE LEFT SIDEBAR (Dynamic for Patient or Doctor) */}
       <Sidebar
         activeTab={activeTab}
@@ -379,12 +397,27 @@ export default function App() {
               {activeTab === 'doctor_overview' && (
                 <DoctorOverview
                   setActiveTab={handleTabChange}
-                  onSelectPatient={(pat) => handleTabChange('doctor_patients')}
+                  onSelectPatient={(pat) => {
+                    if (pat && pat.patient_id) {
+                      setSelectedPatientForDoctorAction(pat.patient_id);
+                    }
+                    handleTabChange('doctor_patients');
+                  }}
                 />
               )}
 
               {activeTab === 'doctor_patients' && (
-                <DoctorPatientsView setActiveTab={handleTabChange} />
+                <DoctorPatientsView
+                  setActiveTab={handleTabChange}
+                  onSelectPatientForAction={(patientId, action) => {
+                    setSelectedPatientForDoctorAction(patientId);
+                    if (action === 'treatment') {
+                      handleTabChange('doctor_treatments');
+                    } else if (action === 'consultation') {
+                      handleTabChange('doctor_consultations');
+                    }
+                  }}
+                />
               )}
 
               {activeTab === 'doctor_requests' && (
@@ -392,7 +425,13 @@ export default function App() {
               )}
 
               {activeTab === 'doctor_records' && (
-                <DoctorRecordsView setActiveTab={handleTabChange} />
+                <DoctorRecordsView
+                  setActiveTab={handleTabChange}
+                  onSelectPatientForAction={(patientId, action) => {
+                    setSelectedPatientForDoctorAction(patientId);
+                    handleTabChange(action === 'treatment' ? 'doctor_treatments' : 'doctor_consultations');
+                  }}
+                />
               )}
 
               {activeTab === 'doctor_symptoms' && (
@@ -404,11 +443,11 @@ export default function App() {
               )}
 
               {activeTab === 'doctor_consultations' && (
-                <DoctorConsultationsView />
+                <DoctorConsultationsView selectedPatientId={selectedPatientForDoctorAction} />
               )}
 
               {activeTab === 'doctor_treatments' && (
-                <DoctorTreatmentsView />
+                <DoctorTreatmentsView selectedPatientId={selectedPatientForDoctorAction} />
               )}
 
               {activeTab === 'doctor_followups' && (
@@ -439,7 +478,7 @@ export default function App() {
               {activeTab === 'diagnose' && (
                 <div>
                   <div className="project-card" style={{ textAlign: 'center', padding: '16px 20px' }}>
-                    <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', marginBottom: 4 }}>
+                    <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', marginBottom: 4 }}>
                       Real-Time Skin Lesion Classification
                     </h2>
                     <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -518,21 +557,37 @@ export default function App() {
 
                       {/* Submit / Predict Button */}
                       {inputMode === 'upload' && (
-                        <div style={{ marginTop: 16 }}>
+                        <div style={{ marginTop: 16, display: 'flex', gap: 10 }}>
                           <button
                             type="button"
                             onClick={handleAnalyzeFile}
                             disabled={!selectedFile || loading}
                             className="btn-submit"
                             style={{
-                              width: '100%',
+                              flex: 1,
                               justifyContent: 'center',
                               opacity: (!selectedFile || loading) ? 0.6 : 1,
                               cursor: (!selectedFile || loading) ? 'not-allowed' : 'pointer'
                             }}
                           >
-                            {loading ? 'Classifying Image...' : (selectedFile ? 'Predict Disease' : 'Select an Image to Predict')}
+                            {loading ? 'Classifying Image...' : (selectedFile ? (result ? 'Re-analyze Image' : 'Predict Disease') : 'Select an Image to Predict')}
                           </button>
+
+                          {previewUrl && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInputMode('camera');
+                                setResult(null);
+                                setErrorMessage(null);
+                              }}
+                              className="btn-outline"
+                              style={{ padding: '8px 14px', fontSize: '0.825rem', whiteSpace: 'nowrap' }}
+                              title="Capture a new photo with webcam"
+                            >
+                              Retake Webcam
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -640,7 +695,7 @@ export default function App() {
         {/* Medical Disclaimer Footer */}
         <footer style={{
           backgroundColor: '#ffffff',
-          borderTop: '1px solid #e2e8f0',
+          borderTop: '1px solid #7CB0EA',
           padding: '14px 20px',
           textAlign: 'center',
           fontSize: '0.8rem',
@@ -667,7 +722,7 @@ export default function App() {
             }}>
               <AlertTriangle size={24} color="#ef4444" />
             </div>
-            <h3 style={{ color: '#0f172a', margin: '0 0 8px', fontSize: '1.15rem', fontWeight: 700 }}>
+            <h3 style={{ color: '#1177DE', margin: '0 0 8px', fontSize: '1.15rem', fontWeight: 700 }}>
               Sign Out of DermAI?
             </h3>
             <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: 20 }}>

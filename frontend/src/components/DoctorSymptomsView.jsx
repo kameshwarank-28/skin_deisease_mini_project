@@ -117,7 +117,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading patient symptom logs...</div>
       </div>
@@ -135,9 +135,9 @@ export default function DoctorSymptomsView({ setActiveTab }) {
           padding: '12px 18px',
           borderRadius: 8,
           marginBottom: 16,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -157,7 +157,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -178,7 +178,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
           <Activity size={14} />
           <span>Patient-Reported Symptom Progression</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           Authorized Patient Symptom History ({symptoms.length})
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -190,7 +190,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '16px 20px',
         marginBottom: 20,
         display: 'flex',
@@ -207,7 +207,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
             <select
               value={patientFilter}
               onChange={(e) => setPatientFilter(e.target.value)}
-              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.8rem' }}
             >
               <option value="all">All Patients ({uniquePatients.length})</option>
               {uniquePatients.map(p => (
@@ -222,7 +222,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
             <select
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value)}
-              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+              style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.8rem' }}
             >
               <option value="all">All Severities</option>
               <option value="mild">Mild</option>
@@ -240,7 +240,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
             placeholder="Search symptoms or notes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.825rem' }}
+            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.825rem' }}
           />
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 24px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
@@ -270,8 +270,8 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                   style={{
                     padding: '16px 20px',
                     borderRadius: 10,
-                    border: '1px solid #e2e8f0',
-                    backgroundColor: isSevere ? '#fffbfb' : '#f8fafc',
+                    border: '1px solid #7CB0EA',
+                    backgroundColor: isSevere ? '#fffbfb' : '#EAF3FC',
                     borderLeft: isSevere ? '4px solid #ef4444' : isModerate ? '4px solid #f59e0b' : '4px solid #10b981',
                     display: 'flex',
                     flexDirection: 'column',
@@ -281,7 +281,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4, flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: 800, fontSize: '1rem', color: '#0f172a' }}>
+                        <span style={{ fontWeight: 800, fontSize: '1rem', color: '#1177DE' }}>
                           {s.symptom_name}
                         </span>
                         <span style={{
@@ -289,15 +289,15 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                           padding: '2px 8px',
                           borderRadius: 10,
                           fontWeight: 700,
-                          backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#dcfce7',
-                          color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#15803d'
+                          backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#DCEAF8',
+                          color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#1177DE'
                         }}>
                           {s.severity || 'Mild'}
                         </span>
-                        <span style={{ fontSize: '0.75rem', color: '#0d6efd', fontWeight: 700 }}>
+                        <span style={{ fontSize: '0.75rem', color: '#1177DE', fontWeight: 700 }}>
                           {s.patient_name || `Patient #${s.user_id}`}
                         </span>
-                        <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: 4, backgroundColor: '#e2e8f0', color: '#475569' }}>
+                        <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: 4, backgroundColor: '#7CB0EA', color: '#475569' }}>
                           {s.patient_code}
                         </span>
                       </div>
@@ -313,9 +313,9 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                         onClick={() => openObservationModal(s)}
                         style={{
                           padding: '6px 12px',
-                          backgroundColor: s.doctor_observation ? '#eff6ff' : '#0d6efd',
-                          color: s.doctor_observation ? '#1d4ed8' : '#ffffff',
-                          border: s.doctor_observation ? '1px solid #bfdbfe' : 'none',
+                          backgroundColor: s.doctor_observation ? '#EAF3FC' : '#1177DE',
+                          color: s.doctor_observation ? '#1177DE' : '#ffffff',
+                          border: s.doctor_observation ? '1px solid #7CB0EA' : 'none',
                           borderRadius: 6,
                           fontSize: '0.75rem',
                           fontWeight: 600,
@@ -334,12 +334,12 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                         style={{
                           padding: '6px 12px',
                           backgroundColor: '#ffffff',
-                          border: '1px solid #cbd5e1',
+                          border: '1px solid #7CB0EA',
                           borderRadius: 6,
                           fontSize: '0.75rem',
                           fontWeight: 600,
                           cursor: 'pointer',
-                          color: '#0f172a',
+                          color: '#1177DE',
                           display: 'flex',
                           alignItems: 'center',
                           gap: 4
@@ -353,7 +353,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                         onClick={() => setActiveTab('doctor_treatments')}
                         style={{
                           padding: '6px 12px',
-                          backgroundColor: '#16a34a',
+                          backgroundColor: '#1177DE',
                           color: '#ffffff',
                           border: 'none',
                           borderRadius: 6,
@@ -378,7 +378,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                         width: 56,
                         height: 56,
                         borderRadius: 6,
-                        backgroundColor: '#0f172a',
+                        backgroundColor: '#10254C',
                         overflow: 'hidden',
                         flexShrink: 0,
                         position: 'relative'
@@ -394,7 +394,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                             bottom: 2,
                             left: 2,
                             backgroundColor: 'rgba(15,23,42,0.85)',
-                            color: '#38bdf8',
+                            color: '#448EE2',
                             fontSize: '0.55rem',
                             padding: '1px 3px',
                             borderRadius: 2
@@ -414,12 +414,12 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                   {(s.doctor_observation || s.doctor_feedback) && (
                     <div style={{
                       padding: '10px 14px',
-                      backgroundColor: '#eff6ff',
-                      border: '1px solid #bfdbfe',
+                      backgroundColor: '#EAF3FC',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 8
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                        <Stethoscope size={14} color="#2563eb" />
+                        <Stethoscope size={14} color="#1177DE" />
                         <span style={{ fontSize: '0.775rem', fontWeight: 700, color: '#1e40af' }}>
                           Doctor Clinical Observation ({s.reviewed_by_doctor_name ? `Dr. ${s.reviewed_by_doctor_name}` : 'Clinician'})
                         </span>
@@ -454,7 +454,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
       {observationModalSymptom && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 480 }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: '#0f172a' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 6px', color: '#1177DE' }}>
               Add Clinical Observation
             </h3>
             <p style={{ fontSize: '0.825rem', color: '#64748b', marginBottom: 16 }}>
@@ -472,7 +472,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                   placeholder="e.g. Mild localized erythema observed. No signs of secondary infection or cellulitis."
                   value={observationData.doctor_observation}
                   onChange={(e) => setObservationData({ ...observationData, doctor_observation: e.target.value })}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
                 />
               </div>
 
@@ -485,7 +485,7 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                   placeholder="e.g. Apply prescribed topical barrier cream twice daily. Avoid hot showers."
                   value={observationData.doctor_feedback}
                   onChange={(e) => setObservationData({ ...observationData, doctor_feedback: e.target.value })}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
                 />
               </div>
 
@@ -493,14 +493,14 @@ export default function DoctorSymptomsView({ setActiveTab }) {
                 <button
                   type="button"
                   onClick={() => setObservationModalSymptom(null)}
-                  style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submittingObs}
-                  style={{ padding: '8px 16px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  style={{ padding: '8px 16px', backgroundColor: '#1177DE', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                 >
                   {submittingObs ? 'Saving...' : 'Save Clinical Observation'}
                 </button>

@@ -102,7 +102,7 @@ export default function ImageComparisonView({ preselectedRecord }) {
     <div>
       {/* Top Banner */}
       <div className="project-card">
-        <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: '0 0 4px' }}>
+        <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
           Longitudinal Skin Photo Comparison
         </h2>
         <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -272,7 +272,7 @@ export default function ImageComparisonView({ preselectedRecord }) {
               /* Side by Side Mode */
               <div className="grid-2">
                 <div style={{ border: '1px solid var(--border-color)', borderRadius: 6, padding: 12, textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0d6efd', marginBottom: 6 }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1177DE', marginBottom: 6 }}>
                     EARLIER PHOTO (BASELINE)
                   </div>
                   <div style={{ height: 260, backgroundColor: '#000', borderRadius: 4, overflow: 'hidden', marginBottom: 10 }}>
@@ -334,7 +334,7 @@ export default function ImageComparisonView({ preselectedRecord }) {
 
           {/* Section: OBSERVED VISUAL CHANGES */}
           <div className="project-card">
-            <div className="project-card-header" style={{ color: '#0d6efd' }}>
+            <div className="project-card-header" style={{ color: '#1177DE' }}>
               OBSERVED VISUAL CHANGES
             </div>
 
@@ -343,7 +343,7 @@ export default function ImageComparisonView({ preselectedRecord }) {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 18 }}>
                   <div style={{ backgroundColor: '#f8f9fa', border: '1px solid var(--border-color)', borderRadius: 6, padding: 12, textAlign: 'center' }}>
                     <div style={{ fontSize: '0.75rem', color: '#6c757d' }}>Image Similarity Index</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#0d6efd' }}>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#1177DE' }}>
                       {(comparisonResult.similarity_score * 100).toFixed(0)}%
                     </div>
                   </div>
@@ -364,7 +364,7 @@ export default function ImageComparisonView({ preselectedRecord }) {
                 {/* Specific Observations List */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
                   {comparisonResult.observed_changes.map((obs, idx) => (
-                    <div key={idx} style={{ backgroundColor: '#f8f9fa', borderLeft: '4px solid #0d6efd', padding: '10px 14px', borderRadius: 4 }}>
+                    <div key={idx} style={{ backgroundColor: '#f8f9fa', borderLeft: '4px solid #1177DE', padding: '10px 14px', borderRadius: 4 }}>
                       <strong style={{ fontSize: '0.85rem', color: '#212529' }}>{obs.observation_type}:</strong>
                       <p style={{ margin: '2px 0 4px', fontSize: '0.85rem', color: '#495057' }}>
                         {obs.summary}

@@ -202,9 +202,9 @@ export default function SymptomTracker() {
           padding: '12px 18px',
           borderRadius: 8,
           marginBottom: 16,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -224,7 +224,7 @@ export default function SymptomTracker() {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 20,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -245,7 +245,7 @@ export default function SymptomTracker() {
           <Activity size={14} />
           <span>Longitudinal Symptom Tracking & Clinical Observations</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           Symptoms & Observations
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -314,13 +314,13 @@ export default function SymptomTracker() {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '22px 24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <Plus size={18} color="#0d6efd" />
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+            <Plus size={18} color="#1177DE" />
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
               Log New Symptom
             </h2>
           </div>
@@ -334,7 +334,7 @@ export default function SymptomTracker() {
               <select
                 value={symptomName}
                 onChange={(e) => setSymptomName(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
                 required
               >
                 {STANDARD_SYMPTOMS.map(s => (
@@ -354,7 +354,7 @@ export default function SymptomTracker() {
                   placeholder="e.g. Tingling, weeping, tightness"
                   value={customName}
                   onChange={(e) => setCustomName(e.target.value)}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
                   required
                 />
               </div>
@@ -367,7 +367,7 @@ export default function SymptomTracker() {
               </label>
               <div style={{ display: 'flex', gap: 8 }}>
                 {[
-                  { key: 'Mild', color: '#16a34a', bg: '#dcfce7', border: '#86efac' },
+                  { key: 'Mild', color: '#1177DE', bg: '#DCEAF8', border: '#86efac' },
                   { key: 'Moderate', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
                   { key: 'Severe', color: '#dc2626', bg: '#fee2e2', border: '#fca5a5' }
                 ].map(sev => {
@@ -381,7 +381,7 @@ export default function SymptomTracker() {
                         flex: 1,
                         padding: '8px 6px',
                         borderRadius: 6,
-                        border: isSelected ? `2px solid ${sev.color}` : '1px solid #cbd5e1',
+                        border: isSelected ? `2px solid ${sev.color}` : '1px solid #7CB0EA',
                         backgroundColor: isSelected ? sev.bg : '#ffffff',
                         color: isSelected ? sev.color : '#475569',
                         fontWeight: isSelected ? 700 : 500,
@@ -411,7 +411,7 @@ export default function SymptomTracker() {
                 placeholder="e.g. 2 days, since yesterday, 1 week"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
               />
             </div>
 
@@ -423,7 +423,7 @@ export default function SymptomTracker() {
               <select
                 value={linkedRecordId}
                 onChange={(e) => setLinkedRecordId(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
               >
                 <option value="">-- None / General Body Symptom --</option>
                 {skinRecords.map(r => (
@@ -443,7 +443,7 @@ export default function SymptomTracker() {
                 type="datetime-local"
                 value={recordedAt}
                 onChange={(e) => setRecordedAt(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
               />
             </div>
 
@@ -457,7 +457,7 @@ export default function SymptomTracker() {
                 placeholder="Describe triggers, flare-ups with heat or water, relief measures, sensations..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.85rem' }}
               />
             </div>
 
@@ -467,7 +467,7 @@ export default function SymptomTracker() {
               style={{
                 width: '100%',
                 padding: '10px 16px',
-                backgroundColor: '#0d6efd',
+                backgroundColor: '#10254C',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 8,
@@ -490,8 +490,8 @@ export default function SymptomTracker() {
           <div style={{
             marginTop: 16,
             padding: '10px 12px',
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
+            backgroundColor: '#EAF3FC',
+            border: '1px solid #7CB0EA',
             borderRadius: 6,
             fontSize: '0.725rem',
             color: '#64748b',
@@ -507,7 +507,7 @@ export default function SymptomTracker() {
           <div style={{
             backgroundColor: '#ffffff',
             borderRadius: 12,
-            border: '1px solid #e2e8f0',
+            border: '1px solid #7CB0EA',
             padding: '16px 20px',
             marginBottom: 16,
             boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
@@ -516,7 +516,7 @@ export default function SymptomTracker() {
             gap: 12
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1177DE' }}>
                 Chronological Symptom Log ({filteredSymptoms.length} of {symptoms.length})
               </div>
 
@@ -528,7 +528,7 @@ export default function SymptomTracker() {
                   placeholder="Search symptom or notes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+                  style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.8rem' }}
                 />
               </div>
             </div>
@@ -541,7 +541,7 @@ export default function SymptomTracker() {
                 <select
                   value={selectedSeverity}
                   onChange={(e) => setSelectedSeverity(e.target.value)}
-                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.775rem' }}
+                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.775rem' }}
                 >
                   <option value="all">All Severities</option>
                   <option value="mild">Mild</option>
@@ -556,7 +556,7 @@ export default function SymptomTracker() {
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.775rem' }}
+                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.775rem' }}
                 >
                   <option value="all">All Symptom Types</option>
                   {STANDARD_SYMPTOMS.map(st => (
@@ -571,7 +571,7 @@ export default function SymptomTracker() {
                 <select
                   value={selectedDateRange}
                   onChange={(e) => setSelectedDateRange(e.target.value)}
-                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.775rem' }}
+                  style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.775rem' }}
                 >
                   <option value="all">All Time</option>
                   <option value="7days">Past 7 Days</option>
@@ -584,19 +584,19 @@ export default function SymptomTracker() {
           {/* Chronological Symptom Cards */}
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px 16px', color: '#64748b' }}>
-              <Loader2 size={26} className="animate-spin" color="#0d6efd" style={{ marginBottom: 8 }} />
+              <Loader2 size={26} className="animate-spin" color="#1177DE" style={{ marginBottom: 8 }} />
               <div>Loading symptoms & observations...</div>
             </div>
           ) : filteredSymptoms.length === 0 ? (
             <div style={{
               backgroundColor: '#ffffff',
               borderRadius: 12,
-              border: '1px dashed #cbd5e1',
+              border: '1px dashed #7CB0EA',
               padding: '48px 20px',
               textAlign: 'center',
               color: '#94a3b8'
             }}>
-              <Activity size={36} color="#cbd5e1" style={{ marginBottom: 10 }} />
+              <Activity size={36} color="#7CB0EA" style={{ marginBottom: 10 }} />
               <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#475569' }}>No Symptom Entries Found</div>
               <p style={{ fontSize: '0.825rem', maxWidth: 400, margin: '6px auto 0' }}>
                 No records matched your filters. Use the form on the left to document new skin sensations and symptoms.
@@ -615,7 +615,7 @@ export default function SymptomTracker() {
                     style={{
                       backgroundColor: '#ffffff',
                       borderRadius: 12,
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid #7CB0EA',
                       borderLeft: isSevere ? '4px solid #ef4444' : isModerate ? '4px solid #f59e0b' : '4px solid #10b981',
                       padding: '16px 20px',
                       boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
@@ -627,7 +627,7 @@ export default function SymptomTracker() {
                     {/* Top Row: Symptom, Badge, Duration, Date */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: 800, fontSize: '1.05rem', color: '#0f172a' }}>
+                        <span style={{ fontWeight: 800, fontSize: '1.05rem', color: '#1177DE' }}>
                           {s.symptom_name}
                         </span>
                         <span style={{
@@ -635,13 +635,13 @@ export default function SymptomTracker() {
                           padding: '2px 8px',
                           borderRadius: 12,
                           fontWeight: 700,
-                          backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#dcfce7',
-                          color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#15803d'
+                          backgroundColor: isSevere ? '#fee2e2' : isModerate ? '#fef3c7' : '#DCEAF8',
+                          color: isSevere ? '#b91c1c' : isModerate ? '#b45309' : '#1177DE'
                         }}>
                           {s.severity || 'Mild'}
                         </span>
                         {s.duration && (
-                          <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#f1f5f9', color: '#475569' }}>
+                          <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#EAF3FC', color: '#475569' }}>
                             Duration: {s.duration}
                           </span>
                         )}
@@ -669,7 +669,7 @@ export default function SymptomTracker() {
                           width: 64,
                           height: 64,
                           borderRadius: 8,
-                          backgroundColor: '#0f172a',
+                          backgroundColor: '#10254C',
                           overflow: 'hidden',
                           flexShrink: 0,
                           position: 'relative'
@@ -714,12 +714,12 @@ export default function SymptomTracker() {
                       <div style={{
                         marginTop: 4,
                         padding: '10px 14px',
-                        backgroundColor: '#eff6ff',
-                        border: '1px solid #bfdbfe',
+                        backgroundColor: '#EAF3FC',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 8
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                          <Stethoscope size={15} color="#2563eb" />
+                          <Stethoscope size={15} color="#1177DE" />
                           <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e40af' }}>
                             Dermatologist Clinical Review ({s.reviewed_by_doctor_name ? `Dr. ${s.reviewed_by_doctor_name}` : 'Attending Dermatologist'})
                           </span>
@@ -751,7 +751,7 @@ export default function SymptomTracker() {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#0d6efd',
+                          color: '#1177DE',
                           fontSize: '0.775rem',
                           fontWeight: 600,
                           cursor: 'pointer',
@@ -785,13 +785,13 @@ export default function SymptomTracker() {
             <p style={{ fontSize: '0.875rem', color: '#334155', lineHeight: 1.5, marginBottom: 16 }}>
               {activeAdvisory.message}
             </p>
-            <div style={{ backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: 6, fontSize: '0.775rem', color: '#64748b', marginBottom: 18, border: '1px solid #e2e8f0' }}>
+            <div style={{ backgroundColor: '#EAF3FC', padding: '10px 14px', borderRadius: 6, fontSize: '0.775rem', color: '#64748b', marginBottom: 18, border: '1px solid #7CB0EA' }}>
               {activeAdvisory.safety_guideline}
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <button
                 onClick={() => setActiveAdvisory(null)}
-                style={{ padding: '8px 16px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.825rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', backgroundColor: '#10254C', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.825rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 I Acknowledge
               </button>
@@ -805,7 +805,7 @@ export default function SymptomTracker() {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 520 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 Symptom & Observation Dossier
               </h3>
               <button
@@ -817,7 +817,7 @@ export default function SymptomTracker() {
             </div>
 
             {selectedSymptomModal.skin_record_image_url && (
-              <div style={{ height: 200, backgroundColor: '#0f172a', borderRadius: 8, overflow: 'hidden', marginBottom: 14 }}>
+              <div style={{ height: 200, backgroundColor: '#10254C', borderRadius: 8, overflow: 'hidden', marginBottom: 14 }}>
                 <img
                   src={getImageUrl(selectedSymptomModal.skin_record_image_url)}
                   alt="Associated lesion"
@@ -826,14 +826,14 @@ export default function SymptomTracker() {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, backgroundColor: '#f8fafc', padding: '14px', borderRadius: 8, border: '1px solid #e2e8f0', marginBottom: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, backgroundColor: '#EAF3FC', padding: '14px', borderRadius: 8, border: '1px solid #7CB0EA', marginBottom: 14 }}>
               <div>
                 <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Symptom Name</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>{selectedSymptomModal.symptom_name}</div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1177DE' }}>{selectedSymptomModal.symptom_name}</div>
               </div>
               <div>
                 <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Severity Level</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: selectedSymptomModal.severity?.toLowerCase() === 'severe' ? '#dc2626' : selectedSymptomModal.severity?.toLowerCase() === 'moderate' ? '#d97706' : '#16a34a' }}>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: selectedSymptomModal.severity?.toLowerCase() === 'severe' ? '#dc2626' : selectedSymptomModal.severity?.toLowerCase() === 'moderate' ? '#d97706' : '#1177DE' }}>
                   {selectedSymptomModal.severity} (Score: {selectedSymptomModal.severity_score}/3)
                 </div>
               </div>
@@ -850,7 +850,7 @@ export default function SymptomTracker() {
             {selectedSymptomModal.notes && (
               <div style={{ marginBottom: 14 }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>Patient Description & Triggers</div>
-                <div style={{ fontSize: '0.85rem', color: '#475569', backgroundColor: '#f8fafc', padding: '10px 12px', borderRadius: 6, border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '0.85rem', color: '#475569', backgroundColor: '#EAF3FC', padding: '10px 12px', borderRadius: 6, border: '1px solid #7CB0EA' }}>
                   "{selectedSymptomModal.notes}"
                 </div>
               </div>
@@ -858,7 +858,7 @@ export default function SymptomTracker() {
 
             {/* Doctor Clinical Review */}
             {(selectedSymptomModal.doctor_observation || selectedSymptomModal.doctor_feedback) && (
-              <div style={{ marginBottom: 16, padding: '12px 14px', backgroundColor: '#eff6ff', borderRadius: 8, border: '1px solid #bfdbfe' }}>
+              <div style={{ marginBottom: 16, padding: '12px 14px', backgroundColor: '#EAF3FC', borderRadius: 8, border: '1px solid #7CB0EA' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e40af', marginBottom: 6 }}>
                   Dermatologist Clinical Observation ({selectedSymptomModal.reviewed_by_doctor_name ? `Dr. ${selectedSymptomModal.reviewed_by_doctor_name}` : 'Doctor'})
                 </div>
@@ -878,7 +878,7 @@ export default function SymptomTracker() {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <button
                 onClick={() => setSelectedSymptomModal(null)}
-                style={{ padding: '8px 16px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Close
               </button>
@@ -900,7 +900,7 @@ export default function SymptomTracker() {
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 14px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Cancel
               </button>

@@ -61,7 +61,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f8fafc',
+      backgroundColor: '#C8DEF7',
       padding: '28px 16px',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
     }}>
@@ -71,12 +71,12 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
         backgroundColor: '#ffffff',
         borderRadius: 12,
         boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04)',
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         overflow: 'hidden'
       }}>
         {/* Welcome Banner */}
         <div style={{
-          backgroundColor: '#0b1329',
+          backgroundColor: '#10254C',
           padding: '28px 24px',
           textAlign: 'center',
           color: '#ffffff'
@@ -89,7 +89,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
             height: 52,
             borderRadius: 12,
             backgroundColor: 'rgba(13, 110, 253, 0.15)',
-            color: '#38bdf8',
+            color: '#448EE2',
             marginBottom: 12,
             border: '1px solid rgba(56, 189, 248, 0.3)'
           }}>
@@ -149,7 +149,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.9rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   outline: 'none',
                   boxSizing: 'border-box'
@@ -175,7 +175,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box'
@@ -194,7 +194,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -225,7 +225,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box'
@@ -246,7 +246,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box'
@@ -269,7 +269,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   outline: 'none',
                   boxSizing: 'border-box',
@@ -285,7 +285,7 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
               style={{
                 width: '100%',
                 padding: '12px 16px',
-                backgroundColor: '#0d6efd',
+                backgroundColor: '#10254C',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 8,
@@ -299,8 +299,8 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
                 boxShadow: '0 2px 4px rgba(13, 110, 253, 0.2)',
                 transition: 'background-color 0.2s'
               }}
-              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.backgroundColor = '#0b5ed7'; }}
-              onMouseLeave={(e) => { if (!loading) e.currentTarget.style.backgroundColor = '#0d6efd'; }}
+              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.backgroundColor = '#1177DE'; }}
+              onMouseLeave={(e) => { if (!loading) e.currentTarget.style.backgroundColor = '#1177DE'; }}
             >
               {loading ? 'Saving Profile...' : 'Create Patient Profile'}
               {!loading && <ArrowRight size={18} />}

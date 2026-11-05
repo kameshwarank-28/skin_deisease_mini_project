@@ -231,9 +231,9 @@ export default function DoctorAppointmentsView() {
             borderRadius: 12,
             fontSize: '0.725rem',
             fontWeight: 600,
-            backgroundColor: '#dcfce7',
-            color: '#15803d',
-            border: '1px solid #bbf7d0'
+            backgroundColor: '#DCEAF8',
+            color: '#1177DE',
+            border: '1px solid #7CB0EA'
           }}>
             <CheckCircle2 size={12} /> Confirmed
           </span>
@@ -282,9 +282,9 @@ export default function DoctorAppointmentsView() {
             borderRadius: 12,
             fontSize: '0.725rem',
             fontWeight: 600,
-            backgroundColor: '#f1f5f9',
+            backgroundColor: '#EAF3FC',
             color: '#475569',
-            border: '1px solid #e2e8f0'
+            border: '1px solid #7CB0EA'
           }}>
             <CheckCircle size={12} /> Completed
           </span>
@@ -320,7 +320,7 @@ export default function DoctorAppointmentsView() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Clinical Appointments & Schedule
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -329,7 +329,7 @@ export default function DoctorAppointmentsView() {
         </div>
 
         {/* Filter Pills */}
-        <div style={{ display: 'flex', gap: 6, backgroundColor: '#f1f5f9', padding: 4, borderRadius: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 6, backgroundColor: '#EAF3FC', padding: 4, borderRadius: 8, flexWrap: 'wrap' }}>
           {[
             { key: 'all', label: `All (${appointments.length})` },
             { key: 'pending', label: `Pending Review (${pendingCount})` },
@@ -350,7 +350,7 @@ export default function DoctorAppointmentsView() {
                 fontWeight: 600,
                 cursor: 'pointer',
                 backgroundColor: filter === f.key ? '#ffffff' : 'transparent',
-                color: filter === f.key ? '#0d6efd' : '#64748b',
+                color: filter === f.key ? '#1177DE' : '#64748b',
                 boxShadow: filter === f.key ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                 transition: 'all 0.15s ease'
               }}
@@ -369,9 +369,9 @@ export default function DoctorAppointmentsView() {
           padding: '12px 16px',
           borderRadius: 8,
           marginBottom: 20,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           {feedback.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
@@ -386,7 +386,7 @@ export default function DoctorAppointmentsView() {
         </div>
       ) : filteredAppointments.length === 0 ? (
         <div className="project-card" style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-          <CalendarDays size={40} style={{ color: '#cbd5e1', marginBottom: 10 }} />
+          <CalendarDays size={40} style={{ color: '#7CB0EA', marginBottom: 10 }} />
           <div style={{ fontWeight: 600, color: '#475569' }}>No Appointments Found</div>
           <div style={{ fontSize: '0.825rem' }}>There are no consultation bookings matching this filter.</div>
         </div>
@@ -394,7 +394,7 @@ export default function DoctorAppointmentsView() {
         <div className="project-card" style={{ padding: '8px 16px', overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+              <tr style={{ borderBottom: '1px solid #7CB0EA', color: '#64748b', textAlign: 'left' }}>
                 <th style={{ padding: '12px 8px' }}>Patient</th>
                 <th style={{ padding: '12px 8px' }}>Appointment Slot</th>
                 <th style={{ padding: '12px 8px' }}>Reason / Concern</th>
@@ -406,9 +406,9 @@ export default function DoctorAppointmentsView() {
               {filteredAppointments.map(appt => {
                 const patientIdDisplay = appt.patient_id || appt.user_id || '---';
                 return (
-                  <tr key={appt.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <tr key={appt.id} style={{ borderBottom: '1px solid #EAF3FC' }}>
                     <td style={{ padding: '14px 8px' }}>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>
+                      <div style={{ fontWeight: 600, color: '#1177DE' }}>
                         {appt.patient_name || `Patient #${patientIdDisplay}`}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -417,7 +417,7 @@ export default function DoctorAppointmentsView() {
                     </td>
 
                     <td style={{ padding: '14px 8px' }}>
-                      <div style={{ fontWeight: 600, color: '#0d6efd', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ fontWeight: 600, color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Calendar size={14} />
                         <span>{formatAppointmentDate(appt.appointment_date)}</span>
                       </div>
@@ -426,8 +426,24 @@ export default function DoctorAppointmentsView() {
                         <span>{formatAppointmentTime(appt.appointment_time, appt.appointment_date)}</span>
                       </div>
 
-                      {/* Display Suggested Alternate Time if Rescheduled */}
-                      {(appt.suggested_date || appt.suggested_alternate_time) && (
+                      {/* Patient Rescheduled Banner */}
+                      {appt.status === 'RESCHEDULED' && (
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: '#1177DE',
+                          marginTop: 4,
+                          padding: '3px 6px',
+                          backgroundColor: '#EAF3FC',
+                          border: '1px solid #7CB0EA',
+                          borderRadius: 4,
+                          display: 'inline-block'
+                        }}>
+                          Patient Rescheduled slot: {formatAppointmentDate(appt.appointment_date)} at {formatAppointmentTime(appt.appointment_time, appt.appointment_date)}
+                        </div>
+                      )}
+
+                      {/* Display Suggested Alternate Time if Rescheduled by Doctor */}
+                      {appt.status !== 'RESCHEDULED' && (appt.suggested_date || appt.suggested_alternate_time) && (
                         <div style={{
                           fontSize: '0.75rem',
                           color: '#6d28d9',
@@ -463,7 +479,7 @@ export default function DoctorAppointmentsView() {
                         <div style={{
                           fontSize: '0.75rem',
                           color: '#64748b',
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: '#EAF3FC',
                           padding: '4px 6px',
                           borderRadius: 4,
                           marginTop: 4
@@ -487,7 +503,7 @@ export default function DoctorAppointmentsView() {
                               onClick={() => openActionModal('accept', appt)}
                               style={{
                                 padding: '6px 12px',
-                                backgroundColor: '#16a34a',
+                                backgroundColor: '#1177DE',
                                 color: '#ffffff',
                                 border: 'none',
                                 borderRadius: 6,
@@ -534,8 +550,8 @@ export default function DoctorAppointmentsView() {
                               style={{
                                 padding: '5px 12px',
                                 backgroundColor: '#ffffff',
-                                color: '#0d6efd',
-                                border: '1px solid #0d6efd',
+                                color: '#1177DE',
+                                border: '1px solid #1177DE',
                                 borderRadius: 6,
                                 fontSize: '0.78rem',
                                 fontWeight: 600,
@@ -560,7 +576,7 @@ export default function DoctorAppointmentsView() {
                               onClick={() => openActionModal('complete', appt)}
                               style={{
                                 padding: '6px 12px',
-                                backgroundColor: '#0d6efd',
+                                backgroundColor: '#1177DE',
                                 color: '#ffffff',
                                 border: 'none',
                                 borderRadius: 6,
@@ -600,8 +616,73 @@ export default function DoctorAppointmentsView() {
                           </>
                         )}
 
-                        {/* AWAITING PATIENT CONFIRMATION */}
-                        {isAwaiting(appt.status) && (
+                        {/* RESCHEDULED BY PATIENT: DOCTOR CAN CONFIRM OR COUNTER */}
+                        {appt.status === 'RESCHEDULED' && (
+                          <div style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                            <button
+                              onClick={() => openActionModal('accept', appt)}
+                              style={{
+                                padding: '6px 12px',
+                                backgroundColor: '#1177DE',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: 6,
+                                fontSize: '0.78rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4
+                              }}
+                              title="Accept Patient Rescheduled Slot"
+                            >
+                              <Check size={14} />
+                              <span>Accept Reschedule</span>
+                            </button>
+                            <button
+                              onClick={() => openActionModal('reschedule', appt)}
+                              style={{
+                                padding: '5px 10px',
+                                backgroundColor: '#ffffff',
+                                color: '#1177DE',
+                                border: '1px solid #1177DE',
+                                borderRadius: 6,
+                                fontSize: '0.78rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4
+                              }}
+                              title="Suggest Alternate Time"
+                            >
+                              <Clock size={14} />
+                              <span>Suggest Alternate</span>
+                            </button>
+                            <button
+                              onClick={() => openActionModal('reject', appt)}
+                              style={{
+                                padding: '6px 10px',
+                                backgroundColor: '#ef4444',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: 6,
+                                fontSize: '0.78rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4
+                              }}
+                              title="Decline Rescheduled Request"
+                            >
+                              <XCircle size={14} />
+                            </button>
+                          </div>
+                        )}
+
+                        {/* AWAITING PATIENT CONFIRMATION (Doctor proposed time) */}
+                        {appt.status !== 'RESCHEDULED' && isAwaiting(appt.status) && (
                           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                             <span style={{ fontSize: '0.75rem', color: '#6d28d9', fontStyle: 'italic', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                               <Clock size={13} /> Awaiting patient confirmation
@@ -610,9 +691,9 @@ export default function DoctorAppointmentsView() {
                               onClick={() => openActionModal('reschedule', appt)}
                               style={{
                                 padding: '4px 8px',
-                                backgroundColor: '#f1f5f9',
+                                backgroundColor: '#EAF3FC',
                                 color: '#475569',
-                                border: '1px solid #cbd5e1',
+                                border: '1px solid #7CB0EA',
                                 borderRadius: 6,
                                 fontSize: '0.725rem',
                                 cursor: 'pointer'
@@ -663,7 +744,7 @@ export default function DoctorAppointmentsView() {
             padding: 24,
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
           }}>
-            <h3 style={{ margin: '0 0 6px', fontSize: '1.2rem', fontWeight: 700, color: '#0f172a' }}>
+            <h3 style={{ margin: '0 0 6px', fontSize: '1.2rem', fontWeight: 700, color: '#1177DE' }}>
               {actionModal.type === 'accept' && 'Accept & Confirm Patient Appointment'}
               {actionModal.type === 'reject' && 'Decline Appointment Request'}
               {actionModal.type === 'reschedule' && 'Propose New Appointment Time'}
@@ -674,8 +755,8 @@ export default function DoctorAppointmentsView() {
             <div style={{
               margin: '0 0 16px',
               padding: '10px 12px',
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              backgroundColor: '#EAF3FC',
+              border: '1px solid #7CB0EA',
               borderRadius: 8,
               fontSize: '0.825rem',
               color: '#334155'
@@ -733,7 +814,7 @@ export default function DoctorAppointmentsView() {
                       width: '100%',
                       padding: '8px 10px',
                       fontSize: '0.85rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       boxSizing: 'border-box'
                     }}
@@ -744,7 +825,7 @@ export default function DoctorAppointmentsView() {
               {/* REJECT APPOINTMENT FORM */}
               {actionModal.type === 'reject' && (
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#0f172a', marginBottom: 4 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#1177DE', marginBottom: 4 }}>
                     Reason for Declining <span style={{ color: '#ef4444' }}>* (Required)</span>
                   </label>
                   <p style={{ fontSize: '0.775rem', color: '#64748b', margin: '0 0 8px' }}>
@@ -760,7 +841,7 @@ export default function DoctorAppointmentsView() {
                       width: '100%',
                       padding: '8px 10px',
                       fontSize: '0.85rem',
-                      border: formData.error ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                      border: formData.error ? '1px solid #ef4444' : '1px solid #7CB0EA',
                       borderRadius: 6,
                       boxSizing: 'border-box'
                     }}
@@ -788,7 +869,7 @@ export default function DoctorAppointmentsView() {
                           width: '100%',
                           padding: '8px 10px',
                           fontSize: '0.85rem',
-                          border: '1px solid #cbd5e1',
+                          border: '1px solid #7CB0EA',
                           borderRadius: 6,
                           boxSizing: 'border-box'
                         }}
@@ -809,7 +890,7 @@ export default function DoctorAppointmentsView() {
                           width: '100%',
                           padding: '8px 10px',
                           fontSize: '0.85rem',
-                          border: '1px solid #cbd5e1',
+                          border: '1px solid #7CB0EA',
                           borderRadius: 6,
                           boxSizing: 'border-box'
                         }}
@@ -830,7 +911,7 @@ export default function DoctorAppointmentsView() {
                         width: '100%',
                         padding: '8px 10px',
                         fontSize: '0.85rem',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 6,
                         boxSizing: 'border-box'
                       }}
@@ -857,7 +938,7 @@ export default function DoctorAppointmentsView() {
                       width: '100%',
                       padding: '8px 10px',
                       fontSize: '0.85rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       boxSizing: 'border-box'
                     }}
@@ -883,7 +964,7 @@ export default function DoctorAppointmentsView() {
                       width: '100%',
                       padding: '8px 10px',
                       fontSize: '0.85rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       boxSizing: 'border-box'
                     }}
@@ -899,7 +980,7 @@ export default function DoctorAppointmentsView() {
                   style={{
                     padding: '8px 14px',
                     backgroundColor: '#ffffff',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     fontSize: '0.85rem',
                     fontWeight: 600,
@@ -915,9 +996,9 @@ export default function DoctorAppointmentsView() {
                   style={{
                     padding: '8px 18px',
                     backgroundColor:
-                      actionModal.type === 'accept' ? '#16a34a' :
+                      actionModal.type === 'accept' ? '#1177DE' :
                       actionModal.type === 'reject' ? '#ef4444' :
-                      actionModal.type === 'cancel' ? '#ef4444' : '#0d6efd',
+                      actionModal.type === 'cancel' ? '#ef4444' : '#1177DE',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: 6,

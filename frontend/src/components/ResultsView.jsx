@@ -68,8 +68,8 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
 
       {/* Main Prediction Result Box */}
       <div style={{
-        backgroundColor: isNormalSkin ? (is_uncertain ? '#fff8e1' : '#e6f4ea') : '#e7f1ff',
-        border: `1px solid ${isNormalSkin ? (is_uncertain ? '#ffe082' : '#a8dab5') : '#b6d4fe'}`,
+        backgroundColor: isNormalSkin ? (is_uncertain ? '#fff8e1' : '#e6f4ea') : '#EAF3FC',
+        border: `1px solid ${isNormalSkin ? (is_uncertain ? '#ffe082' : '#a8dab5') : '#7CB0EA'}`,
         borderRadius: 6,
         padding: '16px 18px',
         marginBottom: 18
@@ -81,7 +81,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
           {prediction}
         </h3>
         {disease_info?.scientific_name && (
-          <div style={{ fontSize: '0.85rem', color: isNormalSkin ? '#2e7d32' : '#0d6efd', fontStyle: 'italic' }}>
+          <div style={{ fontSize: '0.85rem', color: isNormalSkin ? '#2e7d32' : '#1177DE', fontStyle: 'italic' }}>
             Biological Specification: {disease_info.scientific_name}
           </div>
         )}
@@ -105,7 +105,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
         <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: '0.9rem', color: '#212529' }}>
-              Confidence: <strong style={{ color: isNormalSkin ? '#137333' : '#0d6efd' }}>{confidence_pct}</strong>
+              Confidence: <strong style={{ color: isNormalSkin ? '#137333' : '#1177DE' }}>{confidence_pct}</strong>
             </span>
             <span className={`badge-label ${is_uncertain ? 'badge-warning-custom' : 'badge-success-custom'}`}>
               {is_uncertain ? 'Uncertain Prediction' : 'High Confidence'}
@@ -136,7 +136,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
       {showSaveModal && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 440 }}>
-            <h4 style={{ color: '#0d6efd', margin: '0 0 12px' }}>Save to Skin Health Records</h4>
+            <h4 style={{ color: '#1177DE', margin: '0 0 12px' }}>Save to Skin Health Records</h4>
             <div className="form-group">
               <label className="form-label">Affected Body Location *</label>
               <select
@@ -194,7 +194,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
           display: 'flex',
           justifyContent: 'center',
           backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
+          border: '1px solid #7CB0EA',
           borderRadius: 4,
           padding: 10,
           maxHeight: 260
@@ -210,7 +210,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
       {/* Uncertainty & Clinical Action Advice */}
       <div style={{
         backgroundColor: is_uncertain ? '#fff3cd' : '#d1e7dd',
-        border: `1px solid ${is_uncertain ? '#ffecb5' : '#badbcc'}`,
+        border: `1px solid ${is_uncertain ? '#ffecb5' : '#7CB0EA'}`,
         borderRadius: 5,
         padding: '10px 14px',
         marginBottom: 18,
@@ -260,7 +260,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
                       <div style={{
                         width: `${Math.max(item.probability * 100, 2)}%`,
                         height: '100%',
-                        backgroundColor: idx === 0 ? '#0d6efd' : '#6c757d'
+                        backgroundColor: idx === 0 ? '#1177DE' : '#6c757d'
                       }} />
                     </div>
                     <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{item.percentage}</span>
@@ -276,7 +276,7 @@ export default function ResultsView({ result, originalImage, onSavedToRecords })
       {disease_info && (
         <div style={{
           backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
+          border: '1px solid #7CB0EA',
           borderRadius: 5,
           padding: 12,
           fontSize: '0.85rem'

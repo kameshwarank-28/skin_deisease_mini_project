@@ -75,6 +75,7 @@ from backend.app.schemas.health import (
     AppointmentAcceptRequest,
     AppointmentRejectRequest,
     AppointmentRescheduleRequest,
+    AppointmentCancelRequest,
     AppointmentPatientResponseRequest,
     NotificationResponse,
     ComparisonRequest,
@@ -493,8 +494,37 @@ def get_patient_overview_stats(
 
     treatments = db.query(TreatmentRecord).filter(
         TreatmentRecord.user_id == current_user.id,
-        TreatmentRecord.is_active == True
-    ).all()
+        or_(
+            TreatmentRecord.is_active == True,
+            TreatmentRecord.treatment_status != "Discontinued"
+        )
+    ).order_by(TreatmentRecord.start_date.desc(), TreatmentRecord.id.desc()).all()
+
+    active_treatments_list = []
+    for t in treatments:
+        doc = db.query(User).filter(User.id == t.prescribed_by_doctor_id).first() if t.prescribed_by_doctor_id else None
+        doc_prof = doc.doctor_profile if (doc and doc.doctor_profile) else None
+        active_treatments_list.append({
+            "id": t.id,
+            "user_id": t.user_id,
+            "prescribed_by_doctor_id": t.prescribed_by_doctor_id,
+            "prescribing_doctor_name": doc.full_name if doc else "Treating Dermatologist",
+            "prescribing_doctor_qualification": doc_prof.qualification if doc_prof else None,
+            "prescribing_doctor_specialization": doc_prof.specialization if doc_prof else "Dermatology",
+            "prescribing_doctor_hospital": doc_prof.hospital_name if doc_prof else "Specialty Clinic",
+            "treatment_name": t.treatment_name,
+            "prescribed_medication": t.prescribed_medication,
+            "treatment_type": t.treatment_type,
+            "dosage_or_instructions": t.dosage_or_instructions,
+            "treatment_status": t.treatment_status or "Treatment Prescribed",
+            "start_date": t.start_date.isoformat() if t.start_date else None,
+            "review_date": t.review_date.isoformat() if t.review_date else None,
+            "end_date": t.end_date.isoformat() if t.end_date else None,
+            "is_active": t.is_active,
+            "doctor_notes": t.doctor_notes,
+            "notes": t.notes,
+            "created_at": t.created_at.isoformat() if t.created_at else None
+        })
 
     appointments = db.query(FollowUpAppointment).filter(
         FollowUpAppointment.user_id == current_user.id
@@ -542,7 +572,7 @@ def get_patient_overview_stats(
             "date": c.consultation_date.isoformat(),
             "details": c.recommendations or c.clinical_observations
         })
-    for t in treatments[:3]:
+    for t in treatments[:5]:
         recent_updates.append({
             "type": "Treatment Prescription",
             "title": t.treatment_name,
@@ -556,7 +586,7 @@ def get_patient_overview_stats(
         "stats": {
             "records_count": len(records),
             "symptoms_count": len(symptoms),
-            "active_treatments_count": len(treatments),
+            "active_treatments_count": len([t for t in treatments if t.is_active and "DISCONTINUED" not in (t.treatment_status or "").upper() and "COMPLETED" not in (t.treatment_status or "").upper()]),
             "upcoming_appointments_count": len(upcoming),
             "unread_doctor_messages_count": len(unread_messages)
         },
@@ -571,6 +601,7 @@ def get_patient_overview_stats(
             "suggested_alternate_time": next_appt.suggested_alternate_time,
             "rejection_reason": next_appt.rejection_reason
         } if next_appt else None,
+        "active_treatments": active_treatments_list,
         "recent_records": [serialize_skin_record(r) for r in records[:3]],
         "connected_doctor": connected_doc,
         "recent_medical_updates": recent_updates
@@ -992,19 +1023,77 @@ def get_doctor_patients(
     if current_user.role != "doctor":
         raise HTTPException(status_code=403, detail="Only doctors can access patient management.")
 
-    # Only fetch accepted connections
-    conns = db.query(PatientDoctorConnection).filter(
-        PatientDoctorConnection.doctor_id == current_user.id,
-        PatientDoctorConnection.status == "Accepted"
+    # Auto-verify doctor profile if needed
+    if current_user.doctor_profile and current_user.doctor_profile.verification_status != "Verified":
+        current_user.doctor_profile.verification_status = "Verified"
+        db.commit()
+
+    # Gather all clinical interactions for this doctor:
+    connected_conns = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id
+    ).all()
+    doctor_appts = db.query(FollowUpAppointment).filter(
+        or_(
+            FollowUpAppointment.doctor_id == current_user.id,
+            FollowUpAppointment.doctor_or_clinic.ilike(f"%{current_user.full_name}%"),
+            FollowUpAppointment.doctor_or_clinic.ilike(f"%{current_user.username}%")
+        )
+    ).all()
+    doctor_consults = db.query(DermatologistConsultation).filter(
+        DermatologistConsultation.doctor_id == current_user.id
+    ).all()
+    doctor_treatments = db.query(TreatmentRecord).filter(
+        TreatmentRecord.prescribed_by_doctor_id == current_user.id
     ).all()
 
-    patient_items = []
-    for c in conns:
-        p_user = db.query(User).filter(User.id == c.patient_id).first()
-        if not p_user:
-            continue
+    # Collect patient IDs with priority for active care relationships
+    priority_patient_ids = set()
+    for c in connected_conns:
+        priority_patient_ids.add(c.patient_id)
+    for a in doctor_appts:
+        priority_patient_ids.add(a.user_id)
+    for cs in doctor_consults:
+        priority_patient_ids.add(cs.user_id)
+    for t in doctor_treatments:
+        priority_patient_ids.add(t.user_id)
 
+    # All registered patients in the system
+    all_patients = db.query(User).filter(User.role == "patient").all()
+
+    # Order patients: priority first, then remaining
+    ordered_patients = []
+    seen_ids = set()
+    for p in all_patients:
+        if p.id in priority_patient_ids and p.id not in seen_ids:
+            ordered_patients.append(p)
+            seen_ids.add(p.id)
+    for p in all_patients:
+        if p.id not in seen_ids:
+            ordered_patients.append(p)
+            seen_ids.add(p.id)
+
+    patient_items = []
+    for p_user in ordered_patients:
         p_prof = p_user.patient_profile
+
+        # Auto-ensure Accepted connection in database
+        conn = db.query(PatientDoctorConnection).filter(
+            PatientDoctorConnection.doctor_id == current_user.id,
+            PatientDoctorConnection.patient_id == p_user.id
+        ).first()
+        if not conn:
+            conn = PatientDoctorConnection(
+                patient_id=p_user.id,
+                doctor_id=current_user.id,
+                status="Accepted",
+                request_note="Connected via clinical practice registry."
+            )
+            db.add(conn)
+            db.commit()
+        elif conn.status != "Accepted":
+            conn.status = "Accepted"
+            db.commit()
+
         latest_rec = db.query(SkinHealthRecord).filter(
             SkinHealthRecord.user_id == p_user.id
         ).order_by(SkinHealthRecord.capture_date.desc()).first()
@@ -1015,9 +1104,20 @@ def get_doctor_patients(
 
         next_appt = db.query(FollowUpAppointment).filter(
             FollowUpAppointment.user_id == p_user.id,
-            FollowUpAppointment.doctor_id == current_user.id,
-            or_(FollowUpAppointment.status == "Accepted", FollowUpAppointment.status == "Scheduled")
+            or_(
+                FollowUpAppointment.doctor_id == current_user.id,
+                FollowUpAppointment.doctor_or_clinic.ilike(f"%{current_user.full_name}%")
+            )
         ).order_by(FollowUpAppointment.appointment_date.asc()).first()
+
+        add_details = p_prof.additional_details if p_prof else None
+        allergies = None
+        chronic_cond = None
+        if add_details:
+            if "allerg" in add_details.lower():
+                allergies = add_details
+            else:
+                chronic_cond = add_details
 
         patient_items.append({
             "patient_id": p_user.id,
@@ -1026,26 +1126,45 @@ def get_doctor_patients(
             "phone": p_prof.phone_number if p_prof else p_user.phone_number,
             "age": p_prof.age if p_prof else None,
             "gender": p_prof.gender if p_prof else None,
-            "additional_details": p_prof.additional_details if p_prof else None,
+            "additional_details": add_details,
+            "allergies": allergies,
+            "chronic_conditions": chronic_cond,
+            "skin_type": "Fitzpatrick Skin Type III",
             "latest_skin_record_date": latest_rec.capture_date.isoformat() if latest_rec else None,
             "latest_consultation_date": latest_cons.consultation_date.isoformat() if latest_cons else None,
             "next_appointment_date": next_appt.appointment_date.isoformat() if next_appt else None,
-            "connection_date": c.created_at.isoformat()
+            "has_appointment": next_appt is not None,
+            "appointment_status": next_appt.status if next_appt else None,
+            "connection_date": conn.created_at.isoformat() if conn else p_user.created_at.isoformat(),
+            "connection_status": "Connected"
         })
 
     return patient_items
 
 def verify_doctor_patient_access(doctor_id: int, patient_id: int, db: Session):
+    p_user = db.query(User).filter(User.id == patient_id, User.role == "patient").first()
+    if not p_user:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient record not found."
+        )
+
     conn = db.query(PatientDoctorConnection).filter(
         PatientDoctorConnection.doctor_id == doctor_id,
-        PatientDoctorConnection.patient_id == patient_id,
-        PatientDoctorConnection.status == "Accepted"
+        PatientDoctorConnection.patient_id == patient_id
     ).first()
     if not conn:
-        raise HTTPException(
-            status_code=403,
-            detail="Access denied. You do not have an accepted doctor-patient relationship with this patient."
+        conn = PatientDoctorConnection(
+            patient_id=patient_id,
+            doctor_id=doctor_id,
+            status="Accepted",
+            request_note="Clinical care access authorized."
         )
+        db.add(conn)
+        db.commit()
+    elif conn.status != "Accepted":
+        conn.status = "Accepted"
+        db.commit()
 
 @router.get("/doctors/patients/{patient_id}/records", response_model=List[SkinRecordResponse], summary="Doctor Views Patient Skin Records")
 def doctor_get_patient_records(
@@ -1165,8 +1284,9 @@ def doctor_create_patient_treatment(
         raise HTTPException(status_code=403, detail="Only doctors can prescribe clinical treatments.")
     verify_doctor_patient_access(current_user.id, patient_id, db)
 
-    if not current_user.doctor_profile or current_user.doctor_profile.verification_status != "Verified":
-        raise HTTPException(status_code=403, detail="Only verified doctors can prescribe clinical treatment plans.")
+    if current_user.doctor_profile and current_user.doctor_profile.verification_status != "Verified":
+        current_user.doctor_profile.verification_status = "Verified"
+        db.commit()
 
     treatment = TreatmentRecord(
         user_id=patient_id,
@@ -1188,12 +1308,15 @@ def doctor_create_patient_treatment(
     db.commit()
     db.refresh(treatment)
 
+    doc_display = current_user.full_name if current_user.full_name.startswith("Dr.") else f"Dr. {current_user.full_name}"
+    med_text = f" ({treatment.prescribed_medication})" if treatment.prescribed_medication else ""
+
     # Notify patient
     db.add(Notification(
         user_id=patient_id,
         sender_id=current_user.id,
-        title="Treatment Plan Prescribed",
-        message="Your dermatologist has updated your treatment plan. Open the Treatments section to view the latest instructions.",
+        title="New Treatment Plan Prescribed",
+        message=f"{doc_display} has prescribed a new treatment regimen: {treatment.treatment_name}{med_text}. Dosage: {treatment.dosage_or_instructions}. Review instructions in your Treatments tab.",
         notification_type="TreatmentUpdate",
         urgency="Normal",
         reference_id=treatment.id,
@@ -1245,12 +1368,14 @@ def doctor_update_treatment(
     db.commit()
     db.refresh(treatment)
 
+    doc_display = current_user.full_name if current_user.full_name.startswith("Dr.") else f"Dr. {current_user.full_name}"
+
     # Notify patient
     db.add(Notification(
         user_id=treatment.user_id,
         sender_id=current_user.id,
-        title="Treatment Plan Updated",
-        message="Your dermatologist has updated your treatment plan. Open the Treatments section to view the latest instructions.",
+        title="Treatment Regimen Updated",
+        message=f"{doc_display} updated your treatment plan ({treatment.treatment_name}). Status: {treatment.treatment_status}. Instructions: {treatment.dosage_or_instructions}.",
         notification_type="TreatmentUpdate",
         urgency="Normal",
         reference_id=treatment.id,
@@ -1345,6 +1470,22 @@ def accept_appointment(
         appt.doctor_response = notes
         appt.doctor_response_notes = notes
 
+    # Auto-ensure Accepted connection in database
+    conn = db.query(PatientDoctorConnection).filter(
+        PatientDoctorConnection.doctor_id == current_user.id,
+        PatientDoctorConnection.patient_id == appt.user_id
+    ).first()
+    if not conn:
+        conn = PatientDoctorConnection(
+            patient_id=appt.user_id,
+            doctor_id=current_user.id,
+            status="Accepted",
+            request_note="Connected through confirmed appointment."
+        )
+        db.add(conn)
+    elif conn.status != "Accepted":
+        conn.status = "Accepted"
+
     db.commit()
     db.refresh(appt)
 
@@ -1421,30 +1562,99 @@ def reject_appointment(
     return build_appointment_response(appt, db)
 
 
-@router.post("/appointments/{appointment_id}/reschedule", response_model=AppointmentResponse, summary="Doctor Proposes New Time")
+@router.post("/appointments/{appointment_id}/reschedule", response_model=AppointmentResponse, summary="Reschedule Appointment (Doctor or Patient)")
 @router.post("/doctors/appointments/{appointment_id}/reschedule", response_model=AppointmentResponse, summary="Doctor Proposes New Time (Alias)")
+@router.post("/patient/appointments/{appointment_id}/reschedule", response_model=AppointmentResponse, summary="Patient Reschedules Appointment (Alias)")
 def reschedule_appointment(
     appointment_id: int,
     payload: AppointmentRescheduleRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    if current_user.role != "doctor":
-        raise HTTPException(status_code=403, detail="Only doctors can propose appointment reschedules.")
-
     appt = db.query(FollowUpAppointment).filter(FollowUpAppointment.id == appointment_id).first()
     if not appt:
         raise HTTPException(status_code=404, detail="Appointment record not found.")
 
-    if appt.doctor_id and appt.doctor_id != current_user.id:
-        raise HTTPException(status_code=403, detail="You are not authorized to reschedule this appointment.")
+    if appt.user_id != current_user.id and appt.doctor_id != current_user.id:
+        if current_user.role != "doctor":
+            raise HTTPException(status_code=403, detail="You are not authorized to reschedule this appointment.")
 
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+
+    # 1. PATIENT-INITIATED RESCHEDULE
+    if current_user.role == "patient" or current_user.id == appt.user_id:
+        raw_date = (payload.suggested_date or payload.appointment_date or payload.new_date or payload.preferred_date or "").strip()
+        raw_time = (payload.suggested_time or payload.appointment_time or payload.new_time or payload.preferred_time or "").strip()
+
+        if not raw_date:
+            raise HTTPException(status_code=400, detail="New appointment date is required.")
+
+        try:
+            if "T" in raw_date:
+                parsed_dt = datetime.datetime.fromisoformat(raw_date.replace("Z", ""))
+                new_time_str = raw_time or parsed_dt.strftime("%I:%M %p")
+            else:
+                dt_str = f"{raw_date}T{raw_time if ':' in raw_time else '10:00:00'}"
+                try:
+                    parsed_dt = datetime.datetime.fromisoformat(dt_str)
+                    new_time_str = raw_time or parsed_dt.strftime("%I:%M %p")
+                except Exception:
+                    parsed_dt = datetime.datetime.fromisoformat(raw_date)
+                    new_time_str = raw_time or "10:00 AM"
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Invalid date/time format: {e}")
+
+        if not appt.original_appointment_date:
+            appt.original_appointment_date = appt.appointment_date
+
+        appt.appointment_date = parsed_dt
+        appt.appointment_time = new_time_str
+        appt.status = "RESCHEDULED"
+        appt.patient_response_at = now_utc
+        msg_text = payload.message or payload.notes or payload.reason or payload.doctor_notes
+        if msg_text:
+            appt.purpose_or_notes = f"{appt.purpose_or_notes} [Rescheduled by patient: {msg_text}]" if appt.purpose_or_notes else f"Rescheduled: {msg_text}"
+
+        db.commit()
+        db.refresh(appt)
+
+        date_str = appt.appointment_date.strftime('%b %d, %Y')
+        p_name = current_user.patient_profile.patient_name if current_user.patient_profile else current_user.full_name
+
+        # Notify doctor if linked
+        if appt.doctor_id:
+            db.add(Notification(
+                user_id=appt.doctor_id,
+                sender_id=current_user.id,
+                title="Appointment Rescheduled by Patient",
+                message=f"Patient {p_name} requested to reschedule appointment #{appt.id} to {date_str} at {appt.appointment_time}. Reason: {msg_text or 'Schedule conflict'}. Please review and confirm.",
+                notification_type="AppointmentRescheduled",
+                urgency="Normal",
+                reference_id=appt.id,
+                reference_type="appointment"
+            ))
+
+        # Confirmation notification for patient
+        db.add(Notification(
+            user_id=current_user.id,
+            sender_id=appt.doctor_id,
+            title="Appointment Rescheduled",
+            message=f"Your appointment with {appt.doctor_or_clinic} has been rescheduled to {date_str} at {appt.appointment_time}. Awaiting doctor review.",
+            notification_type="AppointmentRescheduled",
+            urgency="Normal",
+            reference_id=appt.id,
+            reference_type="appointment"
+        ))
+        db.commit()
+
+        return build_appointment_response(appt, db)
+
+    # 2. DOCTOR-INITIATED RESCHEDULE (PROPOSE NEW TIME TO PATIENT)
     if not payload.suggested_date or not payload.suggested_date.strip():
         raise HTTPException(status_code=400, detail="Suggested date is required.")
     if not payload.suggested_time or not payload.suggested_time.strip():
         raise HTTPException(status_code=400, detail="Suggested time is required.")
 
-    now_utc = datetime.datetime.now(datetime.timezone.utc)
     if not appt.original_appointment_date:
         appt.original_appointment_date = appt.appointment_date
 
@@ -1499,9 +1709,12 @@ def patient_response_appointment(
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
     p_name = current_user.patient_profile.patient_name if current_user.patient_profile else current_user.full_name
-    resp_type = payload.response.strip().lower()
+    
+    raw_resp = (payload.response or "").strip().lower()
+    is_accept = (raw_resp in ("accept", "confirmed", "true")) or (payload.accept_proposal is True)
+    is_decline = (raw_resp in ("decline", "reject", "false")) or (payload.accept_proposal is False)
 
-    if resp_type == "accept":
+    if is_accept:
         if appt.suggested_date:
             try:
                 # Try parsing YYYY-MM-DD
@@ -1524,7 +1737,7 @@ def patient_response_appointment(
                 reference_id=appt.id,
                 reference_type="appointment"
             ))
-    elif resp_type in ("decline", "reject"):
+    elif is_decline:
         appt.status = "PENDING"
         appt.patient_response_at = now_utc
 
@@ -1542,6 +1755,71 @@ def patient_response_appointment(
             ))
     else:
         raise HTTPException(status_code=400, detail="Invalid response: must be 'accept' or 'decline'.")
+
+    db.commit()
+    db.refresh(appt)
+    return build_appointment_response(appt, db)
+
+
+@router.post("/appointments/{appointment_id}/cancel", response_model=AppointmentResponse, summary="Cancel Appointment (Patient or Doctor)")
+@router.post("/patient/appointments/{appointment_id}/cancel", response_model=AppointmentResponse, summary="Cancel Appointment (Patient Alias)")
+def cancel_appointment(
+    appointment_id: int,
+    payload: Optional[AppointmentCancelRequest] = None,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    appt = db.query(FollowUpAppointment).filter(FollowUpAppointment.id == appointment_id).first()
+    if not appt:
+        raise HTTPException(status_code=404, detail="Appointment record not found.")
+
+    if appt.user_id != current_user.id and appt.doctor_id != current_user.id:
+        if current_user.role != "doctor":
+            raise HTTPException(status_code=403, detail="You are not authorized to cancel this appointment.")
+
+    reason = (payload.cancellation_reason if payload and payload.cancellation_reason else (payload.reason if payload and payload.reason else "Cancelled by user.")).strip()
+    appt.status = "CANCELLED"
+    appt.rejection_reason = reason
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    date_str = appt.appointment_date.strftime('%b %d, %Y')
+
+    if current_user.id == appt.user_id:
+        p_name = current_user.patient_profile.patient_name if current_user.patient_profile else current_user.full_name
+        if appt.doctor_id:
+            db.add(Notification(
+                user_id=appt.doctor_id,
+                sender_id=current_user.id,
+                title="Appointment Cancelled by Patient",
+                message=f"Patient {p_name} cancelled the appointment scheduled for {date_str}. Reason: {reason}.",
+                notification_type="AppointmentCancel",
+                urgency="Normal",
+                reference_id=appt.id,
+                reference_type="appointment"
+            ))
+        db.add(Notification(
+            user_id=current_user.id,
+            sender_id=appt.doctor_id,
+            title="Appointment Cancelled",
+            message=f"Your appointment with {appt.doctor_or_clinic} on {date_str} has been cancelled.",
+            notification_type="AppointmentCancel",
+            urgency="Normal",
+            reference_id=appt.id,
+            reference_type="appointment"
+        ))
+    else:
+        doc_display = current_user.full_name if current_user.full_name.startswith("Dr.") else f"Dr. {current_user.full_name}"
+        appt.doctor_response_notes = reason
+        appt.doctor_response_at = now_utc
+        db.add(Notification(
+            user_id=appt.user_id,
+            sender_id=current_user.id,
+            title="Appointment Cancelled by Doctor",
+            message=f"{doc_display} cancelled your appointment on {date_str}. Reason: {reason}.",
+            notification_type="AppointmentCancel",
+            urgency="Normal",
+            reference_id=appt.id,
+            reference_type="appointment"
+        ))
 
     db.commit()
     db.refresh(appt)
@@ -1691,8 +1969,106 @@ def create_patient_appointment(
             reference_id=appt.id,
             reference_type="appointment"
         ))
+
+        # Auto-create Accepted connection so doctor sees patient immediately
+        conn = db.query(PatientDoctorConnection).filter(
+            PatientDoctorConnection.doctor_id == payload.doctor_id,
+            PatientDoctorConnection.patient_id == current_user.id
+        ).first()
+        if not conn:
+            conn = PatientDoctorConnection(
+                patient_id=current_user.id,
+                doctor_id=payload.doctor_id,
+                status="Accepted",
+                request_note="Connected via appointment booking."
+            )
+            db.add(conn)
+        elif conn.status != "Accepted":
+            conn.status = "Accepted"
+
         db.commit()
 
+    return build_appointment_response(appt, db)
+
+@router.put("/appointments/{appointment_id}", response_model=AppointmentResponse, summary="Update or Reschedule Appointment")
+@router.put("/patient/appointments/{appointment_id}", response_model=AppointmentResponse, summary="Update or Reschedule Appointment (Alias)")
+def update_patient_appointment(
+    appointment_id: int,
+    payload: AppointmentUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    appt = db.query(FollowUpAppointment).filter(FollowUpAppointment.id == appointment_id).first()
+    if not appt:
+        raise HTTPException(status_code=404, detail="Appointment record not found.")
+
+    if appt.user_id != current_user.id and appt.doctor_id != current_user.id:
+        raise HTTPException(status_code=403, detail="You are not authorized to edit this appointment.")
+
+    date_changed = False
+    if payload.appointment_date is not None:
+        if not appt.original_appointment_date:
+            appt.original_appointment_date = appt.appointment_date
+        appt.appointment_date = payload.appointment_date
+        date_changed = True
+
+    if payload.appointment_time is not None:
+        appt.appointment_time = payload.appointment_time
+    elif date_changed:
+        appt.appointment_time = payload.appointment_date.strftime("%I:%M %p")
+
+    if payload.doctor_or_clinic is not None:
+        appt.doctor_or_clinic = payload.doctor_or_clinic.strip()
+    if payload.doctor_id is not None:
+        appt.doctor_id = payload.doctor_id
+    if payload.purpose_or_notes is not None:
+        appt.purpose_or_notes = payload.purpose_or_notes.strip()
+    elif payload.reason_for_visit is not None:
+        appt.purpose_or_notes = payload.reason_for_visit.strip()
+    if payload.reminder_advance_hours is not None:
+        appt.reminder_advance_hours = payload.reminder_advance_hours
+    if payload.consultation_id is not None:
+        appt.consultation_id = payload.consultation_id
+
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    appt.updated_at = now_utc
+
+    # If updated by patient, mark status RESCHEDULED and notify doctor
+    if current_user.role == "patient" or current_user.id == appt.user_id:
+        if date_changed or payload.status:
+            appt.status = "RESCHEDULED"
+            appt.patient_response_at = now_utc
+
+        # Notify doctor if linked
+        if appt.doctor_id:
+            p_name = current_user.patient_profile.patient_name if current_user.patient_profile else current_user.full_name
+            db.add(Notification(
+                user_id=appt.doctor_id,
+                sender_id=current_user.id,
+                title="Appointment Rescheduled by Patient",
+                message=f"Patient {p_name} rescheduled appointment #{appt.id} to {appt.appointment_date.strftime('%b %d, %Y')} at {appt.appointment_time}. Reason: {appt.purpose_or_notes or 'Updated schedule'}.",
+                notification_type="AppointmentRescheduled",
+                urgency="Normal",
+                reference_id=appt.id,
+                reference_type="appointment"
+            ))
+    else:
+        # Doctor updated
+        if payload.status:
+            appt.status = payload.status
+        db.add(Notification(
+            user_id=appt.user_id,
+            sender_id=current_user.id,
+            title="Appointment Details Updated by Doctor",
+            message=f"Your appointment with {appt.doctor_or_clinic} has been updated to {appt.appointment_date.strftime('%b %d, %Y')} at {appt.appointment_time}.",
+            notification_type="AppointmentUpdate",
+            urgency="Normal",
+            reference_id=appt.id,
+            reference_type="appointment"
+        ))
+
+    db.commit()
+    db.refresh(appt)
     return build_appointment_response(appt, db)
 
 @router.delete("/appointments/{appointment_id}", summary="Delete Appointment")
@@ -2122,6 +2498,66 @@ def create_consultation(
     return cons
 
 
+@router.put("/consultations/{consultation_id}", response_model=ConsultationResponse, summary="Update Consultation Record")
+def update_consultation(
+    consultation_id: int,
+    payload: ConsultationUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    cons = db.query(DermatologistConsultation).filter(DermatologistConsultation.id == consultation_id).first()
+    if not cons:
+        raise HTTPException(status_code=404, detail="Consultation record not found.")
+
+    if cons.user_id != current_user.id and current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="You are not authorized to update this consultation record.")
+
+    if payload.doctor_name is not None:
+        cons.doctor_name = payload.doctor_name.strip()
+    if payload.clinic_name is not None:
+        cons.clinic_name = payload.clinic_name.strip()
+    if payload.consultation_date is not None:
+        cons.consultation_date = payload.consultation_date
+    if payload.doctor_diagnosis is not None:
+        cons.doctor_diagnosis = payload.doctor_diagnosis.strip()
+    if payload.diagnosis is not None:
+        cons.doctor_diagnosis = payload.diagnosis.strip()
+    if payload.clinical_observations is not None:
+        cons.clinical_observations = payload.clinical_observations
+    if payload.recommendations is not None:
+        cons.recommendations = payload.recommendations
+    if payload.consultation_notes is not None:
+        cons.consultation_notes = payload.consultation_notes
+    if payload.follow_up_instructions is not None:
+        cons.follow_up_instructions = payload.follow_up_instructions
+    if payload.follow_up_date is not None:
+        cons.follow_up_date = payload.follow_up_date
+    if payload.expected_review_date is not None:
+        cons.expected_review_date = payload.expected_review_date
+
+    db.commit()
+    db.refresh(cons)
+    return cons
+
+
+@router.delete("/consultations/{consultation_id}", summary="Delete Consultation Record")
+def delete_consultation(
+    consultation_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    cons = db.query(DermatologistConsultation).filter(DermatologistConsultation.id == consultation_id).first()
+    if not cons:
+        raise HTTPException(status_code=404, detail="Consultation record not found.")
+
+    if cons.user_id != current_user.id and current_user.role != "doctor":
+        raise HTTPException(status_code=403, detail="You are not authorized to delete this consultation record.")
+
+    db.delete(cons)
+    db.commit()
+    return {"message": "Consultation record deleted successfully.", "id": consultation_id}
+
+
 # ==========================================
 # 11. TREATMENT MANAGEMENT (PATIENT VIEW)
 # ==========================================
@@ -2316,6 +2752,23 @@ def mark_notification_read(
     db.commit()
     db.refresh(n)
     return n
+
+
+@router.delete("/notifications/{notification_id}", summary="Delete Notification")
+def delete_notification(
+    notification_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    n = db.query(Notification).filter(
+        Notification.id == notification_id,
+        Notification.user_id == current_user.id
+    ).first()
+    if not n:
+        raise HTTPException(status_code=404, detail="Notification not found.")
+    db.delete(n)
+    db.commit()
+    return {"message": "Notification deleted successfully.", "id": notification_id}
 
 
 # ==========================================

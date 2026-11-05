@@ -82,12 +82,28 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
     return name.includes(q) || cond.includes(q);
   });
 
+  const handlePrescribeTreatment = () => {
+    if (selectedPatient && onSelectPatientForAction) {
+      onSelectPatientForAction(selectedPatient.patient_id, 'treatment');
+    } else {
+      setActiveTab('doctor_treatments');
+    }
+  };
+
+  const handleNewConsultation = () => {
+    if (selectedPatient && onSelectPatientForAction) {
+      onSelectPatientForAction(selectedPatient.patient_id, 'consultation');
+    } else {
+      setActiveTab('doctor_consultations');
+    }
+  };
+
   return (
     <div>
       {/* Header Info */}
       <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Connected Patient Dossiers
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -97,7 +113,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
 
         <div style={{ display: 'flex', gap: 10 }}>
           <button
-            onClick={() => setActiveTab('doctor_consultations')}
+            onClick={handleNewConsultation}
             className="btn-submit"
             style={{ fontSize: '0.825rem', padding: '8px 14px', gap: 6 }}
           >
@@ -105,7 +121,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
             <span>New Consultation</span>
           </button>
           <button
-            onClick={() => setActiveTab('doctor_treatments')}
+            onClick={handlePrescribeTreatment}
             className="btn-outline"
             style={{ fontSize: '0.825rem', padding: '8px 14px', gap: 6 }}
           >
@@ -130,7 +146,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                 width: '100%',
                 padding: '8px 12px 8px 32px',
                 fontSize: '0.85rem',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #7CB0EA',
                 borderRadius: 6,
                 outline: 'none',
                 boxSizing: 'border-box'
@@ -167,8 +183,8 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                       display: 'flex',
                       alignItems: 'center',
                       gap: 10,
-                      backgroundColor: isSelected ? '#e7f1ff' : '#f8fafc',
-                      border: `1px solid ${isSelected ? '#b6d4fe' : '#f1f5f9'}`,
+                      backgroundColor: isSelected ? '#EAF3FC' : '#EAF3FC',
+                      border: `1px solid ${isSelected ? '#7CB0EA' : '#EAF3FC'}`,
                       transition: 'all 0.15s ease'
                     }}
                   >
@@ -176,7 +192,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                       width: 36,
                       height: 36,
                       borderRadius: '50%',
-                      backgroundColor: isSelected ? '#0d6efd' : '#cbd5e1',
+                      backgroundColor: isSelected ? '#1177DE' : '#7CB0EA',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
@@ -189,7 +205,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     </div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, fontSize: '0.875rem', color: isSelected ? '#0d6efd' : '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.875rem', color: isSelected ? '#1177DE' : '#1177DE', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {pat.patient_name}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -197,7 +213,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                       </div>
                     </div>
 
-                    <ChevronRight size={16} style={{ color: isSelected ? '#0d6efd' : '#cbd5e1' }} />
+                    <ChevronRight size={16} style={{ color: isSelected ? '#1177DE' : '#7CB0EA' }} />
                   </div>
                 );
               })}
@@ -216,7 +232,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     width: 52,
                     height: 52,
                     borderRadius: '50%',
-                    backgroundColor: '#0d6efd',
+                    backgroundColor: '#1177DE',
                     color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
@@ -228,7 +244,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                   </div>
 
                   <div>
-                    <h3 style={{ margin: '0 0 2px', fontSize: '1.25rem', fontWeight: 700, color: '#0f172a' }}>
+                    <h3 style={{ margin: '0 0 2px', fontSize: '1.25rem', fontWeight: 700, color: '#1177DE' }}>
                       {selectedPatient.patient_name}
                     </h3>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -259,7 +275,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                   </span>
                 )}
                 {selectedPatient.chronic_conditions && (
-                  <span style={{ fontSize: '0.75rem', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e40af', padding: '3px 8px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: '0.75rem', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', color: '#1e40af', padding: '3px 8px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                     <Stethoscope size={12} color="#1e40af" />
                     <span>Conditions: {selectedPatient.chronic_conditions}</span>
                   </span>
@@ -272,15 +288,15 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
             </div>
 
             {/* Dossier Tabs */}
-            <div style={{ display: 'flex', gap: 6, borderBottom: '2px solid #e2e8f0', marginBottom: 16 }}>
+            <div style={{ display: 'flex', gap: 6, borderBottom: '2px solid #7CB0EA', marginBottom: 16 }}>
               <button
                 onClick={() => setActiveDossierTab('records')}
                 style={{
                   padding: '10px 16px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: activeDossierTab === 'records' ? '3px solid #0d6efd' : '3px solid transparent',
-                  color: activeDossierTab === 'records' ? '#0d6efd' : '#64748b',
+                  borderBottom: activeDossierTab === 'records' ? '3px solid #1177DE' : '3px solid transparent',
+                  color: activeDossierTab === 'records' ? '#1177DE' : '#64748b',
                   fontWeight: activeDossierTab === 'records' ? 700 : 500,
                   fontSize: '0.875rem',
                   cursor: 'pointer',
@@ -299,8 +315,8 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                   padding: '10px 16px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: activeDossierTab === 'symptoms' ? '3px solid #0d6efd' : '3px solid transparent',
-                  color: activeDossierTab === 'symptoms' ? '#0d6efd' : '#64748b',
+                  borderBottom: activeDossierTab === 'symptoms' ? '3px solid #1177DE' : '3px solid transparent',
+                  color: activeDossierTab === 'symptoms' ? '#1177DE' : '#64748b',
                   fontWeight: activeDossierTab === 'symptoms' ? 700 : 500,
                   fontSize: '0.875rem',
                   cursor: 'pointer',
@@ -319,8 +335,8 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                   padding: '10px 16px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: activeDossierTab === 'consultations' ? '3px solid #0d6efd' : '3px solid transparent',
-                  color: activeDossierTab === 'consultations' ? '#0d6efd' : '#64748b',
+                  borderBottom: activeDossierTab === 'consultations' ? '3px solid #1177DE' : '3px solid transparent',
+                  color: activeDossierTab === 'consultations' ? '#1177DE' : '#64748b',
                   fontWeight: activeDossierTab === 'consultations' ? 700 : 500,
                   fontSize: '0.875rem',
                   cursor: 'pointer',
@@ -339,8 +355,8 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                   padding: '10px 16px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: activeDossierTab === 'treatments' ? '3px solid #0d6efd' : '3px solid transparent',
-                  color: activeDossierTab === 'treatments' ? '#0d6efd' : '#64748b',
+                  borderBottom: activeDossierTab === 'treatments' ? '3px solid #1177DE' : '3px solid transparent',
+                  color: activeDossierTab === 'treatments' ? '#1177DE' : '#64748b',
                   fontWeight: activeDossierTab === 'treatments' ? 700 : 500,
                   fontSize: '0.875rem',
                   cursor: 'pointer',
@@ -365,7 +381,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                 {activeDossierTab === 'records' && (
                   patientRecords.length === 0 ? (
                     <div className="project-card" style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
-                      <FolderHeart size={36} style={{ color: '#cbd5e1', marginBottom: 8 }} />
+                      <FolderHeart size={36} style={{ color: '#7CB0EA', marginBottom: 8 }} />
                       <div style={{ fontWeight: 600, color: '#475569' }}>No Lesion Photos Uploaded Yet</div>
                       <div style={{ fontSize: '0.825rem' }}>Patient has not yet documented any skin lesion records.</div>
                     </div>
@@ -373,7 +389,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
                       {patientRecords.map(rec => (
                         <div key={rec.id} className="project-card" style={{ overflow: 'hidden' }}>
-                          <div style={{ height: 160, backgroundColor: '#0f172a', position: 'relative', overflow: 'hidden' }}>
+                          <div style={{ height: 160, backgroundColor: '#10254C', position: 'relative', overflow: 'hidden' }}>
                             <img
                               src={getImageUrl(rec.image_filename)}
                               alt={rec.body_location}
@@ -398,15 +414,15 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                           </div>
 
                           <div style={{ padding: '12px 14px' }}>
-                            <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#0f172a', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
-                              <MapPin size={13} color="#0d6efd" />
+                            <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#1177DE', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                              <MapPin size={13} color="#1177DE" />
                               <span>{rec.body_location}</span>
                             </div>
                             <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: 6 }}>
                               Captured on {new Date(rec.capture_date).toLocaleDateString()}
                             </div>
                             {rec.user_notes && (
-                              <div style={{ fontSize: '0.8rem', color: '#334155', backgroundColor: '#f8fafc', padding: '6px 8px', borderRadius: 4 }}>
+                              <div style={{ fontSize: '0.8rem', color: '#334155', backgroundColor: '#EAF3FC', padding: '6px 8px', borderRadius: 4 }}>
                                 "{rec.user_notes}"
                               </div>
                             )}
@@ -421,7 +437,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                 {activeDossierTab === 'symptoms' && (
                   patientSymptoms.length === 0 ? (
                     <div className="project-card" style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
-                      <Activity size={36} style={{ color: '#cbd5e1', marginBottom: 8 }} />
+                      <Activity size={36} style={{ color: '#7CB0EA', marginBottom: 8 }} />
                       <div style={{ fontWeight: 600, color: '#475569' }}>No Reported Symptoms</div>
                       <div style={{ fontSize: '0.825rem' }}>No active or logged symptoms for this patient.</div>
                     </div>
@@ -429,7 +445,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     <div className="project-card" style={{ padding: '16px' }}>
                       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                         <thead>
-                          <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+                          <tr style={{ borderBottom: '1px solid #7CB0EA', color: '#64748b', textAlign: 'left' }}>
                             <th style={{ padding: '8px' }}>Date</th>
                             <th style={{ padding: '8px' }}>Symptom</th>
                             <th style={{ padding: '8px' }}>Severity</th>
@@ -439,11 +455,11 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                         </thead>
                         <tbody>
                           {patientSymptoms.map(symp => (
-                            <tr key={symp.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                            <tr key={symp.id} style={{ borderBottom: '1px solid #EAF3FC' }}>
                               <td style={{ padding: '10px 8px', color: '#64748b' }}>
                                 {new Date(symp.recorded_at).toLocaleDateString()}
                               </td>
-                              <td style={{ padding: '10px 8px', fontWeight: 600, color: '#0f172a' }}>
+                              <td style={{ padding: '10px 8px', fontWeight: 600, color: '#1177DE' }}>
                                 {symp.symptom_name}
                               </td>
                               <td style={{ padding: '10px 8px' }}>
@@ -473,11 +489,11 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                 {activeDossierTab === 'consultations' && (
                   patientConsultations.length === 0 ? (
                     <div className="project-card" style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
-                      <Stethoscope size={36} style={{ color: '#cbd5e1', marginBottom: 8 }} />
+                      <Stethoscope size={36} style={{ color: '#7CB0EA', marginBottom: 8 }} />
                       <div style={{ fontWeight: 600, color: '#475569' }}>No Consultations Recorded</div>
                       <div style={{ fontSize: '0.825rem', marginBottom: 14 }}>Document your first clinical consultation for this patient.</div>
                       <button
-                        onClick={() => setActiveTab('doctor_consultations')}
+                        onClick={handleNewConsultation}
                         className="btn-submit"
                         style={{ fontSize: '0.825rem', padding: '6px 14px' }}
                       >
@@ -486,11 +502,21 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                        <button
+                          onClick={handleNewConsultation}
+                          className="btn-submit"
+                          style={{ fontSize: '0.8rem', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+                        >
+                          <Stethoscope size={14} />
+                          <span>+ New Consultation</span>
+                        </button>
+                      </div>
                       {patientConsultations.map(c => (
                         <div key={c.id} className="project-card" style={{ padding: '16px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                            <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <Stethoscope size={16} color="#0d6efd" />
+                            <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <Stethoscope size={16} color="#1177DE" />
                               <span>Consultation: {c.consultation_type || 'Clinical Review'}</span>
                             </div>
                             <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -503,12 +529,12 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                             </div>
                           )}
                           {c.clinical_observations && (
-                            <div style={{ fontSize: '0.825rem', color: '#334155', backgroundColor: '#f8fafc', padding: '8px 10px', borderRadius: 6, marginBottom: 6 }}>
+                            <div style={{ fontSize: '0.825rem', color: '#334155', backgroundColor: '#EAF3FC', padding: '8px 10px', borderRadius: 6, marginBottom: 6 }}>
                               <strong>Observations:</strong> {c.clinical_observations}
                             </div>
                           )}
                           {c.recommendations && (
-                            <div style={{ fontSize: '0.825rem', color: '#0d6efd' }}>
+                            <div style={{ fontSize: '0.825rem', color: '#1177DE' }}>
                               <strong>Recommendations:</strong> {c.recommendations}
                             </div>
                           )}
@@ -522,11 +548,11 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                 {activeDossierTab === 'treatments' && (
                   patientTreatments.length === 0 ? (
                     <div className="project-card" style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
-                      <Pill size={36} style={{ color: '#cbd5e1', marginBottom: 8 }} />
+                      <Pill size={36} style={{ color: '#7CB0EA', marginBottom: 8 }} />
                       <div style={{ fontWeight: 600, color: '#475569' }}>No Active Prescriptions</div>
                       <div style={{ fontSize: '0.825rem', marginBottom: 14 }}>Prescribe a targeted dermatological treatment regimen.</div>
                       <button
-                        onClick={() => setActiveTab('doctor_treatments')}
+                        onClick={handlePrescribeTreatment}
                         className="btn-submit"
                         style={{ fontSize: '0.825rem', padding: '6px 14px' }}
                       >
@@ -535,11 +561,21 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 4 }}>
+                        <button
+                          onClick={handlePrescribeTreatment}
+                          className="btn-submit"
+                          style={{ fontSize: '0.8rem', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+                        >
+                          <Pill size={14} />
+                          <span>+ Prescribe Treatment</span>
+                        </button>
+                      </div>
                       {patientTreatments.map(t => (
                         <div key={t.id} className="project-card" style={{ padding: '16px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                            <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <Pill size={15} color="#15803d" />
+                            <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <Pill size={15} color="#1177DE" />
                               <span>{t.treatment_name}</span>
                             </div>
                             <span className={
@@ -561,7 +597,7 @@ export default function DoctorPatientsView({ setActiveTab, onSelectPatientForAct
                             </div>
                           )}
                           {t.doctor_notes && (
-                            <div style={{ fontSize: '0.8rem', color: '#334155', backgroundColor: '#f8fafc', padding: '6px 10px', borderRadius: 4, marginTop: 6 }}>
+                            <div style={{ fontSize: '0.8rem', color: '#334155', backgroundColor: '#EAF3FC', padding: '6px 10px', borderRadius: 4, marginTop: 6 }}>
                               <strong>Clinician Notes:</strong> {t.doctor_notes}
                             </div>
                           )}

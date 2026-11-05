@@ -47,7 +47,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading clinical follow-ups...</div>
       </div>
@@ -60,7 +60,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -70,18 +70,18 @@ export default function DoctorFollowupsView({ setActiveTab }) {
           alignItems: 'center',
           gap: 6,
           padding: '4px 10px',
-          backgroundColor: '#eff6ff',
-          border: '1px solid #bfdbfe',
+          backgroundColor: '#EAF3FC',
+          border: '1px solid #7CB0EA',
           borderRadius: 20,
           fontSize: '0.75rem',
-          color: '#2563eb',
+          color: '#1177DE',
           fontWeight: 600,
           marginBottom: 8
         }}>
           <Clock size={14} />
           <span>Longitudinal Clinical Care Continuity</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           Clinical Follow-ups & Treatment Reviews ({followups.length})
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -93,7 +93,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '16px 20px',
         marginBottom: 20,
         display: 'flex',
@@ -114,7 +114,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
             placeholder="Search by patient or concern..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.825rem' }}
+            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.825rem' }}
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 24px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
@@ -139,8 +139,8 @@ export default function DoctorFollowupsView({ setActiveTab }) {
                 style={{
                   padding: '14px 18px',
                   borderRadius: 10,
-                  border: '1px solid #e2e8f0',
-                  backgroundColor: '#f8fafc',
+                  border: '1px solid #7CB0EA',
+                  backgroundColor: '#EAF3FC',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -150,7 +150,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE' }}>
                       {f.patient_name}
                     </span>
                     <span style={{
@@ -158,8 +158,8 @@ export default function DoctorFollowupsView({ setActiveTab }) {
                       padding: '2px 8px',
                       borderRadius: 10,
                       fontWeight: 600,
-                      backgroundColor: '#eff6ff',
-                      color: '#2563eb'
+                      backgroundColor: '#EAF3FC',
+                      color: '#1177DE'
                     }}>
                       {f.followup_type}
                     </span>
@@ -168,8 +168,8 @@ export default function DoctorFollowupsView({ setActiveTab }) {
                       padding: '2px 8px',
                       borderRadius: 10,
                       fontWeight: 600,
-                      backgroundColor: f.status.toLowerCase().includes('confirm') ? '#dcfce7' : '#fef3c7',
-                      color: f.status.toLowerCase().includes('confirm') ? '#15803d' : '#b45309'
+                      backgroundColor: f.status.toLowerCase().includes('confirm') ? '#DCEAF8' : '#fef3c7',
+                      color: f.status.toLowerCase().includes('confirm') ? '#1177DE' : '#b45309'
                     }}>
                       {f.status}
                     </span>
@@ -177,12 +177,12 @@ export default function DoctorFollowupsView({ setActiveTab }) {
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: '0.8rem', color: '#334155', marginBottom: 4 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <Calendar size={14} color="#0d6efd" />
+                      <Calendar size={14} color="#1177DE" />
                       <span><strong>Date:</strong> {f.scheduled_date}</span>
                     </div>
                     {f.time_slot && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                        <Clock size={14} color="#0d6efd" />
+                        <Clock size={14} color="#1177DE" />
                         <span><strong>Time:</strong> {f.time_slot}</span>
                       </div>
                     )}
@@ -199,12 +199,12 @@ export default function DoctorFollowupsView({ setActiveTab }) {
                     style={{
                       padding: '6px 12px',
                       backgroundColor: '#ffffff',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       fontSize: '0.75rem',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      color: '#0f172a',
+                      color: '#1177DE',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 4
@@ -217,7 +217,7 @@ export default function DoctorFollowupsView({ setActiveTab }) {
                     onClick={() => setActiveTab('doctor_treatments')}
                     style={{
                       padding: '6px 12px',
-                      backgroundColor: '#0d6efd',
+                      backgroundColor: '#1177DE',
                       color: '#ffffff',
                       border: 'none',
                       borderRadius: 6,

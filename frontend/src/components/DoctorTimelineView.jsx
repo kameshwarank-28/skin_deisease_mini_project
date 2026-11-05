@@ -70,7 +70,7 @@ export default function DoctorTimelineView() {
       {/* Header & Patient Picker */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 14 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Patient Skin Progression Timeline
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -90,7 +90,7 @@ export default function DoctorTimelineView() {
               padding: '8px 12px',
               fontSize: '0.875rem',
               fontWeight: 500,
-              border: '1px solid #cbd5e1',
+              border: '1px solid #7CB0EA',
               borderRadius: 6,
               backgroundColor: '#ffffff',
               minWidth: 200
@@ -131,7 +131,7 @@ export default function DoctorTimelineView() {
               width: 38,
               height: 38,
               borderRadius: '50%',
-              backgroundColor: '#0d6efd',
+              backgroundColor: '#1177DE',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
@@ -142,7 +142,7 @@ export default function DoctorTimelineView() {
               {(selectedPatient.patient_name || 'P')[0].toUpperCase()}
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: '#0f172a' }}>
+              <div style={{ fontWeight: 700, color: '#1177DE' }}>
                 {selectedPatient.patient_name}
               </div>
               <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -164,7 +164,7 @@ export default function DoctorTimelineView() {
         </div>
       ) : timelineEvents.length === 0 ? (
         <div className="project-card" style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-          <History size={40} style={{ color: '#cbd5e1', marginBottom: 10 }} />
+          <History size={40} style={{ color: '#7CB0EA', marginBottom: 10 }} />
           <div style={{ fontWeight: 600, color: '#475569' }}>No Timeline Events Recorded</div>
           <div style={{ fontSize: '0.825rem' }}>This patient has not yet logged any photos, symptoms or treatments.</div>
         </div>
@@ -177,7 +177,7 @@ export default function DoctorTimelineView() {
             top: 10,
             bottom: 10,
             width: 2,
-            backgroundColor: '#e2e8f0'
+            backgroundColor: '#7CB0EA'
           }} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -197,7 +197,7 @@ export default function DoctorTimelineView() {
                     width: 28,
                     height: 28,
                     borderRadius: '50%',
-                    backgroundColor: isSkinRecord ? '#0d6efd' : isSymptom ? '#f59e0b' : isConsult ? '#8b5cf6' : '#10b981',
+                    backgroundColor: isSkinRecord ? '#1177DE' : isSymptom ? '#f59e0b' : isConsult ? '#8b5cf6' : '#10b981',
                     color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
@@ -215,7 +215,7 @@ export default function DoctorTimelineView() {
                   <div className="project-card" style={{ padding: '16px 20px', marginLeft: 10 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE' }}>
                           {evt.title}
                         </span>
                         <span className={
@@ -248,7 +248,7 @@ export default function DoctorTimelineView() {
 
                     {/* Image if available */}
                     {evt.image_url && (
-                      <div style={{ marginTop: 10, maxWidth: 280, borderRadius: 8, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                      <div style={{ marginTop: 10, maxWidth: 280, borderRadius: 8, overflow: 'hidden', border: '1px solid #7CB0EA' }}>
                         <img
                           src={getImageUrl(evt.image_url.replace('/api/images/', ''))}
                           alt="Lesion snapshot"

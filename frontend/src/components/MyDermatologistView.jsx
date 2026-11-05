@@ -114,7 +114,7 @@ export default function MyDermatologistView({ setActiveTab }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading verified dermatologist profiles...</div>
       </div>
@@ -132,9 +132,9 @@ export default function MyDermatologistView({ setActiveTab }) {
           padding: '12px 18px',
           borderRadius: 8,
           marginBottom: 16,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -154,7 +154,7 @@ export default function MyDermatologistView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -164,18 +164,18 @@ export default function MyDermatologistView({ setActiveTab }) {
           alignItems: 'center',
           gap: 6,
           padding: '4px 10px',
-          backgroundColor: '#f0fdfa',
-          border: '1px solid #ccfbf1',
+          backgroundColor: '#EAF3FC',
+          border: '1px solid #7CB0EA',
           borderRadius: 20,
           fontSize: '0.75rem',
-          color: '#0d9488',
+          color: '#1177DE',
           fontWeight: 600,
           marginBottom: 8
         }}>
           <ShieldCheck size={14} />
           <span>Patient-Doctor Medical Care Connectivity</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           My Dermatologist & Clinical Care Team
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -187,22 +187,22 @@ export default function MyDermatologistView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 26px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <Stethoscope size={20} color="#0d6efd" />
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+          <Stethoscope size={20} color="#1177DE" />
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
             Primary Connected Dermatologist
           </h2>
         </div>
 
         {connectedDoc ? (
           <div style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
+            backgroundColor: '#EAF3FC',
+            border: '1px solid #7CB0EA',
             borderRadius: 10,
             padding: '20px 22px'
           }}>
@@ -212,8 +212,8 @@ export default function MyDermatologistView({ setActiveTab }) {
                   width: 56,
                   height: 56,
                   borderRadius: '50%',
-                  backgroundColor: '#eff6ff',
-                  color: '#2563eb',
+                  backgroundColor: '#EAF3FC',
+                  color: '#1177DE',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -224,15 +224,15 @@ export default function MyDermatologistView({ setActiveTab }) {
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                       {connectedDoc.doctor_name}
                     </h3>
                     <span style={{
                       fontSize: '0.725rem',
                       padding: '3px 8px',
                       borderRadius: 12,
-                      backgroundColor: '#dcfce7',
-                      color: '#15803d',
+                      backgroundColor: '#DCEAF8',
+                      color: '#1177DE',
                       fontWeight: 600,
                       display: 'flex',
                       alignItems: 'center',
@@ -261,7 +261,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                   </div>
 
                   {connectedDoc.bio && (
-                    <div style={{ fontSize: '0.825rem', color: '#334155', maxWidth: 650, backgroundColor: '#ffffff', padding: '10px 14px', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '0.825rem', color: '#334155', maxWidth: 650, backgroundColor: '#ffffff', padding: '10px 14px', borderRadius: 8, border: '1px solid #7CB0EA' }}>
                       "{connectedDoc.bio}"
                     </div>
                   )}
@@ -271,14 +271,14 @@ export default function MyDermatologistView({ setActiveTab }) {
                     <div style={{
                       marginTop: 12,
                       padding: '10px 14px',
-                      backgroundColor: '#eff6ff',
+                      backgroundColor: '#EAF3FC',
                       borderRadius: 8,
-                      border: '1px solid #bfdbfe',
+                      border: '1px solid #7CB0EA',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 12
                     }}>
-                      <CalendarDays size={18} color="#2563eb" />
+                      <CalendarDays size={18} color="#1177DE" />
                       <div style={{ fontSize: '0.825rem', color: '#1e40af' }}>
                         <strong>Next Consultation:</strong> {connectedDoc.next_appointment.date} @ {connectedDoc.next_appointment.time} ({connectedDoc.next_appointment.status})
                       </div>
@@ -293,7 +293,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                   onClick={() => setActiveTab('appointments')}
                   style={{
                     padding: '8px 14px',
-                    backgroundColor: '#0d6efd',
+                    backgroundColor: '#1177DE',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: 6,
@@ -315,8 +315,8 @@ export default function MyDermatologistView({ setActiveTab }) {
                   style={{
                     padding: '8px 14px',
                     backgroundColor: '#ffffff',
-                    color: '#0f172a',
-                    border: '1px solid #cbd5e1',
+                    color: '#1177DE',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     fontSize: '0.8rem',
                     fontWeight: 600,
@@ -336,8 +336,8 @@ export default function MyDermatologistView({ setActiveTab }) {
                   style={{
                     padding: '8px 14px',
                     backgroundColor: '#ffffff',
-                    color: '#059669',
-                    border: '1px solid #a7f3d0',
+                    color: '#1177DE',
+                    border: '1px solid #95BFEE',
                     borderRadius: 6,
                     fontSize: '0.8rem',
                     fontWeight: 600,
@@ -358,8 +358,8 @@ export default function MyDermatologistView({ setActiveTab }) {
           <div style={{
             textAlign: 'center',
             padding: '36px 16px',
-            backgroundColor: '#f8fafc',
-            border: '1px dashed #cbd5e1',
+            backgroundColor: '#EAF3FC',
+            border: '1px dashed #7CB0EA',
             borderRadius: 10
           }}>
             <Stethoscope size={36} color="#94a3b8" style={{ marginBottom: 10 }} />
@@ -377,14 +377,14 @@ export default function MyDermatologistView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 26px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
               Verified Dermatologists Directory ({directory.length})
             </h2>
             <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -399,7 +399,7 @@ export default function MyDermatologistView({ setActiveTab }) {
               placeholder="Search by name, hospital, or specialty..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ width: '100%', padding: '8px 10px 8px 34px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.825rem' }}
+              style={{ width: '100%', padding: '8px 10px 8px 34px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.825rem' }}
             />
           </div>
         </div>
@@ -424,9 +424,9 @@ export default function MyDermatologistView({ setActiveTab }) {
                 <div
                   key={doc.doctor_id}
                   style={{
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: '#EAF3FC',
                     borderRadius: 10,
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #7CB0EA',
                     padding: '16px 18px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -436,7 +436,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE' }}>
                           {doc.doctor_name}
                         </div>
                         <div style={{ fontSize: '0.775rem', color: '#64748b' }}>
@@ -445,7 +445,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                       </div>
 
                       {isAccepted && (
-                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: 10, backgroundColor: '#dcfce7', color: '#15803d', fontWeight: 600 }}>
+                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: 10, backgroundColor: '#DCEAF8', color: '#1177DE', fontWeight: 600 }}>
                           Connected
                         </span>
                       )}
@@ -481,13 +481,13 @@ export default function MyDermatologistView({ setActiveTab }) {
                     )}
                   </div>
 
-                  <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid #7CB0EA', display: 'flex', justifyContent: 'flex-end' }}>
                     {isAccepted ? (
                       <button
                         onClick={() => setActiveTab('appointments')}
                         style={{
                           padding: '6px 14px',
-                          backgroundColor: '#0d6efd',
+                          backgroundColor: '#1177DE',
                           color: '#ffffff',
                           border: 'none',
                           borderRadius: 6,
@@ -503,7 +503,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                         disabled
                         style={{
                           padding: '6px 14px',
-                          backgroundColor: '#e2e8f0',
+                          backgroundColor: '#7CB0EA',
                           color: '#64748b',
                           border: 'none',
                           borderRadius: 6,
@@ -519,7 +519,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                         onClick={() => handleOpenRequestModal(doc)}
                         style={{
                           padding: '6px 14px',
-                          backgroundColor: '#0d6efd',
+                          backgroundColor: '#1177DE',
                           color: '#ffffff',
                           border: 'none',
                           borderRadius: 6,
@@ -547,11 +547,11 @@ export default function MyDermatologistView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 26px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
-        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 14px', color: '#0f172a' }}>
+        <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 14px', color: '#1177DE' }}>
           Connection Requests History
         </h2>
 
@@ -566,8 +566,8 @@ export default function MyDermatologistView({ setActiveTab }) {
                 key={c.id}
                 style={{
                   padding: '12px 16px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 8,
                   display: 'flex',
                   alignItems: 'center',
@@ -578,7 +578,7 @@ export default function MyDermatologistView({ setActiveTab }) {
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3 }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#0f172a' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.875rem', color: '#1177DE' }}>
                       {c.doctor_name || `Doctor #${c.doctor_id}`}
                     </span>
                     <span style={{
@@ -586,8 +586,8 @@ export default function MyDermatologistView({ setActiveTab }) {
                       padding: '2px 8px',
                       borderRadius: 10,
                       fontWeight: 600,
-                      backgroundColor: c.status === 'Accepted' ? '#dcfce7' : c.status === 'Requested' ? '#fef3c7' : '#fee2e2',
-                      color: c.status === 'Accepted' ? '#15803d' : c.status === 'Requested' ? '#b45309' : '#b91c1c'
+                      backgroundColor: c.status === 'Accepted' ? '#DCEAF8' : c.status === 'Requested' ? '#fef3c7' : '#fee2e2',
+                      color: c.status === 'Accepted' ? '#1177DE' : c.status === 'Requested' ? '#b45309' : '#b91c1c'
                     }}>
                       {c.status}
                     </span>
@@ -615,7 +615,7 @@ export default function MyDermatologistView({ setActiveTab }) {
       {selectedDoctorForRequest && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 460 }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 8px', color: '#0f172a' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 8px', color: '#1177DE' }}>
               Request Doctor-Patient Connection
             </h3>
             <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: 16 }}>
@@ -633,7 +633,7 @@ export default function MyDermatologistView({ setActiveTab }) {
                   value={requestNote}
                   onChange={(e) => setRequestNote(e.target.value)}
                   placeholder="Describe your symptoms or reasons for connecting..."
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                 />
               </div>
 
@@ -641,14 +641,14 @@ export default function MyDermatologistView({ setActiveTab }) {
                 <button
                   type="button"
                   onClick={() => setSelectedDoctorForRequest(null)}
-                  style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  style={{ padding: '8px 16px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                  style={{ padding: '8px 16px', backgroundColor: '#10254C', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
                 >
                   <Send size={14} />
                   <span>{submitting ? 'Sending...' : 'Send Request'}</span>

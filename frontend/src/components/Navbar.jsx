@@ -49,7 +49,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
   return (
     <header style={{
       backgroundColor: '#ffffff',
-      borderBottom: '1px solid #dee2e6',
+      borderBottom: '1px solid #7CB0EA',
       boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
       position: 'sticky',
       top: 0,
@@ -74,7 +74,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           <div style={{
             width: 34,
             height: 34,
-            backgroundColor: '#0d6efd',
+            backgroundColor: '#1177DE',
             color: '#ffffff',
             borderRadius: 6,
             display: 'flex',
@@ -103,8 +103,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
             onClick={() => setActiveTab('notifications')}
             style={{
               position: 'relative',
-              backgroundColor: activeTab === 'notifications' ? '#e7f1ff' : '#f8f9fa',
-              border: '1px solid #dee2e6',
+              backgroundColor: activeTab === 'notifications' ? '#EAF3FC' : '#f8f9fa',
+              border: '1px solid #7CB0EA',
               borderRadius: 6,
               padding: '6px 12px',
               fontSize: '0.85rem',
@@ -135,8 +135,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
           <button
             onClick={() => setActiveTab('profile')}
             style={{
-              backgroundColor: activeTab === 'profile' ? '#e7f1ff' : '#f8f9fa',
-              border: '1px solid #dee2e6',
+              backgroundColor: activeTab === 'profile' ? '#EAF3FC' : '#f8f9fa',
+              border: '1px solid #7CB0EA',
               borderRadius: 6,
               padding: '6px 12px',
               fontSize: '0.85rem',
@@ -151,7 +151,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
               width: 22,
               height: 22,
               borderRadius: '50%',
-              backgroundColor: '#0d6efd',
+              backgroundColor: '#1177DE',
               color: '#fff',
               fontSize: '0.75rem',
               display: 'flex',
@@ -183,7 +183,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
               key={item.key}
               onClick={() => setActiveTab(item.key)}
               style={{
-                backgroundColor: activeTab === item.key ? '#0d6efd' : 'transparent',
+                backgroundColor: activeTab === item.key ? '#1177DE' : 'transparent',
                 color: activeTab === item.key ? '#ffffff' : '#495057',
                 border: 'none',
                 padding: '7px 12px',

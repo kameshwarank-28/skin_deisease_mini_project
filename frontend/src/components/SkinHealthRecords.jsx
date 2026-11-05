@@ -158,7 +158,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
       {/* Top Banner & Header */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: 0 }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: 0 }}>
             Skin Health Record Management
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: '4px 0 0' }}>
@@ -248,7 +248,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
                   position: 'absolute',
                   top: 8,
                   left: 8,
-                  backgroundColor: '#0d6efd',
+                  backgroundColor: '#1177DE',
                   color: '#ffffff',
                   fontSize: '0.75rem',
                   fontWeight: 600,
@@ -275,7 +275,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
                 {rec.predicted_disease ? (
                   <div style={{ marginBottom: 6 }}>
                     <span style={{ fontSize: '0.7rem', color: '#6c757d', textTransform: 'uppercase' }}>AI Prediction</span>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0d6efd' }}>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1177DE' }}>
                       {rec.predicted_disease}
                     </div>
                   </div>
@@ -339,7 +339,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
         <div className="modal-overlay">
           <div className="modal-content">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, color: '#0d6efd', fontSize: '1.2rem' }}>Add New Skin Health Record</h3>
+              <h3 style={{ margin: 0, color: '#1177DE', fontSize: '1.2rem' }}>Add New Skin Health Record</h3>
               <button
                 onClick={() => setShowCreateModal(false)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6c757d', padding: 4, display: 'flex', alignItems: 'center' }}
@@ -474,7 +474,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 680 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, color: '#0d6efd', fontSize: '1.2rem' }}>
+              <h3 style={{ margin: 0, color: '#1177DE', fontSize: '1.2rem' }}>
                 Skin Record #{selectedRecord.id} Details
               </h3>
               <button
@@ -513,13 +513,13 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
                     </div>
 
                     {selectedRecord.predicted_disease && (
-                      <div style={{ background: '#e7f1ff', padding: '8px 12px', borderRadius: 4, marginBottom: 12 }}>
+                      <div style={{ background: '#EAF3FC', padding: '8px 12px', borderRadius: 4, marginBottom: 12 }}>
                         <div style={{ fontSize: '0.75rem', color: '#084298', fontWeight: 600 }}>ASSOCIATED AI PREDICTION</div>
                         <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#052c65' }}>
                           {selectedRecord.predicted_disease}
                         </div>
                         {selectedRecord.confidence_score && (
-                          <div style={{ fontSize: '0.8rem', color: '#0d6efd' }}>
+                          <div style={{ fontSize: '0.8rem', color: '#1177DE' }}>
                             Confidence: {(selectedRecord.confidence_score * 100).toFixed(1)}%
                           </div>
                         )}
@@ -575,7 +575,7 @@ export default function SkinHealthRecords({ setActiveTab, onCompareSelect }) {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #dee2e6', paddingTop: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #7CB0EA', paddingTop: 14 }}>
               {!isEditing ? (
                 <>
                   <button

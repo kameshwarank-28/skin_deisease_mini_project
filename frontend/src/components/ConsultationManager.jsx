@@ -114,7 +114,7 @@ export default function ConsultationManager({ setActiveTab }) {
       {/* Top Banner */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Dermatologist Consultation Records
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -154,7 +154,7 @@ export default function ConsultationManager({ setActiveTab }) {
                     Dr. {c.doctor_name}
                   </h3>
                   <div style={{ fontSize: '0.85rem', color: '#6c757d', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    <Building size={14} color="#0d6efd" />
+                    <Building size={14} color="#1177DE" />
                     <span>{c.clinic_name}</span>
                     <span>•</span>
                     <Calendar size={14} color="#64748b" />
@@ -182,7 +182,7 @@ export default function ConsultationManager({ setActiveTab }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
                 {/* Diagnosis Box */}
-                <div style={{ backgroundColor: '#e7f1ff', border: '1px solid #b6d4fe', borderRadius: 6, padding: '12px 16px' }}>
+                <div style={{ backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, padding: '12px 16px' }}>
                   <div style={{ fontSize: '0.75rem', color: '#084298', fontWeight: 700, textTransform: 'uppercase' }}>
                     Physician's Clinical Diagnosis
                   </div>
@@ -190,7 +190,7 @@ export default function ConsultationManager({ setActiveTab }) {
                     {c.doctor_diagnosis}
                   </div>
                   {c.expected_review_date && (
-                    <div style={{ fontSize: '0.8rem', color: '#0d6efd', marginTop: 8 }}>
+                    <div style={{ fontSize: '0.8rem', color: '#1177DE', marginTop: 8 }}>
                       Expected Review: {new Date(c.expected_review_date).toLocaleDateString()}
                     </div>
                   )}
@@ -224,7 +224,7 @@ export default function ConsultationManager({ setActiveTab }) {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 580 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, color: '#0d6efd', fontSize: '1.2rem' }}>
+              <h3 style={{ margin: 0, color: '#1177DE', fontSize: '1.2rem' }}>
                 {editingId ? 'Edit Consultation Record' : 'Document Dermatologist Consultation'}
               </h3>
               <button

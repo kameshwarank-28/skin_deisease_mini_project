@@ -253,7 +253,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading clinical practice overview...</div>
       </div>
@@ -273,9 +273,9 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
           padding: '12px 18px',
           borderRadius: 8,
           marginBottom: 16,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -295,7 +295,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         display: 'flex',
@@ -311,18 +311,18 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             alignItems: 'center',
             gap: 6,
             padding: '4px 10px',
-            backgroundColor: '#f0fdfa',
-            border: '1px solid #ccfbf1',
+            backgroundColor: '#EAF3FC',
+            border: '1px solid #7CB0EA',
             borderRadius: 20,
             fontSize: '0.75rem',
-            color: '#0d9488',
+            color: '#1177DE',
             fontWeight: 600,
             marginBottom: 8
           }}>
             <ShieldCheck size={14} />
             <span>Clinical Practice & Decision Support</span>
           </div>
-          <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+          <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
             {data.doctor_name}
           </h1>
           <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -335,7 +335,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             onClick={() => setActiveTab('doctor_patients')}
             style={{
               padding: '10px 18px',
-              backgroundColor: '#0d6efd',
+              backgroundColor: '#1177DE',
               color: '#ffffff',
               border: 'none',
               borderRadius: 8,
@@ -355,9 +355,9 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             onClick={() => setActiveTab('doctor_appointments')}
             style={{
               padding: '10px 16px',
-              backgroundColor: '#f8fafc',
-              color: '#0f172a',
-              border: '1px solid #cbd5e1',
+              backgroundColor: '#EAF3FC',
+              color: '#1177DE',
+              border: '1px solid #7CB0EA',
               borderRadius: 8,
               fontSize: '0.875rem',
               fontWeight: 600,
@@ -402,7 +402,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
               Connected Patients
             </span>
-            <div style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.7)', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.7)', color: '#1177DE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Users size={20} />
             </div>
           </div>
@@ -488,7 +488,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div
           onClick={() => setActiveTab('doctor_treatments')}
           style={{
-            background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
+            background: 'linear-gradient(135deg, #d1fae5 0%, #95BFEE 100%)',
             borderRadius: 12,
             border: '1px solid #6ee7b7',
             padding: '20px 22px',
@@ -504,7 +504,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#065f46', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
               Active Treatments
             </span>
-            <div style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.7)', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.7)', color: '#1177DE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Pill size={20} />
             </div>
           </div>
@@ -525,7 +525,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 26px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
@@ -537,8 +537,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
               width: 40,
               height: 40,
               borderRadius: 8,
-              backgroundColor: '#eff6ff',
-              color: '#2563eb',
+              backgroundColor: '#EAF3FC',
+              color: '#1177DE',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -546,7 +546,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
               <Calendar size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 {monthNames[month]} {year}
               </h3>
               <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -557,7 +557,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* View Mode Toggle */}
-            <div style={{ display: 'flex', backgroundColor: '#f1f5f9', borderRadius: 8, padding: 2 }}>
+            <div style={{ display: 'flex', backgroundColor: '#EAF3FC', borderRadius: 8, padding: 2 }}>
               {['month', 'week', 'day'].map(v => (
                 <button
                   key={v}
@@ -570,7 +570,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     fontWeight: 600,
                     cursor: 'pointer',
                     backgroundColor: calendarView === v ? '#ffffff' : 'transparent',
-                    color: calendarView === v ? '#0f172a' : '#64748b',
+                    color: calendarView === v ? '#1177DE' : '#64748b',
                     boxShadow: calendarView === v ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
                   }}
                 >
@@ -583,20 +583,20 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <button
                 onClick={() => changeMonth(-1)}
-                style={{ padding: '6px 10px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                style={{ padding: '6px 10px', backgroundColor: '#ffffff', border: '1px solid #7CB0EA', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                 title="Previous Month"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => setCurrentCalendarDate(new Date())}
-                style={{ padding: '6px 12px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '6px 12px', backgroundColor: '#ffffff', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Today
               </button>
               <button
                 onClick={() => changeMonth(1)}
-                style={{ padding: '6px 10px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                style={{ padding: '6px 10px', backgroundColor: '#ffffff', border: '1px solid #7CB0EA', borderRadius: 6, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                 title="Next Month"
               >
                 <ChevronRight size={16} />
@@ -621,7 +621,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6 }}>
               {/* Padding empty slots for first day of week */}
               {Array.from({ length: firstDayOfWeek }).map((_, idx) => (
-                <div key={`empty-${idx}`} style={{ minHeight: 90, backgroundColor: '#f8fafc', borderRadius: 8, opacity: 0.4 }} />
+                <div key={`empty-${idx}`} style={{ minHeight: 90, backgroundColor: '#EAF3FC', borderRadius: 8, opacity: 0.4 }} />
               ))}
 
               {daysInMonth.map(dayDate => {
@@ -637,7 +637,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     style={{
                       minHeight: 90,
                       backgroundColor: isToday ? '#f0f9ff' : '#ffffff',
-                      border: isToday ? '2px solid #0284c7' : '1px solid #e2e8f0',
+                      border: isToday ? '2px solid #1177DE' : '1px solid #7CB0EA',
                       borderRadius: 8,
                       padding: 6,
                       display: 'flex',
@@ -650,7 +650,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       <span style={{
                         fontSize: '0.8rem',
                         fontWeight: isToday ? 800 : 600,
-                        color: isToday ? '#0284c7' : '#0f172a',
+                        color: isToday ? '#1177DE' : '#1177DE',
                         width: 22,
                         height: 22,
                         borderRadius: '50%',
@@ -681,9 +681,9 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                               fontSize: '0.675rem',
                               fontWeight: 600,
                               cursor: 'pointer',
-                              backgroundColor: isConf ? '#dcfce7' : '#fef3c7',
-                              color: isConf ? '#15803d' : '#b45309',
-                              border: `1px solid ${isConf ? '#bbf7d0' : '#fde68a'}`,
+                              backgroundColor: isConf ? '#DCEAF8' : '#fef3c7',
+                              color: isConf ? '#1177DE' : '#b45309',
+                              border: `1px solid ${isConf ? '#7CB0EA' : '#fde68a'}`,
                               whiteSpace: 'nowrap',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis'
@@ -704,7 +704,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
 
         {/* Week / Day View Placeholder representation */}
         {calendarView !== 'month' && (
-          <div style={{ padding: '24px 16px', textAlign: 'center', backgroundColor: '#f8fafc', borderRadius: 8 }}>
+          <div style={{ padding: '24px 16px', textAlign: 'center', backgroundColor: '#EAF3FC', borderRadius: 8 }}>
             <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>
               Showing {calendarView.toUpperCase()} Agenda View
             </div>
@@ -719,7 +719,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   style={{
                     padding: '8px 12px',
                     borderRadius: 6,
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #7CB0EA',
                     backgroundColor: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
@@ -728,12 +728,12 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   }}
                 >
                   <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a' }}>{evt.patient_name}</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1177DE' }}>{evt.patient_name}</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{evt.purpose}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0d6efd' }}>{evt.date} @ {evt.time}</div>
-                    <span style={{ fontSize: '0.675rem', padding: '1px 6px', borderRadius: 4, backgroundColor: '#dcfce7', color: '#16a34a' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1177DE' }}>{evt.date} @ {evt.time}</div>
+                    <span style={{ fontSize: '0.675rem', padding: '1px 6px', borderRadius: 4, backgroundColor: '#DCEAF8', color: '#1177DE' }}>
                       {evt.status}
                     </span>
                   </div>
@@ -757,27 +757,27 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '22px 24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Clock size={18} color="#0d6efd" />
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <Clock size={18} color="#1177DE" />
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 Today's Schedule ({today_appointments.length})
               </h3>
             </div>
             <button
               onClick={() => setActiveTab('doctor_appointments')}
-              style={{ background: 'none', border: 'none', color: '#0d6efd', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: '#1177DE', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
             >
               Full Schedule
             </button>
           </div>
 
           {today_appointments.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '36px 16px', backgroundColor: '#f8fafc', borderRadius: 8, border: '1px dashed #cbd5e1' }}>
+            <div style={{ textAlign: 'center', padding: '36px 16px', backgroundColor: '#EAF3FC', borderRadius: 8, border: '1px dashed #7CB0EA' }}>
               <CalendarDays size={32} color="#94a3b8" style={{ marginBottom: 8 }} />
               <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>No Appointments Scheduled for Today</div>
               <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>
@@ -792,8 +792,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   style={{
                     padding: '12px 14px',
                     borderRadius: 8,
-                    border: '1px solid #e2e8f0',
-                    backgroundColor: '#f8fafc',
+                    border: '1px solid #7CB0EA',
+                    backgroundColor: '#EAF3FC',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -803,14 +803,14 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 >
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a' }}>
+                      <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1177DE' }}>
                         {appt.patient_name}
                       </span>
-                      <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10, backgroundColor: '#dcfce7', color: '#16a34a', fontWeight: 600 }}>
+                      <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10, backgroundColor: '#DCEAF8', color: '#1177DE', fontWeight: 600 }}>
                         {appt.status}
                       </span>
                     </div>
-                    <div style={{ fontSize: '0.775rem', color: '#0d6efd', fontWeight: 600, marginTop: 2 }}>
+                    <div style={{ fontSize: '0.775rem', color: '#1177DE', fontWeight: 600, marginTop: 2 }}>
                       Slot: {appt.time} • {appt.consultation_type}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 2 }}>
@@ -826,12 +826,12 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     style={{
                       padding: '6px 12px',
                       backgroundColor: '#ffffff',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       fontSize: '0.75rem',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      color: '#0f172a'
+                      color: '#1177DE'
                     }}
                   >
                     View Patient
@@ -846,7 +846,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '22px 24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
           display: 'flex',
@@ -863,8 +863,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 onClick={() => setActiveTab('doctor_patients')}
                 style={{
                   padding: '12px 14px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 8,
                   textAlign: 'left',
                   cursor: 'pointer',
@@ -873,11 +873,11 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   gap: 12
                 }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#EAF3FC', color: '#1177DE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Users size={18} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Manage Patients</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1177DE' }}>Manage Patients</div>
                   <div style={{ fontSize: '0.725rem', color: '#64748b' }}>View dossiers & medical history</div>
                 </div>
               </button>
@@ -886,8 +886,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 onClick={() => setActiveTab('doctor_records')}
                 style={{
                   padding: '12px 14px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 8,
                   textAlign: 'left',
                   cursor: 'pointer',
@@ -896,11 +896,11 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   gap: 12
                 }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#f0fdfa', color: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#EAF3FC', color: '#1177DE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FolderHeart size={18} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Patient Skin Records</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1177DE' }}>Patient Skin Records</div>
                   <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Review lesion photos & Grad-CAM</div>
                 </div>
               </button>
@@ -909,8 +909,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 onClick={() => setActiveTab('doctor_consultations')}
                 style={{
                   padding: '12px 14px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 8,
                   textAlign: 'left',
                   cursor: 'pointer',
@@ -923,7 +923,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   <Stethoscope size={18} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Document Consultation</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1177DE' }}>Document Consultation</div>
                   <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Clinical notes & official diagnosis</div>
                 </div>
               </button>
@@ -932,8 +932,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 onClick={() => setActiveTab('doctor_treatments')}
                 style={{
                   padding: '12px 14px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 8,
                   textAlign: 'left',
                   cursor: 'pointer',
@@ -942,18 +942,18 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   gap: 12
                 }}
               >
-                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: '#EAF3FC', color: '#1177DE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Pill size={18} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Prescribe Regimen</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1177DE' }}>Prescribe Regimen</div>
                   <div style={{ fontSize: '0.725rem', color: '#64748b' }}>Structured treatments & dosage</div>
                 </div>
               </button>
             </div>
           </div>
 
-          <div style={{ marginTop: 14, padding: '10px 12px', backgroundColor: '#f1f5f9', borderRadius: 6, fontSize: '0.75rem', color: '#475569' }}>
+          <div style={{ marginTop: 14, padding: '10px 12px', backgroundColor: '#EAF3FC', borderRadius: 6, fontSize: '0.75rem', color: '#475569' }}>
             <strong>Protected Records:</strong> Clinician entries are cryptographically stamped with your Doctor ID.
           </div>
         </div>
@@ -965,14 +965,14 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 26px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
               Pending Appointment Requests ({pending_appointments_list.length})
             </h3>
             <div style={{ fontSize: '0.775rem', color: '#64748b' }}>
@@ -981,7 +981,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
           </div>
           <button
             onClick={() => setActiveTab('doctor_appointments')}
-            style={{ background: 'none', border: 'none', color: '#0d6efd', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+            style={{ background: 'none', border: 'none', color: '#1177DE', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
           >
             Manage All Appointments
           </button>
@@ -998,8 +998,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 key={appt.id}
                 style={{
                   padding: '14px 18px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: '#EAF3FC',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 10,
                   display: 'flex',
                   alignItems: 'center',
@@ -1010,10 +1010,10 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1177DE' }}>
                       {appt.patient_name}
                     </span>
-                    <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#e2e8f0', color: '#475569', fontWeight: 600 }}>
+                    <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#7CB0EA', color: '#475569', fontWeight: 600 }}>
                       {appt.patient_code}
                     </span>
                     <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#fef3c7', color: '#b45309', fontWeight: 600 }}>
@@ -1038,7 +1038,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     onClick={() => openAppointmentAction('accept', appt)}
                     style={{
                       padding: '7px 14px',
-                      backgroundColor: '#16a34a',
+                      backgroundColor: '#1177DE',
                       color: '#ffffff',
                       border: 'none',
                       borderRadius: 6,
@@ -1079,8 +1079,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     style={{
                       padding: '7px 12px',
                       backgroundColor: '#ffffff',
-                      color: '#0d6efd',
-                      border: '1px solid #0d6efd',
+                      color: '#1177DE',
+                      border: '1px solid #1177DE',
                       borderRadius: 6,
                       fontSize: '0.775rem',
                       fontWeight: 600,
@@ -1113,13 +1113,13 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '22px 24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 Patient Connection Requests ({pending_connections_list.length})
               </h3>
               <div style={{ fontSize: '0.775rem', color: '#64748b' }}>
@@ -1128,7 +1128,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
             </div>
             <button
               onClick={() => setActiveTab('doctor_requests')}
-              style={{ background: 'none', border: 'none', color: '#0d6efd', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: '#1177DE', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
             >
               All Requests
             </button>
@@ -1145,8 +1145,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   key={conn.id}
                   style={{
                     padding: '12px 14px',
-                    backgroundColor: '#f8fafc',
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     display: 'flex',
                     alignItems: 'center',
@@ -1156,7 +1156,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   }}
                 >
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1177DE' }}>
                       {conn.patient_name} <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 400 }}>({conn.gender}, {conn.age} yrs)</span>
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: 2 }}>
@@ -1173,7 +1173,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       disabled={actionLoading}
                       style={{
                         padding: '6px 12px',
-                        backgroundColor: '#16a34a',
+                        backgroundColor: '#1177DE',
                         color: '#ffffff',
                         border: 'none',
                         borderRadius: 6,
@@ -1211,13 +1211,13 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div style={{
           backgroundColor: '#ffffff',
           borderRadius: 12,
-          border: '1px solid #e2e8f0',
+          border: '1px solid #7CB0EA',
           padding: '22px 24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 Recent Patient Activity
               </h3>
               <div style={{ fontSize: '0.775rem', color: '#64748b' }}>
@@ -1237,8 +1237,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   key={idx}
                   style={{
                     padding: '10px 12px',
-                    backgroundColor: '#f8fafc',
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     display: 'flex',
                     alignItems: 'center',
@@ -1251,8 +1251,8 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       width: 32,
                       height: 32,
                       borderRadius: 6,
-                      backgroundColor: act.type.includes('Skin') ? '#f0fdfa' : '#fef2f2',
-                      color: act.type.includes('Skin') ? '#0d9488' : '#dc2626',
+                      backgroundColor: act.type.includes('Skin') ? '#EAF3FC' : '#fef2f2',
+                      color: act.type.includes('Skin') ? '#1177DE' : '#dc2626',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center'
@@ -1260,7 +1260,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       {act.type.includes('Skin') ? <FolderHeart size={16} /> : <Activity size={16} />}
                     </div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.825rem', color: '#0f172a' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.825rem', color: '#1177DE' }}>
                         {act.patient_name}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -1286,7 +1286,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 480 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1177DE' }}>
                 Appointment Details
               </h3>
               <button
@@ -1297,11 +1297,11 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
               </button>
             </div>
 
-            <div style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: 8, border: '1px solid #e2e8f0', marginBottom: 16 }}>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>
+            <div style={{ backgroundColor: '#EAF3FC', padding: '14px 16px', borderRadius: 8, border: '1px solid #7CB0EA', marginBottom: 16 }}>
+              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#1177DE', marginBottom: 4 }}>
                 {selectedAppointmentModal.patient_name}
               </div>
-              <div style={{ fontSize: '0.825rem', color: '#0d6efd', fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontSize: '0.825rem', color: '#1177DE', fontWeight: 600, marginBottom: 8 }}>
                 {selectedAppointmentModal.date} @ {selectedAppointmentModal.time}
               </div>
               <div style={{ fontSize: '0.8rem', color: '#475569', marginBottom: 4 }}>
@@ -1318,7 +1318,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   setSelectedAppointmentModal(null);
                   openAppointmentAction('accept', selectedAppointmentModal);
                 }}
-                style={{ padding: '8px 14px', backgroundColor: '#16a34a', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 14px', backgroundColor: '#1177DE', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Accept
               </button>
@@ -1327,7 +1327,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   setSelectedAppointmentModal(null);
                   openAppointmentAction('reschedule', selectedAppointmentModal);
                 }}
-                style={{ padding: '8px 14px', backgroundColor: '#0d6efd', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 14px', backgroundColor: '#1177DE', color: '#ffffff', border: 'none', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Suggest New Time
               </button>
@@ -1342,7 +1342,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
               </button>
               <button
                 onClick={() => setSelectedAppointmentModal(null)}
-                style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                style={{ padding: '8px 14px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               >
                 Close
               </button>
@@ -1357,7 +1357,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
       {actionModal && (
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: 440 }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 10px', color: '#0f172a' }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 10px', color: '#1177DE' }}>
               {actionModal.type === 'accept' && 'Confirm Appointment Acceptance'}
               {actionModal.type === 'reject' && 'Decline Appointment'}
               {actionModal.type === 'reschedule' && 'Propose Alternate Appointment Slot'}
@@ -1377,7 +1377,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     rows={3}
                     value={actionFormData.doctorNotes}
                     onChange={(e) => setActionFormData({ ...actionFormData, doctorNotes: e.target.value })}
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                   />
                 </div>
               )}
@@ -1393,7 +1393,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     placeholder="e.g. Schedule fully booked, requires urgent in-person ER evaluation, etc."
                     value={actionFormData.rejectionReason}
                     onChange={(e) => setActionFormData({ ...actionFormData, rejectionReason: e.target.value })}
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                   />
                 </div>
               )}
@@ -1409,7 +1409,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       required
                       value={actionFormData.suggestedDate}
                       onChange={(e) => setActionFormData({ ...actionFormData, suggestedDate: e.target.value })}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                     />
                   </div>
 
@@ -1420,7 +1420,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                     <select
                       value={actionFormData.suggestedTime}
                       onChange={(e) => setActionFormData({ ...actionFormData, suggestedTime: e.target.value })}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                     >
                       <option value="09:00 AM">09:00 AM</option>
                       <option value="10:00 AM">10:00 AM</option>
@@ -1440,7 +1440,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                       placeholder="Doctor note regarding reason for suggested time..."
                       value={actionFormData.doctorNotes}
                       onChange={(e) => setActionFormData({ ...actionFormData, doctorNotes: e.target.value })}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #cbd5e1' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #7CB0EA' }}
                     />
                   </div>
                 </>
@@ -1450,7 +1450,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                 <button
                   type="button"
                   onClick={() => setActionModal(null)}
-                  style={{ padding: '8px 14px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  style={{ padding: '8px 14px', backgroundColor: '#EAF3FC', border: '1px solid #7CB0EA', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                 >
                   Cancel
                 </button>
@@ -1459,7 +1459,7 @@ export default function DoctorOverview({ setActiveTab, onSelectPatient }) {
                   disabled={actionLoading}
                   style={{
                     padding: '8px 16px',
-                    backgroundColor: actionModal.type === 'reject' ? '#ef4444' : actionModal.type === 'accept' ? '#16a34a' : '#0d6efd',
+                    backgroundColor: actionModal.type === 'reject' ? '#ef4444' : '#1177DE',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: 6,

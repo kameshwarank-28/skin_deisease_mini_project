@@ -76,7 +76,7 @@ export default function TopHeader({
       style={{
         height: 64,
         backgroundColor: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        borderBottom: '1px solid #7CB0EA',
         padding: '0 24px',
         display: 'flex',
         alignItems: 'center',
@@ -84,7 +84,7 @@ export default function TopHeader({
         position: 'sticky',
         top: 0,
         zIndex: 1020,
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
+        boxShadow: '0 1px 4px rgba(47, 79, 79, 0.05)'
       }}
     >
       {/* Left: Mobile Drawer Trigger / Desktop Toggle + Page Title + Breadcrumb */}
@@ -103,10 +103,10 @@ export default function TopHeader({
           title="Toggle Navigation"
           style={{
             background: 'none',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #7CB0EA',
             borderRadius: 6,
             padding: '6px 8px',
-            color: '#475569',
+            color: '#1177DE',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -114,12 +114,12 @@ export default function TopHeader({
             transition: 'all 0.15s ease'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#f1f5f9';
-            e.currentTarget.style.color = '#0f172a';
+            e.currentTarget.style.backgroundColor = '#EAF3FC';
+            e.currentTarget.style.color = '#1177DE';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = '#475569';
+            e.currentTarget.style.color = '#1177DE';
           }}
         >
           <Menu size={20} />
@@ -128,16 +128,16 @@ export default function TopHeader({
         {/* Title & Breadcrumbs */}
         <div>
           {/* Breadcrumb */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.725rem', color: '#64748b', fontWeight: 500 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.725rem', color: '#5b7979', fontWeight: 500 }}>
             <span>DermAI</span>
             <span>/</span>
             <span>{currentPage.breadcrumb}</span>
             <span>/</span>
-            <span style={{ color: '#0d6efd', fontWeight: 600 }}>{currentPage.title}</span>
+            <span style={{ color: '#1177DE', fontWeight: 600 }}>{currentPage.title}</span>
           </div>
 
           {/* Heading */}
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: 0, lineHeight: 1.2 }}>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1177DE', margin: 0, lineHeight: 1.2 }}>
             {currentPage.title}
           </h2>
         </div>
@@ -151,11 +151,11 @@ export default function TopHeader({
             onClick={() => setActiveTab('diagnose')}
             className="header-quick-scan-btn"
             style={{
-              backgroundColor: '#e7f1ff',
-              color: '#0d6efd',
-              border: '1px solid #b6d4fe',
+              backgroundColor: '#10254C',
+              color: '#ffffff',
+              border: '1px solid #1177DE',
               borderRadius: 6,
-              padding: '6px 14px',
+              padding: '7px 15px',
               fontSize: '0.825rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -165,12 +165,14 @@ export default function TopHeader({
               transition: 'all 0.15s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#0d6efd';
+              e.currentTarget.style.backgroundColor = '#1177DE';
+              e.currentTarget.style.borderColor = '#1177DE';
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#e7f1ff';
-              e.currentTarget.style.color = '#0d6efd';
+              e.currentTarget.style.backgroundColor = '#1177DE';
+              e.currentTarget.style.borderColor = '#1177DE';
+              e.currentTarget.style.color = '#ffffff';
             }}
           >
             <Sparkles size={15} />
@@ -184,11 +186,11 @@ export default function TopHeader({
             onClick={() => setActiveTab('doctor_appointments')}
             className="header-quick-scan-btn"
             style={{
-              backgroundColor: '#ecfdf5',
-              color: '#059669',
-              border: '1px solid #a7f3d0',
+              backgroundColor: '#10254C',
+              color: '#ffffff',
+              border: '1px solid #1177DE',
               borderRadius: 6,
-              padding: '6px 14px',
+              padding: '7px 15px',
               fontSize: '0.825rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -198,12 +200,14 @@ export default function TopHeader({
               transition: 'all 0.15s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#059669';
+              e.currentTarget.style.backgroundColor = '#1177DE';
+              e.currentTarget.style.borderColor = '#1177DE';
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#ecfdf5';
-              e.currentTarget.style.color = '#059669';
+              e.currentTarget.style.backgroundColor = '#1177DE';
+              e.currentTarget.style.borderColor = '#1177DE';
+              e.currentTarget.style.color = '#ffffff';
             }}
           >
             <CalendarDays size={15} />
@@ -220,9 +224,9 @@ export default function TopHeader({
             width: 38,
             height: 38,
             borderRadius: '50%',
-            backgroundColor: activeTab === 'notifications' ? '#e7f1ff' : '#f8fafc',
-            border: '1px solid #e2e8f0',
-            color: activeTab === 'notifications' ? '#0d6efd' : '#475569',
+            backgroundColor: activeTab === 'notifications' ? '#EAF3FC' : '#ffffff',
+            border: `1px solid ${activeTab === 'notifications' ? '#1177DE' : '#7CB0EA'}`,
+            color: activeTab === 'notifications' ? '#1177DE' : '#1177DE',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -230,12 +234,12 @@ export default function TopHeader({
             transition: 'all 0.15s ease'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#f1f5f9';
-            e.currentTarget.style.borderColor = '#cbd5e1';
+            e.currentTarget.style.backgroundColor = '#EAF3FC';
+            e.currentTarget.style.borderColor = '#448EE2';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = activeTab === 'notifications' ? '#e7f1ff' : '#f8fafc';
-            e.currentTarget.style.borderColor = '#e2e8f0';
+            e.currentTarget.style.backgroundColor = activeTab === 'notifications' ? '#EAF3FC' : '#ffffff';
+            e.currentTarget.style.borderColor = activeTab === 'notifications' ? '#1177DE' : '#7CB0EA';
           }}
         >
           <Bell size={18} />
@@ -269,8 +273,8 @@ export default function TopHeader({
               display: 'flex',
               alignItems: 'center',
               gap: 9,
-              backgroundColor: dropdownOpen ? '#f1f5f9' : '#f8fafc',
-              border: '1px solid #e2e8f0',
+              backgroundColor: dropdownOpen ? '#EAF3FC' : '#ffffff',
+              border: '1px solid #7CB0EA',
               borderRadius: 24,
               padding: '4px 10px 4px 5px',
               cursor: 'pointer',
@@ -283,7 +287,7 @@ export default function TopHeader({
                 width: 30,
                 height: 30,
                 borderRadius: '50%',
-                backgroundColor: '#0d6efd',
+                backgroundColor: '#1177DE',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
@@ -296,11 +300,11 @@ export default function TopHeader({
             </div>
 
             {/* User Name */}
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e293b' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1177DE' }}>
               {userName}
             </span>
 
-            <ChevronDown size={14} style={{ color: '#64748b' }} />
+            <ChevronDown size={14} style={{ color: '#5b7979' }} />
           </button>
 
           {/* Dropdown Menu */}
@@ -313,19 +317,19 @@ export default function TopHeader({
                 width: 230,
                 backgroundColor: '#ffffff',
                 borderRadius: 8,
-                border: '1px solid #e2e8f0',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #7CB0EA',
+                boxShadow: '0 10px 25px rgba(47, 79, 79, 0.15)',
                 padding: '6px 0',
                 zIndex: 1100,
                 animation: 'fadeIn 0.15s ease'
               }}
             >
               {/* Dropdown User Info Header */}
-              <div style={{ padding: '10px 16px', borderBottom: '1px solid #f1f5f9' }}>
-                <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0f172a' }}>
+              <div style={{ padding: '10px 16px', borderBottom: '1px solid #EAF3FC' }}>
+                <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1177DE' }}>
                   {userName}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ fontSize: '0.75rem', color: '#5b7979', marginTop: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {userEmail}
                 </div>
                 <div style={{ marginTop: 6 }}>
@@ -355,10 +359,10 @@ export default function TopHeader({
                   cursor: 'pointer',
                   textAlign: 'left'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EAF3FC'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
-                <User size={16} style={{ color: '#0d6efd' }} />
+                <User size={16} style={{ color: '#1177DE' }} />
                 <span>My Health Profile</span>
               </button>
 
@@ -381,14 +385,14 @@ export default function TopHeader({
                   cursor: 'pointer',
                   textAlign: 'left'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EAF3FC'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <Settings size={16} style={{ color: '#64748b' }} />
                 <span>Account Settings</span>
               </button>
 
-              <div style={{ height: 1, backgroundColor: '#f1f5f9', margin: '4px 0' }} />
+              <div style={{ height: 1, backgroundColor: '#EAF3FC', margin: '4px 0' }} />
 
               <button
                 onClick={() => {

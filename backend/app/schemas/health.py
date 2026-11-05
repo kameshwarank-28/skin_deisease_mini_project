@@ -238,12 +238,17 @@ class ConsultationCreate(BaseModel):
     expected_review_date: Optional[datetime.datetime] = None
 
 class ConsultationUpdate(BaseModel):
+    doctor_name: Optional[str] = None
+    clinic_name: Optional[str] = None
+    consultation_date: Optional[datetime.datetime] = None
     doctor_diagnosis: Optional[str] = None
+    diagnosis: Optional[str] = None
     clinical_observations: Optional[str] = None
     recommendations: Optional[str] = None
     consultation_notes: Optional[str] = None
     follow_up_instructions: Optional[str] = None
     follow_up_date: Optional[datetime.datetime] = None
+    expected_review_date: Optional[datetime.datetime] = None
 
 class ConsultationResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -330,10 +335,12 @@ class AppointmentCreate(BaseModel):
     reminder_advance_hours: int = 24
 
 class AppointmentUpdate(BaseModel):
+    doctor_id: Optional[int] = None
     doctor_or_clinic: Optional[str] = None
     appointment_date: Optional[datetime.datetime] = None
     appointment_time: Optional[str] = None
     purpose_or_notes: Optional[str] = None
+    reason_for_visit: Optional[str] = None
     reminder_advance_hours: Optional[int] = None
     status: Optional[str] = None
     consultation_id: Optional[int] = None
@@ -347,13 +354,27 @@ class AppointmentRejectRequest(BaseModel):
     doctor_notes: Optional[str] = None
 
 class AppointmentRescheduleRequest(BaseModel):
-    suggested_date: str = Field(..., min_length=4, description="Suggested date (YYYY-MM-DD)")
-    suggested_time: str = Field(..., min_length=1, description="Suggested time (e.g. 10:30 AM)")
+    suggested_date: Optional[str] = None
+    suggested_time: Optional[str] = None
+    appointment_date: Optional[str] = None
+    appointment_time: Optional[str] = None
+    new_date: Optional[str] = None
+    new_time: Optional[str] = None
+    preferred_date: Optional[str] = None
+    preferred_time: Optional[str] = None
     message: Optional[str] = None
     doctor_notes: Optional[str] = None
+    reason: Optional[str] = None
+    notes: Optional[str] = None
+
+class AppointmentCancelRequest(BaseModel):
+    cancellation_reason: Optional[str] = None
+    reason: Optional[str] = None
+    notes: Optional[str] = None
 
 class AppointmentPatientResponseRequest(BaseModel):
-    response: str = Field(..., description="'accept' to confirm the suggested time, 'decline' to decline")
+    response: Optional[str] = Field(None, description="'accept' to confirm the suggested time, 'decline' to decline")
+    accept_proposal: Optional[bool] = None
     patient_notes: Optional[str] = None
 
 class AppointmentDoctorAction(BaseModel):

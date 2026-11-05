@@ -63,21 +63,21 @@ export default function SkinTimelineView({ setActiveTab }) {
   const getEventBadge = (type) => {
     switch (type) {
       case 'skin_record':
-        return { label: 'Skin Photo', color: '#0d6efd', bg: '#e7f1ff', icon: Camera };
+        return { label: 'Skin Photo', color: '#1177DE', bg: '#EAF3FC', icon: Camera };
       case 'ai_classification':
-        return { label: 'AI Diagnostic', color: '#2563eb', bg: '#dbeafe', icon: Sparkles };
+        return { label: 'AI Diagnostic', color: '#1177DE', bg: '#dbeafe', icon: Sparkles };
       case 'symptom':
         return { label: 'Symptom Log', color: '#b45309', bg: '#fef3c7', icon: Activity };
       case 'consultation':
         return { label: 'Doctor Visit', color: '#6d28d9', bg: '#ede9fe', icon: Stethoscope };
       case 'treatment_start':
-        return { label: 'Treatment', color: '#15803d', bg: '#dcfce7', icon: Pill };
+        return { label: 'Treatment', color: '#1177DE', bg: '#DCEAF8', icon: Pill };
       case 'appointment':
-        return { label: 'Appointment', color: '#0284c7', bg: '#e0f2fe', icon: CalendarDays };
+        return { label: 'Appointment', color: '#1177DE', bg: '#e0f2fe', icon: CalendarDays };
       case 'image_comparison':
         return { label: 'Lesion Comparison', color: '#4338ca', bg: '#e0e7ff', icon: GitCompare };
       default:
-        return { label: 'Event', color: '#475569', bg: '#f1f5f9', icon: History };
+        return { label: 'Event', color: '#475569', bg: '#EAF3FC', icon: History };
     }
   };
 
@@ -105,7 +105,7 @@ export default function SkinTimelineView({ setActiveTab }) {
       {/* Top Banner */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Skin Health Progress Timeline
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -119,7 +119,7 @@ export default function SkinTimelineView({ setActiveTab }) {
           style={{
             padding: '7px 14px',
             backgroundColor: '#ffffff',
-            border: '1px solid #cbd5e1',
+            border: '1px solid #7CB0EA',
             borderRadius: 6,
             fontSize: '0.8rem',
             fontWeight: 600,
@@ -153,12 +153,12 @@ export default function SkinTimelineView({ setActiveTab }) {
             style={{
               padding: '6px 12px',
               borderRadius: 6,
-              border: filterType === f.key ? '1px solid #0d6efd' : '1px solid #e2e8f0',
+              border: filterType === f.key ? '1px solid #1177DE' : '1px solid #7CB0EA',
               fontSize: '0.8rem',
               fontWeight: 600,
               cursor: 'pointer',
-              backgroundColor: filterType === f.key ? '#eff6ff' : '#ffffff',
-              color: filterType === f.key ? '#0d6efd' : '#64748b',
+              backgroundColor: filterType === f.key ? '#EAF3FC' : '#ffffff',
+              color: filterType === f.key ? '#1177DE' : '#64748b',
               transition: 'all 0.15s ease'
             }}
           >
@@ -208,7 +208,7 @@ export default function SkinTimelineView({ setActiveTab }) {
       {loading ? (
         <div className="project-card" style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-            <RefreshCw size={26} className="animate-spin" color="#0d6efd" />
+            <RefreshCw size={26} className="animate-spin" color="#1177DE" />
           </div>
           <div style={{ fontWeight: 600, color: '#334155' }}>Loading chronological timeline...</div>
         </div>
@@ -218,7 +218,7 @@ export default function SkinTimelineView({ setActiveTab }) {
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
             <History size={46} color="#94a3b8" />
           </div>
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: '0 0 6px' }}>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1177DE', margin: '0 0 6px' }}>
             Your Skin Health Timeline is Empty
           </h3>
           <p style={{ fontSize: '0.875rem', color: '#64748b', maxWidth: 460, margin: '0 auto 20px' }}>
@@ -256,7 +256,7 @@ export default function SkinTimelineView({ setActiveTab }) {
         </div>
       ) : (
         <div className="project-card" style={{ padding: '24px 20px' }}>
-          <div className="timeline" style={{ position: 'relative', paddingLeft: 24, borderLeft: '2px solid #e2e8f0' }}>
+          <div className="timeline" style={{ position: 'relative', paddingLeft: 24, borderLeft: '2px solid #7CB0EA' }}>
             {filteredEvents.map(evt => {
               const badge = getEventBadge(evt.event_type);
               const IconComp = badge.icon;
@@ -273,7 +273,7 @@ export default function SkinTimelineView({ setActiveTab }) {
                     borderRadius: '50%',
                     backgroundColor: badge.color,
                     border: '3px solid #ffffff',
-                    boxShadow: '0 0 0 2px #e2e8f0',
+                    boxShadow: '0 0 0 2px #7CB0EA',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -282,7 +282,7 @@ export default function SkinTimelineView({ setActiveTab }) {
                   {/* Event Card */}
                   <div style={{
                     background: '#ffffff',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     padding: '16px 18px',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
@@ -312,7 +312,7 @@ export default function SkinTimelineView({ setActiveTab }) {
                             gap: 3,
                             fontSize: '0.75rem',
                             color: '#64748b',
-                            backgroundColor: '#f1f5f9',
+                            backgroundColor: '#EAF3FC',
                             padding: '2px 6px',
                             borderRadius: 4
                           }}>
@@ -328,13 +328,13 @@ export default function SkinTimelineView({ setActiveTab }) {
                     </div>
 
                     {/* Event Title */}
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
                       {evt.title}
                     </h4>
 
                     {/* Subtitle */}
                     {evt.subtitle && (
-                      <div style={{ fontSize: '0.85rem', color: '#0d6efd', fontWeight: 600, marginBottom: 6 }}>
+                      <div style={{ fontSize: '0.85rem', color: '#1177DE', fontWeight: 600, marginBottom: 6 }}>
                         {evt.subtitle}
                       </div>
                     )}
@@ -348,25 +348,25 @@ export default function SkinTimelineView({ setActiveTab }) {
 
                     {/* Image Preview (if present) */}
                     {evt.image_url && (
-                      <div style={{ marginTop: 8, marginBottom: 10, maxWidth: 220, borderRadius: 6, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                      <div style={{ marginTop: 8, marginBottom: 10, maxWidth: 220, borderRadius: 6, overflow: 'hidden', border: '1px solid #7CB0EA' }}>
                         <img
                           src={getImageUrl(evt.image_url)}
                           alt={evt.title}
-                          style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 150, objectFit: 'contain', backgroundColor: '#f8fafc' }}
+                          style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 150, objectFit: 'contain', backgroundColor: '#EAF3FC' }}
                         />
                       </div>
                     )}
 
                     {/* Link to view record module */}
                     {evt.link_tab && setActiveTab && (
-                      <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed #f1f5f9' }}>
+                      <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px dashed #EAF3FC' }}>
                         <button
                           type="button"
                           onClick={() => setActiveTab(evt.link_tab)}
                           style={{
                             background: 'none',
                             border: 'none',
-                            color: '#0d6efd',
+                            color: '#1177DE',
                             fontSize: '0.78rem',
                             fontWeight: 600,
                             padding: 0,

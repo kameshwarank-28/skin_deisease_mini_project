@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, User, Mail, Phone, AlertCircle, CheckCircle2, ArrowRight, ShieldCheck, Stethoscope, UserCheck, Award, Building, BookOpen } from 'lucide-react';
 import api from '../services/api';
+import LoginDoodleBackground from './LoginDoodleBackground';
 
 export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess }) {
   const [role, setRole] = useState('patient'); // 'patient' | 'doctor'
@@ -137,26 +138,33 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
   return (
     <div style={{
       minHeight: '100vh',
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f1f5f9',
+      backgroundColor: '#C8DEF7',
       padding: '24px 16px',
+      overflow: 'hidden',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
     }}>
+      {/* Dynamic Doodle Background: Patient Skin Care vs Doctor Clinical */}
+      <LoginDoodleBackground role={role} />
+
       <div style={{
+        position: 'relative',
+        zIndex: 10,
         width: '100%',
         maxWidth: role === 'doctor' ? 560 : 480,
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04)',
-        border: '1px solid #e2e8f0',
+        boxShadow: '0 12px 30px -5px rgba(16, 37, 76, 0.15), 0 8px 14px -6px rgba(16, 37, 76, 0.08)',
+        border: '1.5px solid #7CB0EA',
         overflow: 'hidden',
         transition: 'max-width 0.25s ease'
       }}>
         {/* Top Header Banner */}
         <div style={{
-          backgroundColor: '#0b1329',
+          backgroundColor: '#10254C',
           padding: '22px 24px',
           textAlign: 'center',
           color: '#ffffff'
@@ -169,7 +177,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
             height: 44,
             borderRadius: 10,
             backgroundColor: 'rgba(13, 110, 253, 0.15)',
-            color: '#38bdf8',
+            color: '#448EE2',
             marginBottom: 8,
             border: '1px solid rgba(56, 189, 248, 0.3)'
           }}>
@@ -212,7 +220,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: 8,
-              backgroundColor: '#f1f5f9',
+              backgroundColor: '#EAF3FC',
               padding: 4,
               borderRadius: 8
             }}>
@@ -230,8 +238,8 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                   fontSize: '0.85rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: role === 'patient' ? '#ffffff' : 'transparent',
-                  color: role === 'patient' ? '#0d6efd' : '#64748b',
+                  backgroundColor: role === 'patient' ? '#1177DE' : 'transparent',
+                  color: role === 'patient' ? '#ffffff' : '#4B6B94',
                   boxShadow: role === 'patient' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                   transition: 'all 0.15s ease'
                 }}
@@ -254,8 +262,8 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                   fontSize: '0.85rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: role === 'doctor' ? '#0b1329' : 'transparent',
-                  color: role === 'doctor' ? '#38bdf8' : '#64748b',
+                  backgroundColor: role === 'doctor' ? '#1177DE' : 'transparent',
+                  color: role === 'doctor' ? '#ffffff' : '#4B6B94',
                   boxShadow: role === 'doctor' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none',
                   transition: 'all 0.15s ease'
                 }}
@@ -290,10 +298,10 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
               alignItems: 'center',
               gap: 10,
               padding: '10px 14px',
-              backgroundColor: '#f0fdf4',
-              border: '1px solid #bbf7d0',
+              backgroundColor: '#EAF3FC',
+              border: '1px solid #7CB0EA',
               borderRadius: 8,
-              color: '#15803d',
+              color: '#1177DE',
               fontSize: '0.825rem',
               marginBottom: 16
             }}>
@@ -318,7 +326,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   outline: 'none',
                   boxSizing: 'border-box',
@@ -343,7 +351,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -366,7 +374,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     outline: 'none',
                     boxSizing: 'border-box',
@@ -390,7 +398,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   outline: 'none',
                   boxSizing: 'border-box',
@@ -402,8 +410,8 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
             {/* DOCTOR SPECIFIC FIELDS */}
             {role === 'doctor' && (
               <div style={{
-                backgroundColor: '#f8fafc',
-                border: '1px solid #e2e8f0',
+                backgroundColor: '#EAF3FC',
+                border: '1px solid #7CB0EA',
                 borderRadius: 8,
                 padding: '14px',
                 marginBottom: 14
@@ -411,13 +419,13 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                 <div style={{
                   fontSize: '0.8rem',
                   fontWeight: 700,
-                  color: '#0f172a',
+                  color: '#1177DE',
                   marginBottom: 10,
                   display: 'flex',
                   alignItems: 'center',
                   gap: 6
                 }}>
-                  <Award size={16} style={{ color: '#0d6efd' }} />
+                  <Award size={16} style={{ color: '#1177DE' }} />
                   <span>Clinical & Professional Credentials</span>
                 </div>
 
@@ -436,7 +444,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                         width: '100%',
                         padding: '8px 10px',
                         fontSize: '0.825rem',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 6,
                         backgroundColor: '#ffffff',
                         boxSizing: 'border-box'
@@ -458,7 +466,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                         width: '100%',
                         padding: '8px 10px',
                         fontSize: '0.825rem',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 6,
                         backgroundColor: '#ffffff',
                         boxSizing: 'border-box'
@@ -482,7 +490,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                         width: '100%',
                         padding: '8px 10px',
                         fontSize: '0.825rem',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 6,
                         backgroundColor: '#ffffff',
                         boxSizing: 'border-box'
@@ -504,7 +512,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                         width: '100%',
                         padding: '8px 10px',
                         fontSize: '0.825rem',
-                        border: '1px solid #cbd5e1',
+                        border: '1px solid #7CB0EA',
                         borderRadius: 6,
                         backgroundColor: '#ffffff',
                         boxSizing: 'border-box'
@@ -528,7 +536,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                       width: '100%',
                       padding: '8px 10px',
                       fontSize: '0.825rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       backgroundColor: '#ffffff',
                       boxSizing: 'border-box'
@@ -555,7 +563,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                       width: '100%',
                       padding: '9px 34px 9px 12px',
                       fontSize: '0.875rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -597,7 +605,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
                       width: '100%',
                       padding: '9px 34px 9px 12px',
                       fontSize: '0.875rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #7CB0EA',
                       borderRadius: 6,
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -631,44 +639,43 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
               disabled={loading}
               style={{
                 width: '100%',
-                padding: '11px 16px',
-                backgroundColor: role === 'doctor' ? '#0b1329' : '#0d6efd',
-                color: role === 'doctor' ? '#38bdf8' : '#ffffff',
-                border: 'none',
+                padding: '12px 16px',
+                backgroundColor: '#10254C',
+                color: '#ffffff',
+                border: '1px solid #1177DE',
                 borderRadius: 8,
-                fontSize: '0.925rem',
+                fontSize: '0.95rem',
                 fontWeight: 600,
                 cursor: loading ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: role === 'doctor'
-                  ? '0 2px 4px rgba(11, 19, 41, 0.3)'
-                  : '0 2px 4px rgba(13, 110, 253, 0.2)',
-                transition: 'background-color 0.2s'
+                boxShadow: '0 2px 6px rgba(47, 79, 79, 0.25)',
+                transition: 'background-color 0.2s, border-color 0.2s'
               }}
               onMouseEnter={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.backgroundColor = role === 'doctor' ? '#172554' : '#0b5ed7';
+                  e.currentTarget.style.backgroundColor = '#1177DE';
+                  e.currentTarget.style.borderColor = '#1177DE';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.backgroundColor = role === 'doctor' ? '#0b1329' : '#0d6efd';
+                  e.currentTarget.style.backgroundColor = '#1177DE';
+                  e.currentTarget.style.borderColor = '#1177DE';
                 }
               }}
             >
-              {loading ? 'Creating Account...' : `Register as ${role === 'doctor' ? 'Doctor' : 'Patient'}`}
-              {!loading && <ArrowRight size={18} />}
-            </button>
+              {loading ? 'Creating Account...' : `Register as ${role === 'doctor' ? 'Dermatologist' : 'Patient'}`}
+              {!loading && <ArrowRight size={18} />}</button>
           </form>
 
           {/* Back to Login Link */}
           <div style={{
             marginTop: 18,
             paddingTop: 14,
-            borderTop: '1px solid #f1f5f9',
+            borderTop: '1px solid #EAF3FC',
             textAlign: 'center',
             fontSize: '0.85rem',
             color: '#64748b'
@@ -680,7 +687,7 @@ export default function RegisterPage({ onSwitchToLogin, onRegistrationSuccess })
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#0d6efd',
+                color: '#1177DE',
                 fontWeight: 600,
                 cursor: 'pointer',
                 padding: 0,

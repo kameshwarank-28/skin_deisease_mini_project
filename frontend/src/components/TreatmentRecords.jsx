@@ -93,9 +93,9 @@ export default function TreatmentRecords({ setActiveTab }) {
           borderRadius: 12,
           fontSize: '0.75rem',
           fontWeight: 700,
-          backgroundColor: '#f1f5f9',
+          backgroundColor: '#EAF3FC',
           color: '#475569',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #7CB0EA'
         }}>
           <CheckCircle size={12} /> Completed
         </span>
@@ -131,9 +131,9 @@ export default function TreatmentRecords({ setActiveTab }) {
           borderRadius: 12,
           fontSize: '0.75rem',
           fontWeight: 700,
-          backgroundColor: '#dcfce7',
-          color: '#15803d',
-          border: '1px solid #bbf7d0'
+          backgroundColor: '#DCEAF8',
+          color: '#1177DE',
+          border: '1px solid #7CB0EA'
         }}>
           <Activity size={12} /> Treatment Ongoing
         </span>
@@ -150,9 +150,9 @@ export default function TreatmentRecords({ setActiveTab }) {
         borderRadius: 12,
         fontSize: '0.75rem',
         fontWeight: 700,
-        backgroundColor: '#eff6ff',
-        color: '#1d4ed8',
-        border: '1px solid #bfdbfe'
+        backgroundColor: '#EAF3FC',
+        color: '#1177DE',
+        border: '1px solid #7CB0EA'
       }}>
         <FileText size={12} /> Treatment Prescribed
       </span>
@@ -187,7 +187,7 @@ export default function TreatmentRecords({ setActiveTab }) {
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 20 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: 0 }}>
               Dermatological Treatment & Regimen Monitoring
             </h2>
             <span style={{
@@ -195,12 +195,12 @@ export default function TreatmentRecords({ setActiveTab }) {
               alignItems: 'center',
               gap: 4,
               padding: '3px 8px',
-              backgroundColor: '#eff6ff',
-              color: '#0d6efd',
+              backgroundColor: '#EAF3FC',
+              color: '#1177DE',
               borderRadius: 12,
               fontSize: '0.725rem',
               fontWeight: 600,
-              border: '1px solid #bfdbfe'
+              border: '1px solid #7CB0EA'
             }}>
               <Lock size={12} />
               <span>Verified Doctor Prescriptions (Read-Only)</span>
@@ -217,7 +217,7 @@ export default function TreatmentRecords({ setActiveTab }) {
           style={{
             padding: '7px 14px',
             backgroundColor: '#ffffff',
-            border: '1px solid #cbd5e1',
+            border: '1px solid #7CB0EA',
             borderRadius: 6,
             fontSize: '0.8rem',
             fontWeight: 600,
@@ -248,12 +248,12 @@ export default function TreatmentRecords({ setActiveTab }) {
             style={{
               padding: '6px 14px',
               borderRadius: 6,
-              border: filter === tab.key ? '1px solid #0d6efd' : '1px solid #e2e8f0',
+              border: filter === tab.key ? '1px solid #1177DE' : '1px solid #7CB0EA',
               fontSize: '0.8rem',
               fontWeight: 600,
               cursor: 'pointer',
-              backgroundColor: filter === tab.key ? '#eff6ff' : '#ffffff',
-              color: filter === tab.key ? '#0d6efd' : '#64748b',
+              backgroundColor: filter === tab.key ? '#EAF3FC' : '#ffffff',
+              color: filter === tab.key ? '#1177DE' : '#64748b',
               transition: 'all 0.15s ease'
             }}
           >
@@ -285,15 +285,15 @@ export default function TreatmentRecords({ setActiveTab }) {
       {loading ? (
         <div className="project-card" style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-            <RefreshCw size={26} className="animate-spin" color="#0d6efd" />
+            <RefreshCw size={26} className="animate-spin" color="#1177DE" />
           </div>
           <div style={{ fontWeight: 600, color: '#334155' }}>Loading prescribed treatments...</div>
         </div>
       ) : filteredTreatments.length === 0 ? (
         /* Empty State */
         <div className="project-card" style={{ textAlign: 'center', padding: '50px 24px', color: '#64748b' }}>
-          <Pill size={42} style={{ color: '#cbd5e1', marginBottom: 14 }} />
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: '0 0 6px' }}>
+          <Pill size={42} style={{ color: '#7CB0EA', marginBottom: 14 }} />
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1177DE', margin: '0 0 6px' }}>
             No treatment plan has been recorded by your dermatologist.
           </h3>
           <p style={{ fontSize: '0.875rem', color: '#64748b', maxWidth: 480, margin: '0 auto 20px', lineHeight: 1.5 }}>
@@ -335,7 +335,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                   borderLeft: `4px solid ${
                     (t.treatment_status || '').toUpperCase().includes('DISCONTINUED') ? '#ef4444' :
                     (t.treatment_status || '').toUpperCase().includes('COMPLETED') ? '#64748b' :
-                    (t.treatment_status || '').toUpperCase().includes('REVIEW') ? '#f59e0b' : '#0d6efd'
+                    (t.treatment_status || '').toUpperCase().includes('REVIEW') ? '#f59e0b' : '#1177DE'
                   }`
                 }}
               >
@@ -343,7 +343,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 14 }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                      <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1177DE', margin: 0 }}>
                         {t.treatment_name}
                       </h3>
                       {getStatusBadge(t.treatment_status, t.is_active)}
@@ -351,7 +351,7 @@ export default function TreatmentRecords({ setActiveTab }) {
 
                     {/* Prescribing Doctor Information */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, fontSize: '0.825rem', color: '#475569' }}>
-                      <Stethoscope size={14} style={{ color: '#0d6efd' }} />
+                      <Stethoscope size={14} style={{ color: '#1177DE' }} />
                       <span>
                         Prescribed by: <strong>{t.prescribing_doctor_name || 'Treating Dermatologist'}</strong>
                       </span>
@@ -365,8 +365,8 @@ export default function TreatmentRecords({ setActiveTab }) {
 
                   {/* Classification Type Tag */}
                   <span style={{
-                    backgroundColor: '#f1f5f9',
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
                     color: '#334155',
                     padding: '4px 10px',
                     borderRadius: 6,
@@ -383,9 +383,9 @@ export default function TreatmentRecords({ setActiveTab }) {
                   gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
                   gap: 16,
                   padding: '14px 16px',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: '#EAF3FC',
                   borderRadius: 8,
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #7CB0EA',
                   marginBottom: 14
                 }}>
                   {/* Prescribed Medication */}
@@ -393,7 +393,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                     <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 2 }}>
                       Prescribed Medication
                     </div>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0f172a' }}>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1177DE' }}>
                       {t.prescribed_medication || t.treatment_name}
                     </div>
                   </div>
@@ -413,8 +413,8 @@ export default function TreatmentRecords({ setActiveTab }) {
                     <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 2 }}>
                       Regimen Duration & Review
                     </div>
-                    <div style={{ fontSize: '0.825rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Calendar size={13} style={{ color: '#0d6efd' }} />
+                    <div style={{ fontSize: '0.825rem', color: '#1177DE', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Calendar size={13} style={{ color: '#1177DE' }} />
                       <span>Start: <strong>{formatDate(t.start_date)}</strong></span>
                     </div>
                     <div style={{ fontSize: '0.775rem', color: '#64748b', marginTop: 2 }}>
@@ -428,7 +428,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                       Clinical Follow-up
                     </div>
                     {t.follow_up_appointment_date ? (
-                      <div style={{ fontSize: '0.825rem', color: '#15803d', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <div style={{ fontSize: '0.825rem', color: '#1177DE', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
                         <CheckCircle2 size={13} />
                         <span>{formatDate(t.follow_up_appointment_date)} {t.follow_up_appointment_time ? `@ ${t.follow_up_appointment_time}` : ''}</span>
                       </div>
@@ -444,15 +444,15 @@ export default function TreatmentRecords({ setActiveTab }) {
                 {(t.doctor_notes || t.notes) && (
                   <div style={{
                     padding: '10px 14px',
-                    backgroundColor: '#eff6ff',
-                    border: '1px solid #bfdbfe',
+                    backgroundColor: '#EAF3FC',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     fontSize: '0.825rem',
                     color: '#1e40af',
                     marginBottom: 14
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Stethoscope size={14} color="#1d4ed8" />
+                      <Stethoscope size={14} color="#1177DE" />
                       <strong>Dermatologist Instructions & Notes:</strong>
                     </div>
                     <div style={{ marginTop: 2, color: '#1e3a8a', fontStyle: 'italic' }}>
@@ -469,7 +469,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                   flexWrap: 'wrap',
                   gap: 10,
                   paddingTop: 10,
-                  borderTop: '1px solid #f1f5f9'
+                  borderTop: '1px solid #EAF3FC'
                 }}>
                   <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
                     Prescribed on {formatDate(t.created_at || t.start_date)} • Official Medical Record
@@ -505,7 +505,7 @@ export default function TreatmentRecords({ setActiveTab }) {
                           onClick={() => setActiveTab('appointments')}
                           style={{
                             padding: '6px 12px',
-                            backgroundColor: '#0d6efd',
+                            backgroundColor: '#1177DE',
                             color: '#ffffff',
                             border: 'none',
                             borderRadius: 6,

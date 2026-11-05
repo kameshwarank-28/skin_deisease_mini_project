@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 
-export default function DoctorConsultationsView() {
+export default function DoctorConsultationsView({ selectedPatientId }) {
   const [patients, setPatients] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ export default function DoctorConsultationsView() {
   const [feedback, setFeedback] = useState(null);
 
   const [formData, setFormData] = useState({
-    patientId: '',
+    patientId: selectedPatientId || '',
     consultationDate: new Date().toISOString().split('T')[0],
     consultationType: 'Dermatological Clinical Review',
     diagnosis: '',
@@ -33,6 +33,13 @@ export default function DoctorConsultationsView() {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (selectedPatientId) {
+      setFormData(prev => ({ ...prev, patientId: selectedPatientId }));
+      setShowAddForm(true);
+    }
+  }, [selectedPatientId]);
 
   const loadData = async () => {
     setLoading(true);
@@ -108,7 +115,7 @@ export default function DoctorConsultationsView() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Clinical Consultations
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -134,9 +141,9 @@ export default function DoctorConsultationsView() {
           padding: '12px 16px',
           borderRadius: 8,
           marginBottom: 20,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           {feedback.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
@@ -146,14 +153,14 @@ export default function DoctorConsultationsView() {
 
       {/* Add Consultation Form Card */}
       {showAddForm && (
-        <div className="project-card" style={{ padding: '24px', marginBottom: 24, border: '1px solid #bfdbfe', backgroundColor: '#fcfdfe' }}>
+        <div className="project-card" style={{ padding: '24px', marginBottom: 24, border: '1px solid #7CB0EA', backgroundColor: '#fcfdfe' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
             <div style={{
               width: 38,
               height: 38,
               borderRadius: 8,
               backgroundColor: '#e0f2fe',
-              color: '#0284c7',
+              color: '#1177DE',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -161,7 +168,7 @@ export default function DoctorConsultationsView() {
               <Stethoscope size={20} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#1177DE' }}>
                 New Clinical Consultation Record
               </h3>
               <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
@@ -185,7 +192,7 @@ export default function DoctorConsultationsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -216,7 +223,7 @@ export default function DoctorConsultationsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -237,7 +244,7 @@ export default function DoctorConsultationsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -259,7 +266,7 @@ export default function DoctorConsultationsView() {
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   backgroundColor: '#ffffff'
                 }}
@@ -280,7 +287,7 @@ export default function DoctorConsultationsView() {
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   backgroundColor: '#ffffff'
                 }}
@@ -302,7 +309,7 @@ export default function DoctorConsultationsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -321,7 +328,7 @@ export default function DoctorConsultationsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -358,7 +365,7 @@ export default function DoctorConsultationsView() {
         </div>
       ) : consultations.length === 0 ? (
         <div className="project-card" style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-          <Stethoscope size={40} style={{ color: '#cbd5e1', marginBottom: 10 }} />
+          <Stethoscope size={40} style={{ color: '#7CB0EA', marginBottom: 10 }} />
           <div style={{ fontWeight: 600, color: '#475569' }}>No Consultations Recorded Yet</div>
           <div style={{ fontSize: '0.825rem', marginBottom: 16 }}>Click "Document Consultation" above to add your first entry.</div>
         </div>
@@ -372,8 +379,8 @@ export default function DoctorConsultationsView() {
                     width: 34,
                     height: 34,
                     borderRadius: '50%',
-                    backgroundColor: '#e7f1ff',
-                    color: '#0d6efd',
+                    backgroundColor: '#EAF3FC',
+                    color: '#1177DE',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -383,7 +390,7 @@ export default function DoctorConsultationsView() {
                     {(c.patient_name || 'P')[0].toUpperCase()}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.975rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.975rem', color: '#1177DE' }}>
                       {c.patient_name || `Patient #${c.patient_id}`}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
@@ -399,7 +406,7 @@ export default function DoctorConsultationsView() {
               </div>
 
               {c.diagnosis && (
-                <div style={{ fontSize: '0.875rem', color: '#1e293b', marginBottom: 8, padding: '6px 10px', backgroundColor: '#f8fafc', borderRadius: 6 }}>
+                <div style={{ fontSize: '0.875rem', color: '#1e293b', marginBottom: 8, padding: '6px 10px', backgroundColor: '#EAF3FC', borderRadius: 6 }}>
                   <strong>Diagnosis / Clinical Assessment:</strong> {c.diagnosis}
                 </div>
               )}
@@ -411,7 +418,7 @@ export default function DoctorConsultationsView() {
               )}
 
               {c.recommendations && (
-                <div style={{ fontSize: '0.825rem', color: '#0d6efd', marginBottom: 6 }}>
+                <div style={{ fontSize: '0.825rem', color: '#1177DE', marginBottom: 6 }}>
                   <strong>Recommendations:</strong> {c.recommendations}
                 </div>
               )}

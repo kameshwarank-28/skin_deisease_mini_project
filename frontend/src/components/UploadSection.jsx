@@ -99,8 +99,8 @@ export default function UploadSection({
           }
         }}
         style={{
-          border: `2px dashed ${isDragging ? '#0d6efd' : '#cbd5e1'}`,
-          background: isDragging ? '#eff6ff' : (previewUrl ? '#ffffff' : '#f8fafc'),
+          border: `2px dashed ${isDragging ? '#1177DE' : '#7CB0EA'}`,
+          background: isDragging ? '#EAF3FC' : (previewUrl ? '#ffffff' : '#EAF3FC'),
           borderRadius: 8,
           padding: previewUrl ? '16px' : '30px 20px',
           textAlign: 'center',
@@ -115,11 +115,11 @@ export default function UploadSection({
         }}
       >
         {previewUrl ? (
-          <div style={{ position: 'relative', width: '100%', maxWidth: 280, borderRadius: 6, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 280, borderRadius: 6, overflow: 'hidden', border: '1px solid #7CB0EA' }}>
             <img
               src={previewUrl}
               alt="Selected skin lesion preview"
-              style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 200, objectFit: 'contain', backgroundColor: '#f1f5f9' }}
+              style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 200, objectFit: 'contain', backgroundColor: '#EAF3FC' }}
             />
             <div style={{
               position: 'absolute',
@@ -147,13 +147,13 @@ export default function UploadSection({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#0284c7'
+              color: '#1177DE'
             }}>
               <UploadCloud size={26} />
             </div>
 
             <div>
-              <p style={{ fontWeight: 700, fontSize: '0.925rem', color: '#0f172a', marginBottom: 2 }}>
+              <p style={{ fontWeight: 700, fontSize: '0.925rem', color: '#1177DE', marginBottom: 2 }}>
                 Click to browse or drag & drop lesion photo here
               </p>
               <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>
@@ -174,8 +174,8 @@ export default function UploadSection({
         <div style={{
           marginTop: 10,
           padding: '8px 12px',
-          backgroundColor: '#f1f5f9',
-          border: '1px solid #e2e8f0',
+          backgroundColor: '#EAF3FC',
+          border: '1px solid #7CB0EA',
           borderRadius: 6,
           display: 'flex',
           alignItems: 'center',
@@ -184,8 +184,8 @@ export default function UploadSection({
           fontSize: '0.8rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            <FileText size={15} style={{ color: '#0d6efd', flexShrink: 0 }} />
-            <span style={{ fontWeight: 600, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <FileText size={15} style={{ color: '#1177DE', flexShrink: 0 }} />
+            <span style={{ fontWeight: 600, color: '#1177DE', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {selectedFile.name}
             </span>
             <span style={{ color: '#64748b', flexShrink: 0 }}>
@@ -202,7 +202,7 @@ export default function UploadSection({
               }}
               style={{
                 background: '#ffffff',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #7CB0EA',
                 borderRadius: 4,
                 padding: '3px 8px',
                 fontSize: '0.725rem',

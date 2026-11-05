@@ -77,7 +77,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
-          <Loader2 size={30} className="animate-spin" color="#0284c7" />
+          <Loader2 size={30} className="animate-spin" color="#1177DE" />
         </div>
         <div style={{ fontSize: '0.95rem', fontWeight: 500 }}>Loading patient requests...</div>
       </div>
@@ -95,9 +95,9 @@ export default function DoctorRequestsView({ setActiveTab }) {
           padding: '12px 18px',
           borderRadius: 8,
           marginBottom: 16,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -117,7 +117,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '20px 24px',
         marginBottom: 24,
         boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
@@ -127,18 +127,18 @@ export default function DoctorRequestsView({ setActiveTab }) {
           alignItems: 'center',
           gap: 6,
           padding: '4px 10px',
-          backgroundColor: '#eff6ff',
-          border: '1px solid #bfdbfe',
+          backgroundColor: '#EAF3FC',
+          border: '1px solid #7CB0EA',
           borderRadius: 20,
           fontSize: '0.75rem',
-          color: '#2563eb',
+          color: '#1177DE',
           fontWeight: 600,
           marginBottom: 8
         }}>
           <UserCheck size={14} />
           <span>Patient Intake & Connection Authorizations</span>
         </div>
-        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#0f172a' }}>
+        <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 4px', color: '#1177DE' }}>
           Patient Connection Requests ({connections.length})
         </h1>
         <p style={{ margin: 0, fontSize: '0.875rem', color: '#64748b' }}>
@@ -150,7 +150,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '16px 20px',
         marginBottom: 20,
         display: 'flex',
@@ -178,7 +178,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer',
-                backgroundColor: filter === f.key ? '#0d6efd' : '#f1f5f9',
+                backgroundColor: filter === f.key ? '#1177DE' : '#EAF3FC',
                 color: filter === f.key ? '#ffffff' : '#475569'
               }}
             >
@@ -195,7 +195,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
             placeholder="Search by patient name or note..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.825rem' }}
+            style={{ width: '100%', padding: '6px 10px 6px 32px', borderRadius: 6, border: '1px solid #7CB0EA', fontSize: '0.825rem' }}
           />
         </div>
       </div>
@@ -204,7 +204,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        border: '1px solid #e2e8f0',
+        border: '1px solid #7CB0EA',
         padding: '22px 24px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
@@ -225,8 +225,8 @@ export default function DoctorRequestsView({ setActiveTab }) {
                   style={{
                     padding: '16px 20px',
                     borderRadius: 10,
-                    border: '1px solid #e2e8f0',
-                    backgroundColor: '#f8fafc',
+                    border: '1px solid #7CB0EA',
+                    backgroundColor: '#EAF3FC',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -239,8 +239,8 @@ export default function DoctorRequestsView({ setActiveTab }) {
                       width: 44,
                       height: 44,
                       borderRadius: '50%',
-                      backgroundColor: '#eff6ff',
-                      color: '#2563eb',
+                      backgroundColor: '#EAF3FC',
+                      color: '#1177DE',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -252,10 +252,10 @@ export default function DoctorRequestsView({ setActiveTab }) {
 
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                        <span style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a' }}>
+                        <span style={{ fontWeight: 700, fontSize: '1rem', color: '#1177DE' }}>
                           {c.patient_name || `Patient #${c.patient_id}`}
                         </span>
-                        <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#e2e8f0', color: '#475569', fontWeight: 600 }}>
+                        <span style={{ fontSize: '0.7rem', padding: '2px 8px', borderRadius: 4, backgroundColor: '#7CB0EA', color: '#475569', fontWeight: 600 }}>
                           PAT-{String(c.patient_id).padStart(4, '0')}
                         </span>
                         <span style={{
@@ -263,8 +263,8 @@ export default function DoctorRequestsView({ setActiveTab }) {
                           padding: '2px 8px',
                           borderRadius: 10,
                           fontWeight: 600,
-                          backgroundColor: isAccepted ? '#dcfce7' : isPending ? '#fef3c7' : '#fee2e2',
-                          color: isAccepted ? '#15803d' : isPending ? '#b45309' : '#b91c1c'
+                          backgroundColor: isAccepted ? '#DCEAF8' : isPending ? '#fef3c7' : '#fee2e2',
+                          color: isAccepted ? '#1177DE' : isPending ? '#b45309' : '#b91c1c'
                         }}>
                           {c.status}
                         </span>
@@ -294,7 +294,7 @@ export default function DoctorRequestsView({ setActiveTab }) {
                           disabled={actionLoading}
                           style={{
                             padding: '8px 16px',
-                            backgroundColor: '#16a34a',
+                            backgroundColor: '#1177DE',
                             color: '#ffffff',
                             border: 'none',
                             borderRadius: 6,
@@ -341,8 +341,8 @@ export default function DoctorRequestsView({ setActiveTab }) {
                         style={{
                           padding: '8px 14px',
                           backgroundColor: '#ffffff',
-                          color: '#0d6efd',
-                          border: '1px solid #bfdbfe',
+                          color: '#1177DE',
+                          border: '1px solid #7CB0EA',
                           borderRadius: 6,
                           fontSize: '0.8rem',
                           fontWeight: 600,

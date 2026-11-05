@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, User, AlertCircle, ArrowRight, ShieldCheck, Stethoscope, UserCheck } from 'lucide-react';
 import api, { setAuthSession } from '../services/api';
+import LoginDoodleBackground from './LoginDoodleBackground';
 
 export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
   const [selectedRole, setSelectedRole] = useState('patient'); // 'patient' | 'doctor'
@@ -42,25 +43,32 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
   return (
     <div style={{
       minHeight: '100vh',
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#f1f5f9',
+      backgroundColor: '#C8DEF7',
       padding: '24px 16px',
+      overflow: 'hidden',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
     }}>
+      {/* Dynamic Doodle Background: Patient Skin Care vs Doctor Clinical */}
+      <LoginDoodleBackground role={selectedRole} />
+
       <div style={{
+        position: 'relative',
+        zIndex: 10,
         width: '100%',
         maxWidth: 440,
         backgroundColor: '#ffffff',
         borderRadius: 12,
-        boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04)',
-        border: '1px solid #e2e8f0',
+        boxShadow: '0 12px 30px -5px rgba(16, 37, 76, 0.15), 0 8px 14px -6px rgba(16, 37, 76, 0.08)',
+        border: '1.5px solid #7CB0EA',
         overflow: 'hidden'
       }}>
         {/* Top Header Banner */}
         <div style={{
-          backgroundColor: '#0b1329',
+          backgroundColor: '#10254C',
           padding: '26px 24px 22px',
           textAlign: 'center',
           color: '#ffffff'
@@ -73,7 +81,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
             height: 48,
             borderRadius: 10,
             backgroundColor: 'rgba(13, 110, 253, 0.15)',
-            color: '#38bdf8',
+            color: '#448EE2',
             marginBottom: 10,
             border: '1px solid rgba(56, 189, 248, 0.3)'
           }}>
@@ -116,7 +124,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: 8,
-              backgroundColor: '#f1f5f9',
+              backgroundColor: '#EAF3FC',
               padding: 4,
               borderRadius: 8
             }}>
@@ -134,8 +142,8 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                   fontSize: '0.85rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: selectedRole === 'patient' ? '#ffffff' : 'transparent',
-                  color: selectedRole === 'patient' ? '#0d6efd' : '#64748b',
+                  backgroundColor: selectedRole === 'patient' ? '#1177DE' : 'transparent',
+                  color: selectedRole === 'patient' ? '#ffffff' : '#4B6B94',
                   boxShadow: selectedRole === 'patient' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                   transition: 'all 0.15s ease'
                 }}
@@ -158,8 +166,8 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                   fontSize: '0.85rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: selectedRole === 'doctor' ? '#0b1329' : 'transparent',
-                  color: selectedRole === 'doctor' ? '#38bdf8' : '#64748b',
+                  backgroundColor: selectedRole === 'doctor' ? '#1177DE' : 'transparent',
+                  color: selectedRole === 'doctor' ? '#ffffff' : '#4B6B94',
                   boxShadow: selectedRole === 'doctor' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none',
                   transition: 'all 0.15s ease'
                 }}
@@ -175,7 +183,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               margin: '0 0 2px',
               fontSize: '1.1rem',
               fontWeight: 600,
-              color: '#0f172a'
+              color: '#1177DE'
             }}>
               {selectedRole === 'patient' ? 'Patient Sign In' : 'Clinician / Doctor Sign In'}
             </h2>
@@ -242,15 +250,15 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                     width: '100%',
                     padding: '10px 12px 10px 38px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     outline: 'none',
                     boxSizing: 'border-box',
                     transition: 'border-color 0.2s',
                     backgroundColor: '#ffffff'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#0d6efd'}
-                  onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+                  onFocus={(e) => e.target.style.borderColor = '#1177DE'}
+                  onBlur={(e) => e.target.style.borderColor = '#7CB0EA'}
                 />
               </div>
             </div>
@@ -288,15 +296,15 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                     width: '100%',
                     padding: '10px 42px 10px 38px',
                     fontSize: '0.9rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 8,
                     outline: 'none',
                     boxSizing: 'border-box',
                     transition: 'border-color 0.2s',
                     backgroundColor: '#ffffff'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#0d6efd'}
-                  onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+                  onFocus={(e) => e.target.style.borderColor = '#1177DE'}
+                  onBlur={(e) => e.target.style.borderColor = '#7CB0EA'}
                 />
                 <button
                   type="button"
@@ -326,9 +334,9 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               style={{
                 width: '100%',
                 padding: '11px 16px',
-                backgroundColor: selectedRole === 'doctor' ? '#0b1329' : '#0d6efd',
-                color: selectedRole === 'doctor' ? '#38bdf8' : '#ffffff',
-                border: 'none',
+                backgroundColor: '#10254C',
+                color: '#ffffff',
+                border: '1px solid #1177DE',
                 borderRadius: 8,
                 fontSize: '0.925rem',
                 fontWeight: 600,
@@ -337,32 +345,31 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: selectedRole === 'doctor'
-                  ? '0 2px 4px rgba(11, 19, 41, 0.3)'
-                  : '0 2px 4px rgba(13, 110, 253, 0.2)',
-                transition: 'background-color 0.2s'
+                boxShadow: '0 2px 6px rgba(47, 79, 79, 0.25)',
+                transition: 'background-color 0.2s, border-color 0.2s'
               }}
               onMouseEnter={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.backgroundColor = selectedRole === 'doctor' ? '#172554' : '#0b5ed7';
+                  e.currentTarget.style.backgroundColor = '#1177DE';
+                  e.currentTarget.style.borderColor = '#1177DE';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!loading) {
-                  e.currentTarget.style.backgroundColor = selectedRole === 'doctor' ? '#0b1329' : '#0d6efd';
+                  e.currentTarget.style.backgroundColor = '#1177DE';
+                  e.currentTarget.style.borderColor = '#1177DE';
                 }
               }}
             >
               {loading ? 'Authenticating...' : `Sign In as ${selectedRole === 'patient' ? 'Patient' : 'Doctor'}`}
-              {!loading && <ArrowRight size={18} />}
-            </button>
+              {!loading && <ArrowRight size={18} />}</button>
           </form>
 
           {/* Switch to Register link */}
           <div style={{
             marginTop: 22,
             paddingTop: 16,
-            borderTop: '1px solid #f1f5f9',
+            borderTop: '1px solid #EAF3FC',
             textAlign: 'center',
             fontSize: '0.85rem',
             color: '#64748b'
@@ -374,7 +381,7 @@ export default function LoginPage({ onLoginSuccess, onSwitchToRegister }) {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#0d6efd',
+                color: '#1177DE',
                 fontWeight: 600,
                 cursor: 'pointer',
                 padding: 0,

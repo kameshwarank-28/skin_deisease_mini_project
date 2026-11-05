@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 
-export default function DoctorTreatmentsView() {
+export default function DoctorTreatmentsView({ selectedPatientId }) {
   const [patients, setPatients] = useState([]);
   const [treatments, setTreatments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function DoctorTreatmentsView() {
   const [feedback, setFeedback] = useState(null);
 
   const [formData, setFormData] = useState({
-    patientId: '',
+    patientId: selectedPatientId || '',
     treatmentName: '',
     prescribedMedication: '',
     dosage: '',
@@ -37,6 +37,13 @@ export default function DoctorTreatmentsView() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    if (selectedPatientId) {
+      setFormData(prev => ({ ...prev, patientId: selectedPatientId }));
+      setShowAddForm(true);
+    }
+  }, [selectedPatientId]);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -44,8 +51,11 @@ export default function DoctorTreatmentsView() {
       const pats = patRes.data || [];
       setPatients(pats);
 
-      if (pats.length > 0 && !formData.patientId) {
-        setFormData(prev => ({ ...prev, patientId: pats[0].patient_id }));
+      if (pats.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          patientId: prev.patientId || selectedPatientId || pats[0].patient_id
+        }));
       }
 
       // Collect treatments across all connected patients
@@ -134,7 +144,7 @@ export default function DoctorTreatmentsView() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Prescription & Treatment Management
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
@@ -160,9 +170,9 @@ export default function DoctorTreatmentsView() {
           padding: '12px 16px',
           borderRadius: 8,
           marginBottom: 20,
-          backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
-          border: `1px solid ${feedback.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          color: feedback.type === 'success' ? '#15803d' : '#b91c1c',
+          backgroundColor: feedback.type === 'success' ? '#EAF3FC' : '#fef2f2',
+          border: `1px solid ${feedback.type === 'success' ? '#7CB0EA' : '#fecaca'}`,
+          color: feedback.type === 'success' ? '#1177DE' : '#b91c1c',
           fontSize: '0.875rem'
         }}>
           {feedback.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
@@ -172,14 +182,14 @@ export default function DoctorTreatmentsView() {
 
       {/* Add Treatment Form */}
       {showAddForm && (
-        <div className="project-card" style={{ padding: '24px', marginBottom: 24, border: '1px solid #bfdbfe', backgroundColor: '#fcfdfe' }}>
+        <div className="project-card" style={{ padding: '24px', marginBottom: 24, border: '1px solid #7CB0EA', backgroundColor: '#fcfdfe' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
             <div style={{
               width: 38,
               height: 38,
               borderRadius: 8,
-              backgroundColor: '#dcfce7',
-              color: '#16a34a',
+              backgroundColor: '#DCEAF8',
+              color: '#1177DE',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -187,7 +197,7 @@ export default function DoctorTreatmentsView() {
               <Pill size={20} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#1177DE' }}>
                 Prescribe New Treatment Plan
               </h3>
               <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
@@ -211,7 +221,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -221,7 +231,7 @@ export default function DoctorTreatmentsView() {
                   ) : (
                     patients.map(p => (
                       <option key={p.patient_id} value={p.patient_id}>
-                        {p.patient_name} (ID: PAT-{p.patient_id})
+                        {p.patient_name} — {p.email} (PAT-{p.patient_id})
                       </option>
                     ))
                   )}
@@ -243,7 +253,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -264,7 +274,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -287,7 +297,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -308,7 +318,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -327,7 +337,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -351,7 +361,7 @@ export default function DoctorTreatmentsView() {
                     width: '100%',
                     padding: '9px 12px',
                     fontSize: '0.875rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #7CB0EA',
                     borderRadius: 6,
                     backgroundColor: '#ffffff'
                   }}
@@ -373,7 +383,7 @@ export default function DoctorTreatmentsView() {
                   width: '100%',
                   padding: '9px 12px',
                   fontSize: '0.875rem',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #7CB0EA',
                   borderRadius: 6,
                   backgroundColor: '#ffffff'
                 }}
@@ -409,7 +419,7 @@ export default function DoctorTreatmentsView() {
         </div>
       ) : treatments.length === 0 ? (
         <div className="project-card" style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-          <Pill size={40} style={{ color: '#cbd5e1', marginBottom: 10 }} />
+          <Pill size={40} style={{ color: '#7CB0EA', marginBottom: 10 }} />
           <div style={{ fontWeight: 600, color: '#475569' }}>No Treatments Prescribed Yet</div>
           <div style={{ fontSize: '0.825rem' }}>Click "Prescribe Treatment" above to create a patient regimen.</div>
         </div>
@@ -420,8 +430,8 @@ export default function DoctorTreatmentsView() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Pill size={16} color="#15803d" />
+                    <span style={{ fontWeight: 700, fontSize: '1rem', color: '#1177DE', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Pill size={16} color="#1177DE" />
                       <span>{t.treatment_name}</span>
                     </span>
                     <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
@@ -445,9 +455,9 @@ export default function DoctorTreatmentsView() {
                       fontSize: '0.75rem',
                       fontWeight: 600,
                       borderRadius: 6,
-                      border: '1px solid #cbd5e1',
-                      backgroundColor: '#f8fafc',
-                      color: '#0f172a',
+                      border: '1px solid #7CB0EA',
+                      backgroundColor: '#EAF3FC',
+                      color: '#1177DE',
                       cursor: 'pointer'
                     }}
                   >
@@ -461,7 +471,7 @@ export default function DoctorTreatmentsView() {
               </div>
 
               {t.doctor_notes && (
-                <div style={{ fontSize: '0.825rem', color: '#334155', backgroundColor: '#f8fafc', padding: '8px 12px', borderRadius: 6, marginTop: 8 }}>
+                <div style={{ fontSize: '0.825rem', color: '#334155', backgroundColor: '#EAF3FC', padding: '8px 12px', borderRadius: 6, marginTop: 8 }}>
                   <strong>Clinician Instructions:</strong> {t.doctor_notes}
                 </div>
               )}
@@ -469,7 +479,7 @@ export default function DoctorTreatmentsView() {
               <div style={{ display: 'flex', gap: 16, marginTop: 8, fontSize: '0.75rem', color: '#64748b' }}>
                 <span>Prescribed on: {t.start_date}</span>
                 {t.review_date && (
-                  <span style={{ color: '#0d6efd', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ color: '#1177DE', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                     <Calendar size={12} />
                     <span>Review milestone: {t.review_date}</span>
                   </span>

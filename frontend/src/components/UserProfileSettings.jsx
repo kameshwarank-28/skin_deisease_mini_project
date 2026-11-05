@@ -140,7 +140,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
       {/* Top Banner */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Account Profile & System Settings
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -196,7 +196,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
                 width: 56,
                 height: 56,
                 borderRadius: '50%',
-                backgroundColor: '#0d6efd',
+                backgroundColor: '#1177DE',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
@@ -208,7 +208,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
                 {currentUser?.full_name ? currentUser.full_name[0].toUpperCase() : 'U'}
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#0f172a' }}>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#1177DE' }}>
                   {currentUser?.full_name || 'User'}
                 </h3>
                 <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
@@ -218,15 +218,15 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
             </div>
 
             {/* Patient Profile Card Details */}
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: 14, borderRadius: 8, marginBottom: 18, fontSize: '0.85rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, borderBottom: '1px solid #e2e8f0', pb: 6, paddingBottom: 6 }}>
-                <strong style={{ color: '#0f172a' }}>Patient Profile</strong>
+            <div style={{ background: '#EAF3FC', border: '1px solid #7CB0EA', padding: 14, borderRadius: 8, marginBottom: 18, fontSize: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, borderBottom: '1px solid #7CB0EA', pb: 6, paddingBottom: 6 }}>
+                <strong style={{ color: '#1177DE' }}>Patient Profile</strong>
                 <button
                   onClick={() => setShowEditProfile(true)}
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0d6efd',
+                    color: '#1177DE',
                     fontSize: '0.775rem',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -256,7 +256,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
                   No patient profile registered yet.{' '}
                   <button
                     onClick={() => setShowEditProfile(true)}
-                    style={{ background: 'none', border: 'none', color: '#0d6efd', fontWeight: 600, cursor: 'pointer', padding: 0 }}
+                    style={{ background: 'none', border: 'none', color: '#1177DE', fontWeight: 600, cursor: 'pointer', padding: 0 }}
                   >
                     Create One Now
                   </button>
@@ -265,7 +265,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
             </div>
 
             {/* Account Details */}
-            <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', padding: 12, borderRadius: 6, marginBottom: 18, fontSize: '0.825rem' }}>
+            <div style={{ background: '#ffffff', border: '1px solid #7CB0EA', padding: 12, borderRadius: 6, marginBottom: 18, fontSize: '0.825rem' }}>
               <div style={{ marginBottom: 4 }}><strong>User ID:</strong> #{currentUser?.id} (Tenant Isolation Enforced)</div>
               <div style={{ marginBottom: 4 }}><strong>Timezone:</strong> {currentUser?.timezone || 'UTC'}</div>
               <div><strong>Registered:</strong> {currentUser?.created_at ? new Date(currentUser.created_at).toLocaleDateString() : 'N/A'}</div>
@@ -293,26 +293,26 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
           {/* Privacy & Security Architecture Card */}
           <div className="project-card">
             <div className="project-card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Lock size={16} color="#0d6efd" />
+              <Lock size={16} color="#1177DE" />
               <span>Healthcare Privacy & Multi-User Data Isolation</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: '0.85rem', color: '#475569' }}>
               <div style={{ borderLeft: '4px solid #10b981', paddingLeft: 12 }}>
-                <strong style={{ color: '#0f172a' }}>Multi-Tenant Patient Data Isolation:</strong>
+                <strong style={{ color: '#1177DE' }}>Multi-Tenant Patient Data Isolation:</strong>
                 <p style={{ margin: '2px 0 0' }}>
                   All skin lesion photographs, symptoms, consultations, treatments, appointments, and notification logs are strictly mapped to your unique user ID. One user can never query or view another user's medical records or photographs.
                 </p>
               </div>
 
-              <div style={{ borderLeft: '4px solid #0d6efd', paddingLeft: 12 }}>
-                <strong style={{ color: '#0f172a' }}>Local Storage & Deduplication:</strong>
+              <div style={{ borderLeft: '4px solid #1177DE', paddingLeft: 12 }}>
+                <strong style={{ color: '#1177DE' }}>Local Storage & Deduplication:</strong>
                 <p style={{ margin: '2px 0 0' }}>
                   Medical photographs are stored on secure local disks partitioned by user ID with SHA-256 hash deduplication. Images are never accessible via static unauthenticated URLs and are never uploaded to public AI services.
                 </p>
               </div>
 
               <div style={{ borderLeft: '4px solid #f59e0b', paddingLeft: 12 }}>
-                <strong style={{ color: '#0f172a' }}>Clinical Educational Screening Disclaimer:</strong>
+                <strong style={{ color: '#1177DE' }}>Clinical Educational Screening Disclaimer:</strong>
                 <p style={{ margin: '2px 0 0' }}>
                   The DermAI platform is a clinical decision-support and longitudinal tracking tool. It does not replace physical examination, clinical biopsy, or medical consultation by a certified dermatologist.
                 </p>
@@ -327,7 +327,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 480px) 1fr', gap: 20 }}>
           <div className="project-card">
             <div className="project-card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Settings size={16} color="#0d6efd" />
+              <Settings size={16} color="#1177DE" />
               <span>System Preferences & Alerts</span>
             </div>
 
@@ -335,7 +335,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
               <div>
                 <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#0f172a' }}>In-App Follow-up Reminders</div>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1177DE' }}>In-App Follow-up Reminders</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Receive 24-hour advance notifications for scheduled doctor visits</div>
                   </div>
                   <input
@@ -347,10 +347,10 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
                 </label>
               </div>
 
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 14 }}>
+              <div style={{ borderTop: '1px solid #EAF3FC', paddingTop: 14 }}>
                 <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#0f172a' }}>Symptom Worsening Warnings</div>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1177DE' }}>Symptom Worsening Warnings</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Automatic clinical safety alerts when severity escalates to severe</div>
                   </div>
                   <input
@@ -362,10 +362,10 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
                 </label>
               </div>
 
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 14 }}>
+              <div style={{ borderTop: '1px solid #EAF3FC', paddingTop: 14 }}>
                 <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#0f172a' }}>SHA-256 Image Deduplication</div>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1177DE' }}>SHA-256 Image Deduplication</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Prevent duplicate file storage when identical photos are re-scanned</div>
                   </div>
                   <input
@@ -395,7 +395,7 @@ export default function UserProfileSettings({ initialTab = 'profile', onUserChan
 
           <div className="project-card">
             <div className="project-card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Shield size={16} color="#0d6efd" />
+              <Shield size={16} color="#1177DE" />
               <span>Security & Account Actions</span>
             </div>
             <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.6 }}>

@@ -77,7 +77,7 @@ export default function NotificationCenter({ onNotificationRead }) {
       {/* Top Banner */}
       <div className="project-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0d6efd', margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1177DE', margin: '0 0 4px' }}>
             Notifications & Clinical Safety Alerts
           </h2>
           <p style={{ fontSize: '0.875rem', color: '#6c757d', margin: 0 }}>
@@ -134,7 +134,7 @@ export default function NotificationCenter({ onNotificationRead }) {
               style={{
                 margin: 0,
                 backgroundColor: n.is_read ? '#ffffff' : (n.urgency === 'Urgent' ? '#fff5f5' : '#f0f7ff'),
-                borderLeft: n.urgency === 'Urgent' ? '5px solid #dc3545' : n.urgency === 'Warning' ? '5px solid #ffc107' : '5px solid #0d6efd',
+                borderLeft: n.urgency === 'Urgent' ? '5px solid #dc3545' : n.urgency === 'Warning' ? '5px solid #ffc107' : '5px solid #1177DE',
                 padding: '16px 20px',
                 boxShadow: n.is_read ? 'var(--shadow-sm)' : '0 2px 8px rgba(13,110,253,0.1)'
               }}
