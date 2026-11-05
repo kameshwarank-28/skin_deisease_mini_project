@@ -7,6 +7,7 @@ import TopHeader from './components/TopHeader';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import PatientProfileSetup from './components/PatientProfileSetup';
+import DoodleBackground from './components/LoginDoodleBackground';
 
 // Patient Components
 import DashboardOverview from './components/DashboardOverview';
@@ -374,9 +375,19 @@ export default function App() {
           minWidth: 0,
           display: 'flex',
           flexDirection: 'column',
+          position: 'relative',
+          backgroundColor: '#C8DEF7',
           transition: 'margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
+        {/* Dim Ambient Doodle Background in Main Workspace */}
+        <DoodleBackground
+          role={currentUser?.role || 'patient'}
+          dim={true}
+          isWorkspace={true}
+          sidebarWidth={collapsed ? 72 : 250}
+        />
+
         {/* TOP HEADER */}
         <TopHeader
           activeTab={activeTab}

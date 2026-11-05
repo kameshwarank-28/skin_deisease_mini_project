@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserCheck, Shield, AlertCircle, ArrowRight, HeartHandshake } from 'lucide-react';
 import api from '../services/api';
+import DoodleBackground from './LoginDoodleBackground';
 
 export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
   const [formData, setFormData] = useState({
@@ -58,14 +59,21 @@ export default function PatientProfileSetup({ currentUser, onProfileCreated }) {
   return (
     <div style={{
       minHeight: '100vh',
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#C8DEF7',
       padding: '28px 16px',
+      overflow: 'hidden',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
     }}>
+      {/* Dim Patient Doodles Background */}
+      <DoodleBackground role="patient" dim={true} />
+
       <div style={{
+        position: 'relative',
+        zIndex: 10,
         width: '100%',
         maxWidth: 560,
         backgroundColor: '#ffffff',
