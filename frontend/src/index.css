@@ -166,9 +166,16 @@ button.btn-outline:hover {
    CARDS & CONTAINERS
    ========================================================= */
 
+.content-area {
+  position: relative;
+  z-index: 2;
+}
+
 .project-card,
 .card {
-  background: var(--card-bg) !important;
+  position: relative;
+  z-index: 2;
+  background: #ffffff !important;
   border: 1.5px solid #7CB0EA !important;
   border-radius: 10px;
   box-shadow: 0 4px 14px rgba(17, 119, 222, 0.08) !important;

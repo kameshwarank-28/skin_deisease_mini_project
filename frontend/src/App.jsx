@@ -380,15 +380,13 @@ export default function App() {
           transition: 'margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
-        {/* Dim Ambient Doodle Background ONLY for Patient and Doctor Dashboard */}
-        {(activeTab === 'dashboard' || activeTab === 'doctor_overview') && (
-          <DoodleBackground
-            role={currentUser?.role || 'patient'}
-            dim={true}
-            isWorkspace={true}
-            sidebarWidth={collapsed ? 72 : 250}
-          />
-        )}
+        {/* Dim Ambient Doodle Background across All Patient and Doctor Pages */}
+        <DoodleBackground
+          role={currentUser?.role || 'patient'}
+          dim={true}
+          isWorkspace={true}
+          sidebarWidth={collapsed ? 72 : 250}
+        />
 
         {/* TOP HEADER */}
         <TopHeader
