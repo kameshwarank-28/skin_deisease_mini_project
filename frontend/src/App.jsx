@@ -380,13 +380,15 @@ export default function App() {
           transition: 'margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
-        {/* Dim Ambient Doodle Background in Main Workspace */}
-        <DoodleBackground
-          role={currentUser?.role || 'patient'}
-          dim={true}
-          isWorkspace={true}
-          sidebarWidth={collapsed ? 72 : 250}
-        />
+        {/* Dim Ambient Doodle Background ONLY for Patient and Doctor Dashboard */}
+        {(activeTab === 'dashboard' || activeTab === 'doctor_overview') && (
+          <DoodleBackground
+            role={currentUser?.role || 'patient'}
+            dim={true}
+            isWorkspace={true}
+            sidebarWidth={collapsed ? 72 : 250}
+          />
+        )}
 
         {/* TOP HEADER */}
         <TopHeader
@@ -401,7 +403,7 @@ export default function App() {
         />
 
         {/* MAIN APPLICATION WORKSPACE CONTENT */}
-        <main className="content-area" style={{ flex: 1, padding: '24px 28px', maxWidth: 1280, width: '100%', margin: '0 auto' }}>
+        <main className="content-area" style={{ flex: 1, padding: '24px 28px', maxWidth: 1280, width: '100%', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           {/* ==================== DOCTOR PLATFORM TABS ==================== */}
           {isDoctor && (
             <>
